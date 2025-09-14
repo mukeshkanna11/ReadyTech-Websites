@@ -83,9 +83,6 @@ export default function Home() {
         </button>
       </div>
     </div>
-    <span className="text-sm text-gray-500 font-poppins">
-      Built for demo • Customize content & images
-    </span>
   </div>
 
   {/* Templates */}
