@@ -1,108 +1,132 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import Logo from "../assets/images/Rtech-logo.png";
+import Logo from "../assets/images/Rtech1-logo.png";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const location = useLocation(); // To get current path
+  const [showNavbar, setShowNavbar] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
 
-  const menuItems = [
-    { path: "/", label: "HOME" },
-    { path: "/about", label: "ABOUT" },
-    { path: "/training", label: "TRAINING" },
-    { path: "/hire-trainee", label: "HIRE & TRAINEE" },
-    { path: "/development", label: "DEVELOPMENT" },
-    { path: "/services", label: "SERVICES" },
-    { path: "/contact", label: "CONTACT" },
-  ];
+  // Detect scroll direction + background change
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > lastScrollY) {
+        setShowNavbar(false); // hide on scroll down
+      } else {
+        setShowNavbar(true); // show on scroll up
+      }
+      setLastScrollY(window.scrollY);
+
+      if (window.scrollY > 30) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
+
+  // Active + hover underline animation
+  const getLinkClass = (path) =>
+    `relative transition-colors duration-300 ${location.pathname === path
+      ? "text-yellow-400 font-semibold"
+      : "text-gray-300 hover:text-yellow-400"
+    }
+    after:content-[''] after:absolute after:left-0 after:-bottom-1
+    after:w-full after:h-[2px] after:bg-yellow-400 after:scale-x-0
+    after:origin-left after:transition-transform after:duration-300
+    hover:after:scale-x-100`;
 
   return (
-    <nav className="fixed top-0 left-0 z-50 w-full bg-white shadow-lg">
-      <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link to="/" className="flex items-center">
-            <img src={Logo} alt="Ready Tech Solutions" className="object-contain w-10 h-10" />
-            <span className="ml-2 text-lg font-semibold tracking-wide text-black">
-              Ready Tech Solutions
-            </span>
+    <nav
+      className={`fixed top-0 left-0 z-50 w-full transition-all duration-500 backdrop-blur-md ${showNavbar ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
+        } ${scrolled
+          ? "bg-gradient-to-r from-pink-500 to-purple-700 shadow-lg"
+          : "bg-gradient-to-b from-gray-900 via-black to-gray-950"
+        }`}
+    >
+      <div className="flex items-center justify-between w-full px-6 py-3 mx-auto max-w-7xl">
+        {/* Logo */}
+        <Link to="/" className="flex items-center space-x-2">
+          <img
+            src={Logo}
+            alt="Ready Tech"
+            className="object-contain w-10 h-10"
+          />
+          <span className="text-lg font-bold tracking-wide text-white font-poppins">
+            ReadyTech Solutions
+          </span>
+        </Link>
+
+        {/* Desktop Menu */}
+        <div className="hidden space-x-8 font-medium md:flex">
+          <Link to="/" className={getLinkClass("/")}>
+            Home
           </Link>
+          <Link to="/services" className={getLinkClass("/services")}>
+            Services
+          </Link>
+          <Link to="/development" className={getLinkClass("/development")}>
+            Development
+          </Link>
+          <Link to="/about" className={getLinkClass("/about")}>
+            About
+          </Link>
+          <Link to="/contact" className={getLinkClass("/contact")}>
+            Contact
+          </Link>
+        </div>
 
-          {/* Desktop Menu */}
-          <div className="items-center hidden space-x-8 font-medium text-black md:flex font-poppins">
-            {menuItems.map((item) => {
-              const isActive = location.pathname === item.path;
-              return (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={`relative group transition duration-300 ${
-                    isActive ? "text-indigo-600 font-bold" : "hover:text-indigo-600"
-                  }`}
-                >
-                  <span>{item.label}</span>
-                  {/* Underline Animation */}
-                  <span
-                    className={`absolute left-0 -bottom-1 h-0.5 bg-indigo-600 transition-all ${
-                      isActive ? "w-full" : "w-0 group-hover:w-full"
-                    }`}
-                  ></span>
-                </Link>
-              );
-            })}
-          </div>
+        {/* Buttons */}
+        <div className="hidden space-x-4 md:flex">
+          <Link
+            to="/login"
+            className="px-4 py-2 font-semibold text-yellow-400 transition-all duration-300 border-2 border-yellow-400 rounded-full hover:bg-yellow-400 hover:text-black hover:shadow-lg hover:scale-105"
+          >
+            Login
+          </Link>
+        </div>
 
-          {/* Mobile Hamburger */}
-          <div className="md:hidden">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="text-black hover:text-indigo-600 focus:outline-none"
-            >
-              {isOpen ? (
-                <svg
-                  className="w-6 h-6"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              ) : (
-                <svg
-                  className="w-6 h-6"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              )}
-            </button>
-          </div>
+        {/* Mobile Hamburger */}
+        <div className="md:hidden">
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="text-2xl text-gray-200 focus:outline-none"
+          >
+            ☰
+          </button>
         </div>
       </div>
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="bg-white shadow-lg md:hidden">
-          <div className="px-4 pt-4 pb-6 space-y-2 font-medium text-gray-800">
-            {menuItems.map((item) => {
-              const isActive = location.pathname === item.path;
-              return (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  onClick={() => setIsOpen(false)} // Close menu on click
-                  className={`block py-2 px-2 rounded transition ${
-                    isActive ? "bg-indigo-100 text-indigo-700 font-bold" : "hover:bg-indigo-100 hover:text-indigo-700"
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              );
-            })}
+        <div className="text-gray-200 border-t border-gray-700 shadow-lg bg-black/95 md:hidden animate-slideDown">
+          <div className="px-6 pt-4 pb-6 space-y-4 font-medium">
+            <Link to="/" className="block hover:text-yellow-400">
+              Home
+            </Link>
+            <Link to="/services" className="block hover:text-yellow-400">
+              Services
+            </Link>
+            <Link to="/development" className="block hover:text-yellow-400">
+              Development
+            </Link>
+            <Link to="/about" className="block hover:text-yellow-400">
+              About
+            </Link>
+            <Link to="/contact" className="block hover:text-yellow-400">
+              Contact
+            </Link>
+            <Link
+              to="/login"
+              className="block py-2 text-center text-yellow-400 transition-all duration-300 border-2 border-yellow-400 rounded-full hover:bg-yellow-400 hover:text-black hover:shadow-lg"
+            >
+              Login
+            </Link>
           </div>
         </div>
       )}

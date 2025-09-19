@@ -1,212 +1,194 @@
+import React from "react";
 import { 
   FaDatabase, 
   FaMobileAlt, 
-  FaCloud, 
   FaChartLine, 
   FaLaptopCode, 
   FaLightbulb, 
-  FaProjectDiagram, 
   FaRobot, 
   FaServer, 
   FaHeadset 
 } from "react-icons/fa";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 export default function Services() {
+  const navigate = useNavigate();
+
   const services = [
     {
-      title: "Data Analytics",
-      description: "Our data management & analytics capabilities bring context and insights to help you make informed business decisions.",
-      icon: <FaChartLine className="text-4xl text-indigo-600" />,
-      image: "https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=600&q=80",
-    },
-    {
       title: "Website Maintenance",
-      description: "Ensure your website runs smoothly, remains secure, and provides a vibrant online presence for long-term success.",
-      icon: <FaLaptopCode className="text-4xl text-indigo-600" />,
-      image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80",
-    },
-    {
-      title: "IT Consulting",
-      description: "Build and implement strategic IT solutions to optimize operations and drive business growth.",
-      icon: <FaLightbulb className="text-4xl text-indigo-600" />,
-      image: "https://images.unsplash.com/photo-1587620962725-abab7fe55159?auto=format&fit=crop&w=800&q=80",
+      description: "Keep your website updated, secure, and optimized for the best performance with 24/7 support.",
+      icon: <FaLaptopCode className="text-4xl text-white" />,
+      image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80",
+      link: "/services/website-maintenance",
     },
     {
       title: "Digital Marketing",
-      description: "Market your brand 24/7 with SEO, social media, content marketing, and performance-based campaigns.",
-      icon: <FaChartLine className="text-4xl text-indigo-600" />,
+      description: "Boost your online presence with SEO, PPC, and content marketing campaigns that deliver results.",
+      icon: <FaChartLine className="text-4xl text-white" />,
       image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
+      link: "/services/digital-marketing",
     },
     {
       title: "Graphic Design",
-      description: "Create visually appealing designs that communicate your brand message effectively.",
-      icon: <FaLightbulb className="text-4xl text-indigo-600" />,
-      image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=80",
+      description: "Eye-catching visuals that strengthen your brand identity and connect with your audience.",
+      icon: <FaLightbulb className="text-4xl text-white" />,
+      image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80",
+      link: "/services/graphic-design",
     },
     {
       title: "Business Intelligence",
-      description: "Gain deep visibility into business processes and leverage insights to make data-driven decisions.",
-      icon: <FaDatabase className="text-4xl text-indigo-600" />,
+      description: "Unlock powerful insights with BI solutions to make smart, data-driven decisions.",
+      icon: <FaDatabase className="text-4xl text-white" />,
       image: "https://images.unsplash.com/photo-1605902711622-cfb43c4437b5?auto=format&fit=crop&w=800&q=80",
+      link: "/services/business-intelligence",
     },
     {
       title: "Artificial Intelligence",
-      description: "Implement AI and Machine Learning solutions for automation, analytics, and smarter business operations.",
-      icon: <FaRobot className="text-4xl text-indigo-600" />,
+      description: "Leverage AI & ML for smarter automation, analytics, and customer engagement.",
+      icon: <FaRobot className="text-4xl text-white" />,
       image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800&q=80",
+      link: "/services/artificial-intelligence",
     },
     {
-      title: "IoT",
-      description: "Internet of Things services including requirements analysis, process modeling, and platform integration.",
-      icon: <FaMobileAlt className="text-4xl text-indigo-600" />,
+      title: "IoT Solutions",
+      description: "Connect devices with secure IoT solutions tailored to your business needs.",
+      icon: <FaMobileAlt className="text-4xl text-white" />,
       image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80",
+      link: "/services/iot-solutions",
     },
     {
       title: "Domain & Hosting",
-      description: "Certified domain registration and hosting services following all standards for secure online presence.",
-      icon: <FaServer className="text-4xl text-indigo-600" />,
-      image: "https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=600&q=80",
-    },
-    {
-      title: "Project Management",
-      description: "Focus on bringing new products to market or developing existing ones with efficient project management.",
-      icon: <FaProjectDiagram className="text-4xl text-indigo-600" />,
-      image: "https://images.unsplash.com/photo-1593642532973-d31b6557fa68?auto=format&fit=crop&w=800&q=80",
+      description: "Reliable hosting & domain solutions to keep your business online and running 24/7.",
+      icon: <FaServer className="text-4xl text-white" />,
+      image: "https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=800&q=80",
+      link: "/services/domain-hosting",
     },
     {
       title: "BPO Solutions",
-      description: "Complete customer support, telemarketing, and business process outsourcing services for your company.",
-      icon: <FaHeadset className="text-4xl text-indigo-600" />,
+      description: "End-to-end outsourcing with customer support, telemarketing, and back-office services.",
+      icon: <FaHeadset className="text-4xl text-white" />,
       image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80",
+      link: "/services/bpo-solutions",
     },
   ];
 
-  return (
-    <div className="min-h-screen pt-2 bg-gray-50">
-      {/* Banner */}
-      <section className="relative bg-gray-900 text-white h-[450px] flex items-center justify-center overflow-hidden">
+  // ServiceCard Component
+  const ServiceCard = ({ service }) => (
+    <div className="flex flex-col overflow-hidden text-gray-100 transition-transform transform bg-gray-800 shadow-lg rounded-2xl hover:scale-105">
+      <div className="relative w-full h-48">
         <img
-          src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80"
-          alt="Services Banner"
-          className="absolute inset-0 object-cover w-full h-full opacity-30"
+          src={service.image}
+          alt={service.title}
+          className="object-cover w-full h-full"
         />
-        <div className="relative px-6 text-center">
-          <h1 className="text-3xl font-extrabold leading-tight md:text-5xl">
-            Explore Our <span className="text-yellow-400">Services</span>
+        <div className="absolute p-3 text-white bg-indigo-600 rounded-full shadow-lg bottom-4 left-4">
+          {service.icon}
+        </div>
+      </div>
+      <div className="flex flex-col flex-1 gap-2 p-5">
+        <h3 className="text-xl font-semibold text-indigo-400">{service.title}</h3>
+        <p className="text-sm text-gray-300">{service.description}</p>
+        <button
+          onClick={() => navigate(service.link)}
+          className="px-4 py-2 mt-4 font-medium text-gray-900 transition bg-indigo-400 rounded-lg shadow-md hover:bg-indigo-500"
+        >
+          Learn More
+        </button>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-gray-900">
+      {/* Services Banner with Animated Bubbles */}
+      <section className="relative flex flex-col items-center justify-center w-full min-h-[80vh] overflow-hidden text-white bg-gradient-to-r from-black via-gray-900 to-black">
+        {[...Array(60)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute rounded-full"
+            style={{
+              backgroundColor: [
+                "rgba(168,85,247,0.4)", 
+                "rgba(236,72,153,0.4)", 
+                "rgba(250,204,21,0.3)"
+              ][Math.floor(Math.random() * 3)],
+              width: Math.random() * 35 + 20 + "px",
+              height: Math.random() * 35 + 20 + "px",
+              left: Math.random() * 100 + "vw",
+              top: Math.random() * 100 + "vh",
+              boxShadow: "0 0 20px rgba(255,255,255,0.3)",
+            }}
+            animate={{
+              y: [0, -300],
+              x: [0, Math.random() * 100 - 50],
+              opacity: [0, 1, 0],
+            }}
+            transition={{
+              duration: Math.random() * 10 + 6,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: Math.random() * 6,
+            }}
+          />
+        ))}
+
+        <div className="relative z-10 px-6 text-center">
+          <h1 className="text-5xl font-extrabold tracking-tight md:text-6xl">
+            Our <span className="text-purple-400">Services</span>
           </h1>
-          <p className="max-w-3xl mx-auto mt-4 text-lg text-gray-100 md:text-xl">
-            Ready Tech combines creativity, technology, and performance to boost your business growth.
+          <p className="max-w-2xl mx-auto mt-4 text-lg text-gray-300">
+            We deliver innovative solutions that help businesses thrive in the digital age.
           </p>
+          <button
+            onClick={() => navigate("/demo")}
+            className="px-8 py-3 mt-6 text-lg font-semibold text-black transition rounded-full shadow-lg bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 hover:scale-105"
+          >
+            Book a Demo
+          </button>
         </div>
       </section>
 
       {/* Services Grid */}
-      <section className="max-w-6xl px-6 py-20 mx-auto">
-        <h2 className="text-3xl font-bold text-center text-gray-900">Our Services</h2>
-        <p className="max-w-3xl mx-auto mt-4 text-center text-gray-600">
-          Explore our wide range of services designed to help businesses achieve their goals efficiently.
+      <section className="px-6 py-20 mx-auto max-w-7xl">
+        <h2 className="text-3xl font-bold text-center text-white">Our Services</h2>
+        <p className="max-w-3xl mx-auto mt-4 text-center text-gray-300">
+          Discover our range of services crafted to transform your business and provide measurable results.
         </p>
 
-        <div className="grid gap-8 mt-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div className="grid gap-10 mt-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {services.map((service, index) => (
-            <div key={index} className="relative overflow-hidden transition bg-white shadow rounded-xl hover:shadow-lg group">
-              <img
-                src={service.image}
-                alt={service.title}
-                className="object-cover w-full h-48 transition-transform duration-300 group-hover:scale-105"
-              />
-              <div className="flex flex-col items-start p-6">
-                <div className="mb-2">{service.icon}</div>
-                <h4 className="text-lg font-semibold text-indigo-600">{service.title}</h4>
-                <p className="mt-2 text-sm text-gray-600">{service.description}</p>
-              </div>
-            </div>
+            <ServiceCard key={index} service={service} />
           ))}
         </div>
       </section>
 
       {/* Subscribe Section */}
-      <section className="py-16 bg-indigo-50">
-        <div className="max-w-3xl mx-auto text-center">
-          <h3 className="text-2xl font-bold text-gray-900">Subscribe Us</h3>
-          <p className="mt-2 text-gray-600">Get the latest news, articles, and resources delivered to your inbox.</p>
-          <form className="flex flex-col justify-center gap-4 mt-6 sm:flex-row">
+      <section className="py-20 text-white bg-gradient-to-r from-indigo-600 to-purple-700">
+        <div className="max-w-4xl px-6 mx-auto text-center">
+          <h3 className="text-3xl font-bold">Stay Updated</h3>
+          <p className="mt-3 text-lg text-indigo-100">
+            Subscribe to our newsletter for industry insights, updates, and exclusive offers.
+          </p>
+          <form className="flex flex-col justify-center gap-4 mt-8 sm:flex-row">
             <input
               type="email"
-              placeholder="Enter your Gmail ID"
-              className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400 sm:w-auto"
+              placeholder="Enter your email address"
+              className="w-full px-5 py-3 text-gray-900 rounded-lg sm:w-auto focus:outline-none focus:ring-2 focus:ring-yellow-400"
             />
             <button
               type="submit"
-              className="px-6 py-3 font-medium text-white transition bg-indigo-600 rounded-md hover:bg-indigo-700"
+              className="px-8 py-3 font-medium text-purple-800 bg-yellow-400 rounded-lg shadow-lg hover:bg-yellow-300"
             >
-              Subscribe
+              Subscribe Now
             </button>
           </form>
+          <p className="mt-4 text-sm text-indigo-200">
+            Join 5,000+ professionals who trust Ready Tech for digital success.
+          </p>
         </div>
       </section>
-      {/* Footer */}
-<footer className="mt-12 text-gray-300 bg-gray-900">
-  <div className="grid grid-cols-1 gap-10 px-6 py-12 mx-auto max-w-7xl lg:px-8 md:grid-cols-4">
-    
-    {/* Company Info */}
-    <div>
-      <h3 className="text-xl font-semibold text-white font-poppins">Ready Tech Solutions</h3>
-      <p className="mt-4 text-sm leading-relaxed font-poppins">
-        No 149, 2nd Floor, Sri Nagar,  
-        Hopes, Coimbatore - 641004,  
-        Behind Hope College Stop, Srinagar.
-      </p>
-      <p className="mt-4 text-sm font-poppins">
-        <strong>Phone:</strong> <a href="tel:+917010797721" className="hover:underline">+91 70107 97721</a>  
-        <br />
-        <strong>Email:</strong>{" "}
-        <a href="mailto:info@readytechsolutions.in" className="hover:underline">
-          info@readytechsolutions.in
-        </a>
-      </p>
-    </div>
-
-    {/* Quick Links */}
-    <div>
-      <h4 className="mb-4 text-lg font-semibold text-white font-poppins">Quick Links</h4>
-      <ul className="space-y-2 text-sm font-poppins">
-        <li><a href="#about" className="hover:text-white">About Us</a></li>
-        <li><a href="#services" className="hover:text-white">Services</a></li>
-        <li><a href="#careers" className="hover:text-white">Careers</a></li>
-        <li><a href="#contact" className="hover:text-white">Contact</a></li>
-      </ul>
-    </div>
-
-    {/* Services */}
-    <div>
-      <h4 className="mb-4 text-lg font-semibold text-white font-poppins">Our Services</h4>
-      <ul className="space-y-2 text-sm">
-        <li>Web Development</li>
-        <li>Mobile Applications</li>
-        <li>UI/UX Design</li>
-        <li>Cloud Solutions</li>
-      </ul>
-    </div>
-
-    {/* Social Media */}
-    <div>
-      <h4 className="mb-4 text-lg font-semibold text-white">Connect With Us</h4>
-      <div className="flex space-x-4">
-        <a href="https://www.facebook.com/SoftwareOrganisation/" target="_blank" className="hover:text-white">🌐</a>
-        <a href="https://www.linkedin.com/company/readytechsolutions/people/" target="_blank" className="hover:text-white">💼</a>
-        <a href="https://www.instagram.com/explore/locations/218009922476192/ready-tech-solutions/" target="_blank" className="hover:text-white">🐦</a>
-      </div>
-    </div>
-  </div>
-
-  {/* Bottom Copyright */}
-  <div className="mt-10 border-t border-gray-700">
-    <div className="px-6 py-6 mx-auto text-sm text-center text-gray-400 max-w-7xl lg:px-8">
-      © {new Date().getFullYear()} Ready Tech Solutions — Prototype by Mukesh
-    </div>
-  </div>
-</footer>
     </div>
   );
 }

@@ -1,211 +1,168 @@
-export default function About() {
+import React from "react";
+import { FaLaptopCode, FaChalkboardTeacher, FaTools, FaBullseye, FaLightbulb, FaHeart, FaMapMarkerAlt } from "react-icons/fa";
+
+export default function AboutReadyTech() {
+  const locations = [
+    { city: "Coimbatore", address: "149 2nd Floor, Hopes, Coimbatore, Tamil Nadu", phone: " +91 7010797721" },
+    { city: "Coimbatore", address: "Tidel Park, Peelamedu, B.R. Puram Industrial Estate, Coimbatore, Tamil Nadu 641014", phone: " +91 7010797721" },
+    { city: "Bangalore", address: "2nd floor, Hanumanthappa building, 21/8, Konanakunte Cross Rd, Vasanthapura, Bikasipura, Bangalore, Karnataka", phone: " +91 7010797721" },
+  ];
+
   return (
-    <div className="pt-2 font-poppins">
-      {/* Banner Section */}
-      <section className="relative w-full h-[300px] md:h-[400px] lg:h-[500px]">
-        <img
-          src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1600&q=80"
-          alt="Ready Tech Banner"
-          className="object-cover w-full h-full"
-        />
-        <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center bg-black/50">
-          <h1 className="text-3xl font-bold text-white md:text-4xl lg:text-5xl">
-            Welcome to <span className="text-indigo-600">Ready Tech Solutions</span>
+    <div className="min-h-screen text-gray-100 bg-gray-900">
+
+      {/* Glowing Animated Hero Section */}
+      <section className="relative flex flex-col items-center justify-center py-24 overflow-hidden text-white">
+        <div
+          className="absolute inset-0 w-full h-full"
+          style={{
+            background: `linear-gradient(270deg, #6C63FF, #00C8FF, #FF6EC7, #FFD700)`,
+            backgroundSize: "600% 600%",
+            animation: "gradientShift 20s ease infinite",
+          }}
+        ></div>
+
+        <div className="relative z-10 px-6 text-center">
+          <h1 className="mb-4 text-4xl font-extrabold md:text-5xl drop-shadow-lg">
+            Hi, We Are Ready Tech Solutions
           </h1>
-          <p className="max-w-3xl mt-4 text-base text-gray-200 md:text-lg">
-            Delivering professional IT Training, Software Solutions, and Business Consulting since 2019
+          <p className="max-w-2xl mx-auto text-lg md:text-xl text-gray-200/90">
+            Since 2019, Ready Tech Solutions has been offering professional training and innovative IT solutions. We specialize in web design, programming, networking, accounting, and more.
           </p>
         </div>
+
+        <style>
+          {`
+            @keyframes gradientShift {
+              0% { background-position: 0% 50%; }
+              50% { background-position: 100% 50%; }
+              100% { background-position: 0% 50%; }
+            }
+          `}
+        </style>
       </section>
 
-      {/* Hero Section */}
-      <section className="relative px-6 py-16 text-center text-black md:py-20">
-        <div className="max-w-5xl mx-auto">
-          <h1 className="text-3xl font-bold md:text-4xl lg:text-5xl">
-            Hi, We Are <span className="text-indigo-600">Ready Tech Solutions</span>
-          </h1>
-          <p className="max-w-3xl mx-auto mt-6 text-base leading-relaxed md:text-lg">
-            Since 2019, we have been delivering <span className="font-semibold">professional IT training, software solutions, and business consulting</span> 
-            in Coimbatore. Our goal is to empower individuals and organizations with the right technology and expertise.
-          </p>
-        </div>
-      </section>
-
-      {/* About + Experience */}
-      <section className="grid items-center max-w-6xl gap-12 px-6 py-16 mx-auto md:grid-cols-2">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900">Who We Are</h2>
-          <p className="mt-4 leading-relaxed text-gray-600">
-            Ready Tech Solutions is a team of experts delivering innovative IT services,
-            combining <span className="font-medium text-indigo-600">design, development, training, and outsourcing</span>. 
-            From <strong>web applications</strong> to <strong>digital marketing</strong> and <strong>BPO services</strong>,
-            we craft solutions that drive business growth and learning excellence.
-          </p>
-          <div className="mt-6">
-            <p className="text-3xl font-bold text-indigo-600 md:text-4xl">03+</p>
-            <p className="text-gray-600">Years of Experience in IT Solutions</p>
+      {/* About Section */}
+      <section className="max-w-6xl px-6 py-20 mx-auto">
+        <div className="grid items-center gap-12 md:grid-cols-2">
+          <div>
+            <h2 className="mb-4 text-3xl font-bold text-white">Our Expertise & Innovation</h2>
+            <p className="mb-6 leading-relaxed text-gray-300">
+              Ready Tech Solutions brings you a team of experts delivering innovative web solutions that combine captivating design and flawless functionality. Our multipurpose HTML template is user-friendly and ready for immediate deployment, making us different from others with unique concepts and a polished final look.
+            </p>
+            <p className="mb-6 leading-relaxed text-gray-300">
+              We provide end-to-end IT services, including software development, cloud solutions, mobile applications, digital marketing, and technical training. Our team ensures seamless integration of technology and business objectives for sustainable growth.
+            </p>
+            <p className="leading-relaxed text-gray-300">
+              Our passion is to empower students and businesses with premium training, IT development, and unmatched services that accelerate growth and achieve superior results. We thrive on innovation, creativity, and delivering measurable outcomes for every client.
+            </p>
+          </div>
+          <div className="flex justify-center">
+            <img
+              src="https://opendoodles.s3-us-west-1.amazonaws.com/loving.svg"
+              alt="Team Illustration"
+              className="h-auto mx-auto shadow-lg rounded-xl w-72"
+            />
           </div>
         </div>
+      </section>
 
-        {/* Skill Progress */}
-        <div className="space-y-6">
-          {[{ label: "Development", value: 95 }, { label: "Training", value: 90 }, { label: "Services", value: 85 }].map((item, idx) => (
-            <div key={idx}>
-              <div className="flex justify-between mb-1 text-sm font-medium text-gray-700">
-                <span>{item.label}</span>
-                <span>{item.value}%</span>
-              </div>
-              <div className="w-full h-2 bg-gray-200 rounded-full">
-                <div
-                  className="h-2 transition-all duration-1000 ease-in-out bg-indigo-600 rounded-full"
-                  style={{ width: `${item.value}%` }}
-                ></div>
-              </div>
-            </div>
-          ))}
+      {/* Stats Section */}
+      <section className="py-16 bg-gray-800">
+        <div className="max-w-6xl px-6 mx-auto text-center">
+          <h2 className="mb-12 text-3xl font-bold text-white">Our Impact</h2>
+          <div className="grid gap-12 md:grid-cols-3">
+            <StatCard icon={<FaLaptopCode />} title="Development" value={95} />
+            <StatCard icon={<FaChalkboardTeacher />} title="Training" value={90} />
+            <StatCard icon={<FaTools />} title="Services" value={85} />
+          </div>
         </div>
       </section>
 
-      {/* Why Choose Us */}
-      <section className="px-6 py-16 bg-white">
-        <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-2xl font-bold text-gray-900 md:text-3xl">Why Choose Us?</h2>
-          <p className="max-w-3xl mx-auto mt-4 text-sm text-gray-600 md:text-base">
-            We are not just another IT company — we are your <strong>technology partner</strong>.
-            With a strong foundation in training and IT solutions, we ensure 
-            <span className="text-indigo-600"> value, trust, and innovation</span>.
+      {/* Mission & Vision Section */}
+      <section className="grid max-w-6xl gap-12 px-6 py-20 mx-auto md:grid-cols-2">
+        <div className="p-8 bg-gray-800 shadow rounded-xl">
+          <h3 className="flex items-center gap-2 mb-4 text-2xl font-bold text-indigo-400">
+            <FaBullseye /> Mission
+          </h3>
+          <p className="leading-relaxed text-gray-300">
+            Facilitate our people in offering superior performance to our valued customers. Grow business at an accelerated pace. Foster an environment that enables growth and nurtures leaders.
           </p>
+        </div>
+        <div className="p-8 bg-gray-800 shadow rounded-xl">
+          <h3 className="flex items-center gap-2 mb-4 text-2xl font-bold text-indigo-400">
+            <FaLightbulb /> Vision
+          </h3>
+          <p className="leading-relaxed text-gray-300">
+            Our greatest vision is "Manufacturing All Robotics for our human and organizational needs." We aim to innovate, empower, and lead in IT solutions and training.
+          </p>
+        </div>
+      </section>
 
-          <div className="grid gap-6 mt-10 text-left sm:grid-cols-1 md:grid-cols-3">
-            {[{
-              title: "Expert Trainers",
-              desc: "Our seasoned professionals guide students and businesses with real-world knowledge."
-            }, {
-              title: "Cutting-edge Tech",
-              desc: "We adopt the latest tools, frameworks, and methodologies to deliver future-ready solutions."
-            }, {
-              title: "Customer-Centric",
-              desc: "We believe in long-term partnerships built on trust, performance, and quality services."
-            }].map((card, i) => (
-              <div key={i} className="p-6 transition border rounded-lg shadow bg-gray-50 hover:shadow-lg">
-                <h3 className="text-lg font-semibold text-indigo-600">{card.title}</h3>
-                <p className="mt-2 text-sm text-gray-600 md:text-base">{card.desc}</p>
+      {/* Values Section */}
+      <section className="py-20 bg-gray-900">
+        <div className="max-w-6xl px-6 mx-auto text-center">
+          <h2 className="mb-12 text-3xl font-bold text-white">Our Core Values</h2>
+          <div className="grid gap-8 md:grid-cols-3">
+            <ValueCard icon={<FaHeart />} title="Empowerment" description="We empower our students and clients to achieve excellence and grow continuously." />
+            <ValueCard icon={<FaHeart />} title="Empathy" description="Understanding and catering to the unique needs of every learner and customer." />
+            <ValueCard icon={<FaHeart />} title="Respect" description="Respect for personal aspirations and individual growth is the backbone of our culture." />
+          </div>
+        </div>
+      </section>
+
+      {/* Locations Section */}
+      <section className="py-20 bg-gray-800">
+        <div className="max-w-6xl px-6 mx-auto text-center">
+          <h2 className="mb-12 text-3xl font-bold text-white">Our Locations</h2>
+          <div className="grid gap-8 md:grid-cols-3">
+            {locations.map((loc, idx) => (
+              <div key={idx} className="p-6 transition transform bg-gray-700 shadow rounded-xl hover:shadow-xl hover:-translate-y-1">
+                <div className="flex justify-center mb-4 text-3xl text-indigo-400">
+                  <FaMapMarkerAlt />
+                </div>
+                <h4 className="mb-2 text-xl font-semibold text-white">{loc.city}</h4>
+                <p className="text-sm text-gray-300">{loc.address}</p>
+                <p className="mt-2 text-sm font-medium text-indigo-400">{loc.phone}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Mission, Vision, Values */}
-      <section className="px-6 py-16 bg-gradient-to-b from-indigo-50 to-white">
-        <div className="grid max-w-6xl gap-8 mx-auto sm:grid-cols-1 md:grid-cols-3">
-          <div className="p-6 transition bg-white border rounded-lg shadow hover:shadow-lg">
-            <h3 className="text-xl font-semibold text-indigo-600">Mission</h3>
-            <p className="mt-3 leading-relaxed text-gray-600">
-              Facilitate our people in offering superior performance to our valued
-              customers. Grow business at an accelerated pace. Foster an
-              environment that enables growth and nurtures leaders.
-            </p>
-          </div>
-          <div className="p-6 transition bg-white border rounded-lg shadow hover:shadow-lg">
-            <h3 className="text-xl font-semibold text-indigo-600">Vision</h3>
-            <p className="mt-3 leading-relaxed text-gray-600">
-              Our greatest vision is{" "}
-              <span className="font-semibold text-gray-800">
-                "Manufacturing All Robotics for human and organizational needs."
-              </span>
-            </p>
-          </div>
-          <div className="p-6 transition bg-white border rounded-lg shadow hover:shadow-lg">
-            <h3 className="text-xl font-semibold text-indigo-600">Values</h3>
-            <ul className="mt-3 space-y-2 text-gray-600 list-disc list-inside">
-              <li>Outstanding training, development, and services</li>
-              <li>Deliver premium value to students and customers</li>
-              <li>Empowerment & Empathy</li>
-              <li>Respect for personal aspirations</li>
-            </ul>
-          </div>
-        </div>
-      </section>
+      <style>
+        {`
+          @keyframes glowGrid {
+            0% { background-position: 0 0, 0 0; }
+            50% { background-position: 100px 100px, -50px -50px; }
+            100% { background-position: 0 0, 0 0; }
+          }
+        `}
+      </style>
+    </div>
+  );
+}
 
-      {/* Subscribe */}
-      <section className="relative px-6 py-16 text-center text-black bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600">
-        <div className="max-w-3xl mx-auto">
-          <h3 className="text-2xl font-bold text-white md:text-3xl">Subscribe Us</h3>
-          <p className="mt-3 text-sm text-gray-200 md:text-base">
-            Subscribe to get the latest news, articles, and resources directly in
-            your inbox.
-          </p>
+// Stats and Values Cards
+function StatCard({ icon, title, value }) {
+  return (
+    <div className="p-6 bg-gray-700 shadow rounded-xl">
+      <div className="flex items-center justify-center mb-4 text-4xl text-indigo-400">{icon}</div>
+      <h4 className="text-xl font-semibold text-white">{title}</h4>
+      <p className="mt-2 text-gray-300">{value}%</p>
+      <div className="h-2 mt-2 bg-gray-600 rounded-full">
+        <div className="h-2 bg-indigo-400 rounded-full" style={{ width: `${value}%` }}></div>
+      </div>
+    </div>
+  );
+}
 
-          <div className="flex flex-col items-center justify-center gap-2 mt-6 sm:flex-row">
-            <input
-              type="email"
-              placeholder="Enter your Gmail ID"
-              className="w-full px-4 py-3 text-gray-900 border-0 sm:w-64 rounded-l-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
-            />
-            <button className="w-full px-6 py-3 font-semibold text-gray-900 transition bg-yellow-400 rounded-md sm:w-auto hover:bg-yellow-500">
-              Subscribe
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="mt-1 text-gray-300 bg-gray-900">
-        <div className="grid grid-cols-1 gap-10 px-6 py-12 mx-auto max-w-7xl lg:px-8 md:grid-cols-4">
-          <div>
-            <h3 className="text-xl font-semibold text-white font-poppins">Ready Tech Solutions</h3>
-            <p className="mt-4 text-sm leading-relaxed font-poppins">
-              No 149, 2nd Floor, Sri Nagar,  
-              Hopes, Coimbatore - 641004,  
-              Behind Hope College Stop, Srinagar.
-            </p>
-            <p className="mt-4 text-sm font-poppins">
-              <strong>Phone:</strong> <a href="tel:+917010797721" className="hover:underline">+91 70107 97721</a>  
-              <br />
-              <strong>Email:</strong>{" "}
-              <a href="mailto:info@readytechsolutions.in" className="hover:underline">
-                info@readytechsolutions.in
-              </a>
-            </p>
-          </div>
-
-          <div>
-            <h4 className="mb-4 text-lg font-semibold text-white font-poppins">Quick Links</h4>
-            <ul className="space-y-2 text-sm font-poppins">
-              <li><a href="#about" className="hover:text-white">About Us</a></li>
-              <li><a href="#services" className="hover:text-white">Services</a></li>
-              <li><a href="#careers" className="hover:text-white">Careers</a></li>
-              <li><a href="#contact" className="hover:text-white">Contact</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="mb-4 text-lg font-semibold text-white font-poppins">Our Services</h4>
-            <ul className="space-y-2 text-sm">
-              <li>Web Development</li>
-              <li>Mobile Applications</li>
-              <li>UI/UX Design</li>
-              <li>Cloud Solutions</li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="mb-4 text-lg font-semibold text-white">Connect With Us</h4>
-            <div className="flex space-x-4">
-              <a href="https://www.facebook.com/SoftwareOrganisation/" target="_blank" rel="noreferrer" className="hover:text-white">🌐</a>
-              <a href="https://www.linkedin.com/company/readytechsolutions/people/" target="_blank" rel="noreferrer" className="hover:text-white">💼</a>
-              <a href="https://www.instagram.com/explore/locations/218009922476192/ready-tech-solutions/" target="_blank" rel="noreferrer" className="hover:text-white">🐦</a>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-10 border-t border-gray-700">
-          <div className="px-6 py-6 mx-auto text-sm text-center text-gray-400 max-w-7xl lg:px-8">
-            © {new Date().getFullYear()} Ready Tech Solutions — Prototype by Mukesh
-          </div>
-        </div>
-      </footer>
+function ValueCard({ icon, title, description }) {
+  return (
+    <div className="p-6 transition transform bg-gray-700 shadow rounded-xl hover:shadow-xl hover:-translate-y-1">
+      <div className="flex justify-center mb-4 text-3xl text-indigo-400">{icon}</div>
+      <h4 className="mb-2 text-xl font-semibold text-white">{title}</h4>
+      <p className="text-sm text-gray-300">{description}</p>
     </div>
   );
 }
