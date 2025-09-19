@@ -10,7 +10,7 @@ export default function Footer() {
       <div className="absolute w-56 h-56 bg-pink-600 opacity-25 rounded-full bottom-[-10%] right-[-10%] blur-3xl animate-pulse-slow"></div>
 
       {/* Main Grid */}
-      <div className="relative z-10 grid gap-12 px-6 py-20 mx-auto max-w-7xl md:grid-cols-3">
+      <div className="relative z-10 grid gap-12 px-6 py-16 mx-auto max-w-7xl sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 
         {/* Left: Company Info */}
         <div className="flex flex-col gap-4">
@@ -55,18 +55,17 @@ export default function Footer() {
           </div>
 
           <h4 className="mt-4 text-lg font-semibold text-white">Subscribe</h4>
-          <form className="flex gap-2">
+          <form className="flex flex-col gap-2 sm:flex-row">
             <input
               type="email"
               placeholder="Your email"
-              className="flex-1 px-4 py-2 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="flex-1 px-4 py-3 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
             />
-            <button className="flex items-center gap-1 px-4 py-2 font-semibold text-white transition bg-indigo-600 rounded-md hover:bg-indigo-500">
+            <button className="flex items-center justify-center gap-2 px-4 py-3 font-semibold text-white transition bg-indigo-600 rounded-md hover:bg-indigo-500">
               <FaEnvelope /> Subscribe
             </button>
           </form>
         </div>
-
       </div>
 
       {/* Bottom Bar */}
@@ -75,15 +74,13 @@ export default function Footer() {
       </div>
 
       {/* Animations */}
-      <style>
-        {`
-          @keyframes pulse-slow {
-            0%, 100% { transform: scale(1); opacity: 0.3; }
-            50% { transform: scale(1.1); opacity: 0.4; }
-          }
-          .animate-pulse-slow { animation: pulse-slow 10s ease-in-out infinite; }
-        `}
-      </style>
+      <style>{`
+        @keyframes pulse-slow {
+          0%, 100% { transform: scale(1); opacity: 0.3; }
+          50% { transform: scale(1.1); opacity: 0.4; }
+        }
+        .animate-pulse-slow { animation: pulse-slow 10s ease-in-out infinite; }
+      `}</style>
     </footer>
   );
 }
