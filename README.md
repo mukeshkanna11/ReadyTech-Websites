@@ -67,4 +67,4 @@ The website is built using modern web technologies for **performance, responsive
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/YourUsername/ready-tech-website.git
+  (https://github.com/mukeshkanna11/ReadyTech-Websites)
