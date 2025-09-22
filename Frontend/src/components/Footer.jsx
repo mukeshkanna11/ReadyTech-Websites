@@ -62,7 +62,7 @@ export default function Footer() {
               className="flex-1 px-4 py-3 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
             />
             <button className="flex items-center justify-center gap-2 px-4 py-3 font-semibold text-white transition bg-indigo-600 rounded-md hover:bg-indigo-500">
-              <FaEnvelope /> Subscribe
+              <FaEnvelope /> Send
             </button>
           </form>
         </div>

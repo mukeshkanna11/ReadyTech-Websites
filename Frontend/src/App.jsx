@@ -16,6 +16,7 @@ import Development from "./pages/Development";
 import Demo from "./pages/Demo";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
 
 // Service Detail Pages
 import WebsiteMaintenance from "./pages/WebsiteMaintenance";
@@ -62,6 +63,7 @@ export default function App() {
           <Route path="/demo" element={<Demo />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/dashboard" element={<Dashboard />} />
 
           {/* Service Detail Pages */}
           <Route path="/services/website-maintenance" element={<WebsiteMaintenance />} />
