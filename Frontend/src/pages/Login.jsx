@@ -13,7 +13,7 @@ export default function Login() {
     setError("");
 
     try {
-      const res = await fetch("https://rtech-backend.onrender.com/api/auth/login", {
+      const res = await fetch("https://readytech-websites.onrender.com/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password, employeeId }), // send Employee ID

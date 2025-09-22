@@ -3,17 +3,25 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
+
+// Import route files
 import authRoutes from "./routes/auth.js";
 import contactRoutes from "./routes/contact.js";
 import protectedRoutes from "./routes/protected.js";
 
-dotenv.config(); // Load environment variables from .env
+// Load environment variables
+dotenv.config();
 
 const app = express();
 
 // ---------------- Middleware ----------------
-app.use(cors());           // Enable CORS for all routes
-app.use(express.json());   // Parse JSON request bodies
+app.use(
+  cors({
+    origin: "https://readytech-site.netlify.app/", // 👈 Allow all domains (can restrict later to your Netlify domain)
+    credentials: true,
+  })
+);
+app.use(express.json()); // Parse JSON request bodies
 
 // ---------------- Routes ----------------
 app.get("/", (req, res) => {
@@ -21,25 +29,32 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);          // Authentication routes
-app.use("/api/contact", contactRoutes);    // Contact routes (contact form, mail, subscribe)
-app.use("/api/protected", protectedRoutes); // Protected routes (dashboard)
+app.use("/api/contact", contactRoutes);    // Contact form & mailing routes
+app.use("/api/protected", protectedRoutes); // Protected (JWT/role-based) routes
 
 // ---------------- MongoDB Connection ----------------
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI); // modern driver, no deprecated options
-    console.log("✅ MongoDB connected");
+    await mongoose.connect(process.env.MONGO_URI, {
+      // options not required in Mongoose v7+, but adding for safety
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("✅ MongoDB connected successfully");
   } catch (err) {
-    console.error("❌ MongoDB connection error:", err);
-    process.exit(1); // Exit process with failure
+    console.error("❌ MongoDB connection error:", err.message);
+    process.exit(1); // Stop the app if DB fails
   }
 };
 
 connectDB();
 
-// ---------------- Start Server ----------------
+// ---------------- Server Listener ----------------
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
 
-// Optional: export app for testing
+app.listen(PORT, () => {
+  console.log(`🚀 Server running at http://localhost:${PORT}`);
+});
+
+// Optional: Export for testing (e.g., Jest, Supertest)
 export default app;

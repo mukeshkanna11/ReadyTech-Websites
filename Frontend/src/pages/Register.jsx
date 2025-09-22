@@ -16,7 +16,7 @@ export default function Register() {
     setSuccess("");
 
     try {
-      const res = await fetch("https://rtech-backend.onrender.com/api/auth/register", {
+      const res = await fetch("https://readytech-websites.onrender.com/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password, employeeId }),
