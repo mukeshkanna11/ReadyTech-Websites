@@ -1,3 +1,4 @@
+// server.js
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
@@ -10,20 +11,23 @@ dotenv.config(); // Load environment variables from .env
 
 const app = express();
 
-// Middleware
-app.use(cors());             // Enable CORS for all routes
-app.use(express.json());     // Parse JSON request bodies
+// ---------------- Middleware ----------------
+app.use(cors());           // Enable CORS for all routes
+app.use(express.json());   // Parse JSON request bodies
 
+// ---------------- Routes ----------------
+app.get("/", (req, res) => {
+  res.send("🚀 ReadyTech Backend is running!");
+});
 
-// Routes
-app.use("/api/auth", authRoutes);      // Authentication routes
-app.use("/api/contact", contactRoutes); // Contact routes (contact form, mail, subscribe)
+app.use("/api/auth", authRoutes);          // Authentication routes
+app.use("/api/contact", contactRoutes);    // Contact routes (contact form, mail, subscribe)
 app.use("/api/protected", protectedRoutes); // Protected routes (dashboard)
 
-// MongoDB connection
+// ---------------- MongoDB Connection ----------------
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI); // modern driver, no deprecated options needed
+    await mongoose.connect(process.env.MONGO_URI); // modern driver, no deprecated options
     console.log("✅ MongoDB connected");
   } catch (err) {
     console.error("❌ MongoDB connection error:", err);
@@ -33,7 +37,7 @@ const connectDB = async () => {
 
 connectDB();
 
-// Start server
+// ---------------- Start Server ----------------
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
 
