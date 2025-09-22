@@ -3,7 +3,7 @@ import express from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
-import { verifyToken } from "../middleware/verifyToken.js"; // Middleware for protected routes
+import { verifyToken } from "../middleware/verifyToken.js";
 
 const router = express.Router();
 
@@ -16,30 +16,39 @@ router.post("/register", async (req, res) => {
   try {
     const { name, email, password, employeeId } = req.body;
 
-    // Validate all fields
+    // ✅ Validate all fields
     if (!name || !email || !password || !employeeId) {
       return res.status(400).json({ msg: "All fields are required" });
     }
 
-    // Check if user already exists
+    // ✅ Check if user already exists by email
     const existingUser = await User.findOne({ email });
-    if (existingUser)
+    if (existingUser) {
       return res.status(400).json({ msg: "User already exists" });
+    }
 
-    // Hash password
+    // ✅ Hash password before saving
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create user
+    // ✅ Create user
     const user = await User.create({
       name,
-      email,
+      email: email.toLowerCase(),
       password: hashedPassword,
-      employeeId,
+      employeeId: employeeId.trim(),
     });
 
-    res.status(201).json({ msg: "User registered", user });
+    res.status(201).json({
+      msg: "User registered successfully",
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        employeeId: user.employeeId,
+      },
+    });
   } catch (err) {
-    console.error("REGISTER ERROR:", err); // Logs exact error in Render
+    console.error("REGISTER ERROR:", err);
     res.status(500).json({ msg: "Server error", error: err.message });
   }
 });
@@ -53,29 +62,43 @@ router.post("/login", async (req, res) => {
   try {
     const { email, password, employeeId } = req.body;
 
-    // Find user by email
-    const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ msg: "Invalid credentials" });
+    // ✅ Validate input
+    if (!email || !password || !employeeId) {
+      return res.status(400).json({ msg: "All fields are required" });
+    }
 
-    // Validate employee ID
-    if (user.employeeId !== employeeId) {
+    // ✅ Find user by email
+    const user = await User.findOne({ email: email.toLowerCase() });
+    if (!user) {
+      return res.status(400).json({ msg: "Invalid email or password" });
+    }
+
+    // ✅ Validate employee ID
+    if (user.employeeId !== employeeId.trim()) {
       return res
         .status(403)
         .json({ msg: "Access denied. Invalid employee ID." });
     }
 
-    // Compare passwords
+    // ✅ Compare passwords
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
+    if (!isMatch) {
+      return res.status(400).json({ msg: "Invalid email or password" });
+    }
 
-    // Generate JWT token
+    // ✅ Generate JWT token
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
 
     res.json({
       token,
-      user: { id: user._id, name: user.name, email: user.email },
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        employeeId: user.employeeId,
+      },
     });
   } catch (err) {
     console.error("LOGIN ERROR:", err);
@@ -91,7 +114,9 @@ router.post("/login", async (req, res) => {
 router.get("/protected", verifyToken, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
-    if (!user) return res.status(404).json({ msg: "User not found" });
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
 
     res.json(user);
   } catch (err) {
