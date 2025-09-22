@@ -23,7 +23,7 @@ export default function Dashboard() {
 
     const fetchUserData = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/protected", {
+        const res = await fetch("https://rtech-backend.onrender.com/api/protected", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
