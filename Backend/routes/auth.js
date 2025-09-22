@@ -60,38 +60,43 @@ router.post("/register", async (req, res) => {
  */
 router.post("/login", async (req, res) => {
   try {
-    const { email, password, employeeId } = req.body;
+    let { email, password, employeeId } = req.body;
 
-    // ✅ Validate input
+    // ---------------- Input validation ----------------
     if (!email || !password || !employeeId) {
       return res.status(400).json({ msg: "All fields are required" });
     }
 
-    // ✅ Find user by email
-    const user = await User.findOne({ email: email.toLowerCase() });
+    email = email.toLowerCase().trim();
+    employeeId = employeeId.trim();
+
+    // ---------------- Find user ----------------
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ msg: "Invalid email or password" });
     }
 
-    // ✅ Validate employee ID
-    if (user.employeeId !== employeeId.trim()) {
+    // ---------------- Validate employee ID ----------------
+    if (user.employeeId !== employeeId) {
       return res
         .status(403)
-        .json({ msg: "Access denied. Invalid employee ID." });
+        .json({ msg: "Access denied. Employee ID does not match" });
     }
 
-    // ✅ Compare passwords
+    // ---------------- Compare password ----------------
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ msg: "Invalid email or password" });
     }
 
-    // ✅ Generate JWT token
+    // ---------------- Generate JWT token ----------------
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
 
-    res.json({
+    // ---------------- Response ----------------
+    res.status(200).json({
+      msg: "Login successful",
       token,
       user: {
         id: user._id,
@@ -105,7 +110,6 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ msg: "Server error", error: err.message });
   }
 });
-
 /**
  * @route   GET /api/auth/protected
  * @desc    Get current user (protected route)

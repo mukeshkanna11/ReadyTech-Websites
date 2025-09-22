@@ -20,7 +20,11 @@ export default function Login() {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password, employeeId }),
+          body: JSON.stringify({
+            email: email.trim().toLowerCase(),
+            password: password.trim(),
+            employeeId: employeeId.trim(),
+          }),
         }
       );
 
@@ -28,11 +32,18 @@ export default function Login() {
       setLoading(false);
 
       if (!res.ok) {
-        setError(data.msg || "Login failed");
+        // Handle 403 and 400 errors
+        if (res.status === 403) {
+          setError("Employee ID does not match our records for this email.");
+        } else if (res.status === 400) {
+          setError(data.msg || "Invalid email or password.");
+        } else {
+          setError("Login failed. Please try again.");
+        }
         return;
       }
 
-      // Save token and user data
+      // ✅ Save token and user info
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
@@ -40,8 +51,8 @@ export default function Login() {
       navigate("/dashboard");
     } catch (err) {
       setLoading(false);
-      setError("Server error. Please try again.");
-      console.error(err);
+      setError("Server error. Please check your connection and try again.");
+      console.error("LOGIN ERROR:", err);
     }
   };
 
@@ -52,7 +63,12 @@ export default function Login() {
           Welcome Back 👋
         </h2>
 
-        {error && <p className="mb-4 text-center text-red-400">{error}</p>}
+        {/* Error message */}
+        {error && (
+          <div className="px-4 py-3 mb-4 text-center text-red-700 bg-red-100 rounded-lg">
+            {error}
+          </div>
+        )}
 
         <form className="space-y-5" onSubmit={handleLogin}>
           {/* Employee ID */}
