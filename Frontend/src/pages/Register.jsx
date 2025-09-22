@@ -5,18 +5,21 @@ export default function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [employeeId, setEmployeeId] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(""); // ✅ Success message
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setError("");
+    setSuccess("");
 
     try {
       const res = await fetch("https://rtech-backend.onrender.com/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ name, email, password, employeeId }),
       });
 
       const data = await res.json();
@@ -26,8 +29,15 @@ export default function Register() {
         return;
       }
 
-      // Optional: redirect to login page after registration
-      navigate("/login");
+      setSuccess("🎉 Registration successful! Welcome to ReadyTech Solutions!");
+      // Clear form after success
+      setName("");
+      setEmail("");
+      setPassword("");
+      setEmployeeId("");
+
+      // Redirect to login after a short delay
+      setTimeout(() => navigate("/login"), 3000);
     } catch (err) {
       setError("Server error");
       console.error(err);
@@ -40,7 +50,21 @@ export default function Register() {
         <h2 className="mb-8 text-4xl font-bold text-center text-white">
           Create Account 🚀
         </h2>
-        {error && <p className="mb-4 text-center text-red-400">{error}</p>}
+
+        {/* Error message */}
+        {error && (
+          <div className="px-4 py-3 mb-4 text-center text-red-700 bg-red-100 rounded-lg">
+            {error}
+          </div>
+        )}
+
+        {/* Success message */}
+        {success && (
+          <div className="px-4 py-3 mb-4 text-center text-green-800 bg-green-100 rounded-lg animate-pulse">
+            {success}
+          </div>
+        )}
+
         <form className="space-y-6" onSubmit={handleRegister}>
           <div>
             <label className="block mb-2 text-lg text-white">Full Name</label>
@@ -53,6 +77,7 @@ export default function Register() {
               required
             />
           </div>
+
           <div>
             <label className="block mb-2 text-lg text-white">Email</label>
             <input
@@ -64,6 +89,7 @@ export default function Register() {
               required
             />
           </div>
+
           <div>
             <label className="block mb-2 text-lg text-white">Password</label>
             <input
@@ -75,6 +101,19 @@ export default function Register() {
               required
             />
           </div>
+
+          <div>
+            <label className="block mb-2 text-lg text-white">Employee ID</label>
+            <input
+              type="text"
+              value={employeeId}
+              onChange={(e) => setEmployeeId(e.target.value)}
+              placeholder="Enter your Employee ID (e.g., RTS112)"
+              className="w-full px-5 py-3 text-lg text-gray-800 outline-none rounded-xl bg-white/80 focus:ring-4 focus:ring-yellow-400"
+              required
+            />
+          </div>
+
           <button
             type="submit"
             className="w-full py-3 text-lg font-semibold text-white transition transform rounded-xl bg-gradient-to-r from-green-500 to-teal-500 hover:scale-105"
@@ -82,6 +121,7 @@ export default function Register() {
             Sign Up
           </button>
         </form>
+
         <p className="mt-6 text-center text-white">
           Already have an account?{" "}
           <Link
