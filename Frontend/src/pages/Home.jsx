@@ -38,31 +38,6 @@ export default function Home() {
           }}
         />
 
-        {/* Floating Tech Icons */}
-        {[FaLock, FaUserAlt, FaHome, FaPhoneAlt, FaCloud].map(
-          (Icon, index) => (
-            <motion.div
-              key={index}
-              className="absolute text-indigo-400 opacity-70"
-              style={{
-                top: `${20 + index * 15}%`,
-                left: `${15 + index * 12}%`,
-              }}
-              animate={{
-                y: [0, -20, 0],
-                opacity: [0.4, 1, 0.4],
-              }}
-              transition={{
-                duration: 6 + index,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            >
-              <Icon size={32} />
-            </motion.div>
-          )
-        )}
-
         {/* Glowing Nodes */}
         {[...Array(12)].map((_, i) => (
           <motion.span

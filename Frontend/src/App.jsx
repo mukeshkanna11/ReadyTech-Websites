@@ -17,6 +17,7 @@ import Demo from "./pages/Demo";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import PaymentSection from "./pages/PaymentSection";
 
 // Service Detail Pages
 import WebsiteMaintenance from "./pages/WebsiteMaintenance";
@@ -41,7 +42,7 @@ export default function App() {
   const location = useLocation(); // Get current route
 
   // Check if current route is login
-  const hideFooter = ["/login", "/register"].includes(location.pathname);
+  const hideFooter = ["/login", "/register", "/payment"].includes(location.pathname);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -61,6 +62,7 @@ export default function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/development" element={<Development />} />
           <Route path="/demo" element={<Demo />} />
+          <Route path="/payment" element={<PaymentSection />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
