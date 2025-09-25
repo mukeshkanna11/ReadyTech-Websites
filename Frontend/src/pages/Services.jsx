@@ -74,30 +74,35 @@ export default function Services() {
     },
   ];
 
-  // ServiceCard Component
+  // Enhanced ServiceCard Component
   const ServiceCard = ({ service }) => (
-    <div className="flex flex-col overflow-hidden text-gray-100 transition-transform transform bg-gray-800 shadow-lg rounded-2xl hover:scale-105">
-      <div className="relative w-full h-48">
+    <motion.div 
+      whileHover={{ scale: 1.05 }}
+      transition={{ type: "spring", stiffness: 300 }}
+      className="flex flex-col overflow-hidden text-gray-100 transition-transform transform bg-gray-800 shadow-lg rounded-2xl hover:shadow-2xl"
+    >
+      <div className="relative w-full h-48 overflow-hidden rounded-t-2xl">
         <img
           src={service.image}
           alt={service.title}
-          className="object-cover w-full h-full"
+          className="object-cover w-full h-full transition-transform duration-500 hover:scale-110"
         />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
         <div className="absolute p-3 text-white bg-indigo-600 rounded-full shadow-lg bottom-4 left-4">
           {service.icon}
         </div>
       </div>
-      <div className="flex flex-col flex-1 gap-2 p-5">
+      <div className="flex flex-col flex-1 p-5">
         <h3 className="text-xl font-semibold text-indigo-400">{service.title}</h3>
-        <p className="text-sm text-gray-300">{service.description}</p>
+        <p className="flex-1 mt-2 text-sm text-gray-300">{service.description}</p>
         <button
           onClick={() => navigate(service.link)}
-          className="px-4 py-2 mt-4 font-medium text-gray-900 transition bg-indigo-400 rounded-lg shadow-md hover:bg-indigo-500"
+          className="px-4 py-2 mt-auto font-medium text-gray-900 transition bg-indigo-400 rounded-lg shadow-md hover:bg-indigo-500 hover:scale-105"
         >
           Learn More
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 
   return (
@@ -174,12 +179,12 @@ export default function Services() {
           <form className="flex flex-col justify-center gap-4 mt-8 sm:flex-row">
             <input
               type="email"
-              placeholder="Enter your email address"
+              placeholder="Enter your email"
               className="w-full px-5 py-3 text-gray-900 rounded-lg sm:w-auto focus:outline-none focus:ring-2 focus:ring-yellow-400"
             />
             <button
               type="submit"
-              className="px-8 py-3 font-medium text-purple-800 bg-yellow-400 rounded-lg shadow-lg hover:bg-yellow-300"
+              className="px-8 py-3 font-medium text-purple-800 transition bg-yellow-400 rounded-lg shadow-lg hover:bg-yellow-300"
             >
               Subscribe Now
             </button>

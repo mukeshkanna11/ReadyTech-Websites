@@ -177,34 +177,32 @@ export default function Home() {
           <div className="flex justify-center gap-3 mb-12">
             <button
               onClick={() => setTemplate("A")}
-              className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                template === "A"
+              className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${template === "A"
                   ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/40 scale-105"
                   : "bg-white/10 text-gray-300 hover:bg-indigo-500/20 hover:text-indigo-300"
-              }`}
+                }`}
             >
               Corporate
             </button>
             <button
               onClick={() => setTemplate("B")}
-              className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                template === "B"
+              className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${template === "B"
                   ? "bg-rose-500 text-white shadow-lg shadow-rose-400/40 scale-105"
                   : "bg-white/10 text-gray-300 hover:bg-rose-500/20 hover:text-rose-300"
-              }`}
+                }`}
             >
               Creative
             </button>
             <button
               onClick={() => setTemplate("C")}
-              className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                template === "C"
-                  ? "bg-gray-800 text-white shadow-lg shadow-gray-600/40 scale-105"
-                  : "bg-white/10 text-gray-300 hover:bg-gray-600/20 hover:text-gray-200"
-              }`}
+              className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${template === "C"
+                  ? "bg-gray-200 text-gray-900 shadow-lg shadow-gray-400/40 scale-105" // light background when active
+                  : "bg-gray-100/20 text-gray-300 hover:bg-gray-300/30 hover:text-gray-100" // lighter transparent for inactive
+                }`}
             >
               Developer
             </button>
+
           </div>
 
           {/* Templates */}
@@ -225,65 +223,71 @@ export default function Home() {
   );
 }
 
-/* ---------------------- TemplateA Modern UI ---------------------- */
+/* ---------------------- TemplateA Modern Dark UI ---------------------- */
 function TemplateA() {
   return (
-    <section className="overflow-hidden text-gray-800">
+    <section className="relative overflow-hidden text-white bg-gray-900">
+
+      {/* Animated Gradient Blobs */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute top-0 bg-purple-500 rounded-full left-1/3 w-96 h-96 mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
+        <div className="absolute bottom-0 bg-pink-500 rounded-full right-1/3 w-96 h-96 mix-blend-multiply filter blur-3xl opacity-30 animate-bounce"></div>
+        <div className="absolute bg-indigo-500 rounded-full top-1/2 left-1/4 w-80 h-80 mix-blend-multiply filter blur-3xl opacity-30 animate-spin-slow"></div>
+      </div>
 
       {/* Hero Intro */}
-      <div className="px-6 py-20 lg:px-16 bg-gradient-to-r from-purple-50 via-pink-50 to-rose-50 rounded-xl">
-        <h1 className="text-4xl font-extrabold leading-tight text-center text-purple-700 md:text-5xl">
+      <div className="px-6 py-20 lg:px-16">
+        <h1 className="text-4xl font-extrabold leading-tight text-center text-pink-400 md:text-5xl">
           Your Partner for{" "}
-          <span className="text-pink-600">Enterprise-Grade Digital Solutions</span>
+          <span className="text-purple-300">Enterprise-Grade Digital Solutions</span>
         </h1>
-        <p className="max-w-3xl mx-auto mt-6 text-lg text-center text-gray-700">
-          At <strong className="text-purple-700">ReadyTech Solutions</strong>, we help businesses scale with technology that lasts. From SaaS platforms to enterprise apps, we focus on <span className="font-semibold text-pink-600">speed, security, and measurable growth</span>.
+        <p className="max-w-3xl mx-auto mt-6 text-lg text-center text-gray-300">
+          At <strong className="text-pink-400">ReadyTech Solutions</strong>, we help businesses scale with technology that lasts. From SaaS platforms to enterprise apps, we focus on{" "}
+          <span className="font-semibold text-purple-300">speed, security, and measurable growth</span>.
         </p>
 
         {/* Business Outcomes */}
         <div className="grid gap-6 mt-16 sm:grid-cols-3">
           {[
-            { title: "Faster Time-to-Market", desc: "Agile processes cut development timelines by up to 30%, helping you launch faster.", color: "from-purple-200 to-purple-100" },
-            { title: "Lower Costs, Higher ROI", desc: "Optimized codebases save clients an average of 25% in operational costs.", color: "from-pink-200 to-pink-100" },
-            { title: "Future-Proof Technology", desc: "Latest MERN stack and cloud-native deployments to keep your product relevant.", color: "from-yellow-200 to-yellow-100" },
+            { title: "Faster Time-to-Market", desc: "Agile processes cut development timelines by up to 30%, helping you launch faster.", color: "from-purple-800/60 to-purple-600/40" },
+            { title: "Lower Costs, Higher ROI", desc: "Optimized codebases save clients an average of 25% in operational costs.", color: "from-pink-800/60 to-pink-600/40" },
+            { title: "Future-Proof Technology", desc: "Latest MERN stack and cloud-native deployments to keep your product relevant.", color: "from-yellow-800/60 to-yellow-600/40" },
           ].map((item, idx) => (
-            <div key={idx} className={`p-6 rounded-xl shadow-lg bg-gradient-to-br ${item.color} hover:scale-105 transition transform`}>
-              <h4 className="text-xl font-semibold text-gray-800">{item.title}</h4>
-              <p className="mt-2 text-sm text-gray-700">{item.desc}</p>
+            <div key={idx} className={`p-6 rounded-xl shadow-xl bg-gradient-to-br ${item.color} backdrop-blur-md hover:scale-105 transition`}>
+              <h4 className="text-xl font-semibold text-white">{item.title}</h4>
+              <p className="mt-2 text-sm text-gray-300">{item.desc}</p>
             </div>
           ))}
         </div>
 
         {/* Trust Signals */}
         <div className="mt-20 text-center">
-          <h2 className="text-2xl font-bold text-purple-700">
-            Trusted by Businesses Worldwide 🌍
-          </h2>
-          <p className="mt-2 text-gray-700">
+          <h2 className="text-2xl font-bold text-pink-400">Trusted by Businesses Worldwide 🌍</h2>
+          <p className="mt-2 text-gray-300">
             From startups in Silicon Valley to SMEs in Europe — ReadyTech delivers secure, scalable, and user-friendly platforms.
           </p>
-         <div className="flex justify-center gap-8 mt-8">
-      <img src={Img1} alt="Client Logo" className="w-28 h-28" />
-      <img src={Img2} alt="Client Logo" className="w-28 h-28" />
-      <img src={Img3} alt="Client Logo" className="w-28 h-28" />
-    </div>
+          <div className="flex flex-wrap justify-center gap-8 mt-8">
+            <img src={Img1} alt="Client Logo" className="object-contain w-24 h-24 transition grayscale hover:grayscale-0" />
+            <img src={Img2} alt="Client Logo" className="object-contain w-24 h-24 transition grayscale hover:grayscale-0" />
+            <img src={Img3} alt="Client Logo" className="object-contain w-24 h-24 transition grayscale hover:grayscale-0" />
+          </div>
         </div>
 
         {/* Core Services */}
         <div className="mt-24">
-          <h2 className="text-3xl font-bold text-center text-purple-700">Our Core Services</h2>
-          <p className="max-w-2xl mx-auto mt-2 text-center text-gray-700">
+          <h2 className="text-3xl font-bold text-center text-pink-400">Our Core Services</h2>
+          <p className="max-w-2xl mx-auto mt-2 text-center text-gray-300">
             Full-stack solutions aligned with your business goals.
           </p>
           <div className="grid gap-6 mt-12 sm:grid-cols-3">
             {[
-              { title: "Custom Software", desc: "Tailored applications built for scalability and security.", color: "from-purple-200 to-purple-100" },
-              { title: "UI/UX Design", desc: "Creating intuitive interfaces that boost engagement.", color: "from-pink-200 to-pink-100" },
-              { title: "Cloud & DevOps", desc: "Optimized deployments with high availability & performance.", color: "from-yellow-200 to-yellow-100" },
+              { title: "Custom Software", desc: "Tailored applications built for scalability and security.", color: "from-purple-800/60 to-purple-600/40" },
+              { title: "UI/UX Design", desc: "Creating intuitive interfaces that boost engagement.", color: "from-pink-800/60 to-pink-600/40" },
+              { title: "Cloud & DevOps", desc: "Optimized deployments with high availability & performance.", color: "from-yellow-800/60 to-yellow-600/40" },
             ].map((service, idx) => (
-              <div key={idx} className={`p-6 text-center rounded-xl shadow-lg bg-gradient-to-br ${service.color} hover:scale-105 transition transform`}>
-                <h4 className="text-xl font-semibold text-gray-800">{service.title}</h4>
-                <p className="mt-2 text-sm text-gray-700">{service.desc}</p>
+              <div key={idx} className={`p-6 text-center rounded-xl shadow-xl bg-gradient-to-br ${service.color} backdrop-blur-md hover:scale-105 transition`}>
+                <h4 className="text-xl font-semibold text-white">{service.title}</h4>
+                <p className="mt-2 text-sm text-gray-300">{service.desc}</p>
               </div>
             ))}
           </div>
@@ -291,29 +295,29 @@ function TemplateA() {
 
         {/* Case Studies */}
         <div className="mt-24">
-          <h2 className="text-3xl font-bold text-center text-purple-700">Case Studies</h2>
+          <h2 className="text-3xl font-bold text-center text-pink-400">Case Studies</h2>
           <div className="grid gap-6 mt-12 sm:grid-cols-2">
             {[
-              { title: "FinTech SaaS Platform", desc: "Reduced transaction processing time by 40% with optimized backend APIs and scalable cloud deployment.", color: "from-purple-100 to-purple-50" },
-              { title: "Healthcare Data Portal", desc: "Improved patient record management with secure HIPAA-compliant software, cutting downtime by 60%.", color: "from-pink-100 to-pink-50" },
+              { title: "FinTech SaaS Platform", desc: "Reduced transaction processing time by 40% with optimized backend APIs and scalable cloud deployment.", color: "from-purple-700/50 to-purple-500/40" },
+              { title: "Healthcare Data Portal", desc: "Improved patient record management with secure HIPAA-compliant software, cutting downtime by 60%.", color: "from-pink-700/50 to-pink-500/40" },
             ].map((caseStudy, idx) => (
-              <div key={idx} className={`p-6 rounded-xl shadow-lg bg-gradient-to-br ${caseStudy.color} hover:scale-105 transition transform`}>
-                <h4 className="text-xl font-semibold text-gray-800">{caseStudy.title}</h4>
-                <p className="mt-2 text-sm text-gray-700">{caseStudy.desc}</p>
+              <div key={idx} className={`p-6 rounded-xl shadow-xl bg-gradient-to-br ${caseStudy.color} backdrop-blur-md hover:scale-105 transition`}>
+                <h4 className="text-xl font-semibold text-white">{caseStudy.title}</h4>
+                <p className="mt-2 text-sm text-gray-300">{caseStudy.desc}</p>
               </div>
             ))}
           </div>
         </div>
 
         {/* Final CTA */}
-        <div className="px-6 py-16 mt-24 text-center rounded-xl bg-gradient-to-r from-pink-500 to-purple-500">
+        <div className="px-6 py-16 mt-24 text-center shadow-lg rounded-xl bg-gradient-to-r from-pink-600 to-purple-700">
           <h2 className="text-3xl font-bold text-white">Let’s Build Your Next-Gen Platform 🚀</h2>
-          <p className="mt-2 text-white/90">
+          <p className="mt-2 text-gray-200">
             We combine strategy, design, and technology to deliver lasting results.
           </p>
           <a
             href="/contact"
-            className="inline-block px-8 py-4 mt-6 text-lg font-semibold text-pink-600 transition transform bg-white rounded-full shadow-lg hover:scale-105 hover:shadow-2xl"
+            className="inline-block px-8 py-4 mt-6 text-lg font-semibold text-pink-600 transition bg-white rounded-full shadow-lg hover:scale-105 hover:shadow-2xl"
           >
             Schedule a Free Consultation
           </a>
@@ -325,28 +329,29 @@ function TemplateA() {
 
 
 
-/* ---------------------- TemplateB Modern UI ---------------------- */
+
+/* ---------------------- TemplateB Modern Dark UI ---------------------- */
 function TemplateB() {
   return (
-    <section className="overflow-hidden text-gray-900 bg-gradient-to-b from-rose-50 to-white rounded-xl">
+    <section className="overflow-hidden text-gray-100 bg-gradient-to-b from-gray-900 via-gray-950 to-black rounded-xl">
       {/* Company Introduction */}
       <div className="px-6 py-16 mx-auto max-w-7xl md:flex md:items-start md:gap-16">
         <div className="space-y-6 md:w-1/2">
-          <div className="p-8 shadow-2xl rounded-3xl bg-gradient-to-br from-pink-50 to-rose-50">
-            <h2 className="mb-4 text-4xl font-extrabold text-rose-600">
+          <div className="p-8 border border-gray-700 shadow-2xl rounded-3xl bg-gradient-to-br from-gray-800 to-gray-900">
+            <h2 className="mb-4 text-4xl font-extrabold text-pink-400">
               ReadyTech Solutions – Engineering Digital Excellence
             </h2>
-            <p className="text-lg text-gray-700">
-              At <span className="font-semibold text-rose-500">ReadyTech Solutions</span>, we deliver
-              <span className="font-semibold text-indigo-500"> end-to-end software solutions</span> that empower businesses to thrive in the digital era.
-              Our team combines <span className="font-semibold text-indigo-500">UX-focused design</span>
-              with <span className="font-semibold text-indigo-500">robust engineering</span> to create products that are visually compelling, technically strong, and market-ready.
+            <p className="text-lg text-gray-300">
+              At <span className="font-semibold text-pink-400">ReadyTech Solutions</span>, we deliver
+              <span className="font-semibold text-indigo-400"> end-to-end software solutions</span> that empower businesses to thrive in the digital era.
+              Our team combines <span className="font-semibold text-indigo-400">UX-focused design</span>
+              with <span className="font-semibold text-indigo-400">robust engineering</span> to create products that are visually compelling, technically strong, and market-ready.
             </p>
-            <p className="mt-3 text-gray-600">
+            <p className="mt-3 text-gray-400">
               Serving clients across the US and domestic markets, we provide innovative solutions that streamline operations, enhance customer engagement, and drive measurable growth.
             </p>
 
-            <ul className="mt-6 space-y-3 text-gray-700 list-disc list-inside">
+            <ul className="mt-6 space-y-3 text-gray-300 list-disc list-inside">
               <li>Custom Web & Mobile Application Development</li>
               <li>Cloud-Native & Scalable Systems</li>
               <li>AI-Powered Automation & Smart Workflows</li>
@@ -358,33 +363,33 @@ function TemplateB() {
 
         {/* Right Side: Visual Elements */}
         <div className="grid grid-cols-1 gap-6 mt-10 md:w-1/2 md:mt-0">
-          <div className="p-6 shadow-lg rounded-xl bg-gradient-to-br from-pink-200 to-rose-100">
-            <h3 className="text-lg font-semibold text-rose-600">Custom Software Solutions</h3>
-            <p className="mt-2 text-gray-700">
+          <div className="p-6 border shadow-lg rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 border-pink-500/40">
+            <h3 className="text-lg font-semibold text-pink-400">Custom Software Solutions</h3>
+            <p className="mt-2 text-gray-300">
               Tailored applications that align with your business objectives, improving efficiency and user satisfaction.
             </p>
           </div>
-          <div className="p-6 shadow-lg rounded-xl bg-gradient-to-br from-cyan-200 to-rose-100">
-            <h3 className="text-lg font-semibold text-cyan-700">Cloud & Scalable Systems</h3>
-            <p className="mt-2 text-gray-700">
+          <div className="p-6 border shadow-lg rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 border-cyan-500/40">
+            <h3 className="text-lg font-semibold text-cyan-400">Cloud & Scalable Systems</h3>
+            <p className="mt-2 text-gray-300">
               Cloud-native architectures designed for high performance, security, and effortless scalability.
             </p>
           </div>
-          <div className="p-6 shadow-lg rounded-xl bg-gradient-to-br from-indigo-200 to-rose-100">
-            <h3 className="text-lg font-semibold text-indigo-700">UX/UI Design Excellence</h3>
-            <p className="mt-2 text-gray-700">
+          <div className="p-6 border shadow-lg rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 border-indigo-500/40">
+            <h3 className="text-lg font-semibold text-indigo-400">UX/UI Design Excellence</h3>
+            <p className="mt-2 text-gray-300">
               Engaging, accessible, and responsive interfaces that boost conversion and retention.
             </p>
           </div>
-          <div className="p-6 shadow-lg rounded-xl bg-gradient-to-br from-yellow-200 to-rose-100">
-            <h3 className="text-lg font-semibold text-yellow-700">AI & Automation</h3>
-            <p className="mt-2 text-gray-700">
+          <div className="p-6 border shadow-lg rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 border-yellow-500/40">
+            <h3 className="text-lg font-semibold text-yellow-400">AI & Automation</h3>
+            <p className="mt-2 text-gray-300">
               Intelligent automation for smarter workflows, reduced errors, and faster decision-making.
             </p>
           </div>
-          <div className="p-6 shadow-lg rounded-xl bg-gradient-to-br from-green-200 to-rose-100">
-            <h3 className="text-lg font-semibold text-green-700">Consulting & Support</h3>
-            <p className="mt-2 text-gray-700">
+          <div className="p-6 border shadow-lg rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 border-green-500/40">
+            <h3 className="text-lg font-semibold text-green-400">Consulting & Support</h3>
+            <p className="mt-2 text-gray-300">
               Expert guidance for technology adoption and continuous support for sustainable growth.
             </p>
           </div>
@@ -392,66 +397,70 @@ function TemplateB() {
       </div>
 
       {/* Industries Served */}
-      <div className="py-16 bg-gradient-to-r from-rose-50 to-white">
+      <div className="py-16 bg-gradient-to-r from-gray-950 to-black">
         <div className="px-6 mx-auto text-center max-w-7xl">
-          <h2 className="mb-8 text-3xl font-bold text-rose-600">Industries We Serve</h2>
-          <p className="mb-12 text-gray-700">
+          <h2 className="mb-8 text-3xl font-bold text-pink-400">Industries We Serve</h2>
+          <p className="mb-12 text-gray-300">
             From healthcare to finance, e-commerce to agriculture, our solutions are tailored to fit diverse industries and deliver tangible results.
           </p>
-          <div className="grid grid-cols-2 gap-8 text-gray-700 md:grid-cols-4">
-            <div className="p-6 transition-transform bg-white shadow-lg rounded-xl hover:scale-105">Healthcare</div>
-            <div className="p-6 transition-transform bg-white shadow-lg rounded-xl hover:scale-105">Finance & Banking</div>
-            <div className="p-6 transition-transform bg-white shadow-lg rounded-xl hover:scale-105">E-Commerce</div>
-            <div className="p-6 transition-transform bg-white shadow-lg rounded-xl hover:scale-105">Agriculture & Farming</div>
-            <div className="p-6 transition-transform bg-white shadow-lg rounded-xl hover:scale-105">Education</div>
-            <div className="p-6 transition-transform bg-white shadow-lg rounded-xl hover:scale-105">Logistics & Transport</div>
-            <div className="p-6 transition-transform bg-white shadow-lg rounded-xl hover:scale-105">Real Estate</div>
-            <div className="p-6 transition-transform bg-white shadow-lg rounded-xl hover:scale-105">SaaS & Startups</div>
+          <div className="grid grid-cols-2 gap-8 text-gray-200 md:grid-cols-4">
+            {[
+              "Healthcare",
+              "Finance & Banking",
+              "E-Commerce",
+              "Agriculture & Farming",
+              "Education",
+              "Logistics & Transport",
+              "Real Estate",
+              "SaaS & Startups",
+            ].map((item, i) => (
+              <div
+                key={i}
+                className="p-6 transition-transform bg-gray-800 border border-gray-700 shadow-lg rounded-xl hover:scale-105"
+              >
+                {item}
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
       {/* Our Process */}
       <div className="px-6 py-16 mx-auto max-w-7xl">
-        <h2 className="mb-12 text-3xl font-bold text-center text-rose-600">Our Proven Process</h2>
+        <h2 className="mb-12 text-3xl font-bold text-center text-pink-400">Our Proven Process</h2>
         <div className="grid grid-cols-1 gap-10 text-center md:grid-cols-4">
-          <div className="p-6 shadow-xl bg-gradient-to-br from-pink-50 to-rose-50 rounded-2xl">
-            <h3 className="text-lg font-semibold text-rose-600">1. Discovery</h3>
-            <p className="mt-2 text-gray-700">We understand your goals, audience, and challenges to define a clear roadmap.</p>
-          </div>
-          <div className="p-6 shadow-xl bg-gradient-to-br from-cyan-50 to-rose-50 rounded-2xl">
-            <h3 className="text-lg font-semibold text-cyan-700">2. Design</h3>
-            <p className="mt-2 text-gray-700">We create wireframes, prototypes, and intuitive designs that resonate with users.</p>
-          </div>
-          <div className="p-6 shadow-xl bg-gradient-to-br from-indigo-50 to-rose-50 rounded-2xl">
-            <h3 className="text-lg font-semibold text-indigo-700">3. Development</h3>
-            <p className="mt-2 text-gray-700">Our engineers build scalable, reliable, and maintainable solutions using best practices.</p>
-          </div>
-          <div className="p-6 shadow-xl bg-gradient-to-br from-yellow-50 to-rose-50 rounded-2xl">
-            <h3 className="text-lg font-semibold text-yellow-700">4. Launch & Support</h3>
-            <p className="mt-2 text-gray-700">We deploy your product and provide continuous monitoring, updates, and support.</p>
-          </div>
+          {[
+            { step: "1. Discovery", color: "text-pink-400", desc: "We understand your goals, audience, and challenges to define a clear roadmap." },
+            { step: "2. Design", color: "text-cyan-400", desc: "We create wireframes, prototypes, and intuitive designs that resonate with users." },
+            { step: "3. Development", color: "text-indigo-400", desc: "Our engineers build scalable, reliable, and maintainable solutions using best practices." },
+            { step: "4. Launch & Support", color: "text-yellow-400", desc: "We deploy your product and provide continuous monitoring, updates, and support." },
+          ].map((item, i) => (
+            <div key={i} className="p-6 bg-gray-800 border border-gray-700 shadow-xl rounded-2xl">
+              <h3 className={`text-lg font-semibold ${item.color}`}>{item.step}</h3>
+              <p className="mt-2 text-gray-300">{item.desc}</p>
+            </div>
+          ))}
         </div>
       </div>
 
       {/* Why Choose Us */}
-      <div className="py-16 bg-gradient-to-r from-rose-50 to-white">
+      <div className="py-16 bg-gradient-to-r from-gray-950 to-black">
         <div className="px-6 mx-auto space-y-8 text-center max-w-7xl">
-          <h2 className="mb-8 text-3xl font-bold text-rose-600">Why Choose ReadyTech Solutions?</h2>
-          <p className="max-w-3xl mx-auto text-gray-700">
+          <h2 className="mb-8 text-3xl font-bold text-pink-400">Why Choose ReadyTech Solutions?</h2>
+          <p className="max-w-3xl mx-auto text-gray-300">
             With years of experience, a dedicated team of experts, and a commitment to innovation, we help businesses achieve their digital goals efficiently. Our clients value our transparency, creativity, and ability to deliver on time and within budget.
           </p>
-          <div className="grid grid-cols-1 gap-8 mt-8 text-gray-700 md:grid-cols-3">
-            <div className="p-6 transition-shadow bg-white shadow-lg rounded-xl hover:shadow-2xl">
-              <h3 className="font-semibold text-rose-600">Experienced Team</h3>
+          <div className="grid grid-cols-1 gap-8 mt-8 text-gray-200 md:grid-cols-3">
+            <div className="p-6 transition-shadow bg-gray-800 border shadow-lg border-pink-500/30 rounded-xl hover:shadow-2xl">
+              <h3 className="font-semibold text-pink-400">Experienced Team</h3>
               <p className="mt-2">Professionals with deep expertise in full-stack development, design, and AI solutions.</p>
             </div>
-            <div className="p-6 transition-shadow bg-white shadow-lg rounded-xl hover:shadow-2xl">
-              <h3 className="font-semibold text-cyan-700">Client-Centric Approach</h3>
+            <div className="p-6 transition-shadow bg-gray-800 border shadow-lg border-cyan-500/30 rounded-xl hover:shadow-2xl">
+              <h3 className="font-semibold text-cyan-400">Client-Centric Approach</h3>
               <p className="mt-2">We prioritize understanding client needs and delivering solutions that exceed expectations.</p>
             </div>
-            <div className="p-6 transition-shadow bg-white shadow-lg rounded-xl hover:shadow-2xl">
-              <h3 className="font-semibold text-indigo-700">Proven Results</h3>
+            <div className="p-6 transition-shadow bg-gray-800 border shadow-lg border-indigo-500/30 rounded-xl hover:shadow-2xl">
+              <h3 className="font-semibold text-indigo-400">Proven Results</h3>
               <p className="mt-2">We have successfully helped clients in multiple industries achieve measurable growth.</p>
             </div>
           </div>
@@ -462,16 +471,14 @@ function TemplateB() {
       <div className="max-w-3xl px-6 mx-auto mt-12 text-center">
         <a
           href="/contact"
-          className="inline-block px-12 py-5 mb-6 text-lg font-semibold text-white transition-all duration-300 rounded-full shadow-xl bg-gradient-to-r from-rose-500 to-pink-500 hover:scale-105 hover:shadow-2xl"
+          className="inline-block px-12 py-5 mb-6 text-lg font-semibold text-white transition-all duration-300 rounded-full shadow-xl bg-gradient-to-r from-pink-600 to-rose-500 hover:scale-105 hover:shadow-pink-500/40"
         >
           Schedule a Consultation
         </a>
-        <p className="mb-12 text-lg text-gray-700">
-          Discover how <span className="font-semibold text-rose-500">ReadyTech Solutions</span> can help your business innovate, scale efficiently, and dominate the market.
+        <p className="mb-12 text-lg text-gray-300">
+          Discover how <span className="font-semibold text-pink-400">ReadyTech Solutions</span> can help your business innovate, scale efficiently, and dominate the market.
         </p>
       </div>
-
-
     </section>
   );
 }
@@ -480,10 +487,11 @@ function TemplateB() {
 
 
 
-/* ---------------------- TemplateC Enhanced ---------------------- */
+
+
+/* ---------------------- TemplateC Modern Dark UI ---------------------- */
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { i } from "framer-motion/client";
 
 function TemplateC() {
   const navigate = useNavigate(); // For navigation
@@ -493,16 +501,16 @@ function TemplateC() {
   };
 
   return (
-    <section className="overflow-hidden text-gray-800">
+    <section className="overflow-hidden text-gray-100 bg-gradient-to-b from-gray-900 via-gray-950 to-black">
 
       {/* Intro Section */}
-      <div className="px-6 py-16 md:flex md:items-center md:gap-12 bg-gradient-to-r from-purple-50 via-pink-50 to-rose-50 rounded-xl">
+      <div className="px-6 py-16 md:flex md:items-center md:gap-12">
         <div className="max-w-2xl md:w-2/3">
-          <h1 className="text-3xl font-extrabold text-purple-700 md:text-5xl">
+          <h1 className="text-3xl font-extrabold text-pink-400 md:text-5xl">
             Fast, Reliable MERN Engineering for Global Clients
           </h1>
-          <p className="mt-4 text-lg leading-relaxed text-gray-700">
-            At <span className="font-semibold text-pink-600">Ready Tech Solutions</span>,
+          <p className="mt-4 text-lg leading-relaxed text-gray-300">
+            At <span className="font-semibold text-pink-400">Ready Tech Solutions</span>,
             we engineer scalable web & mobile applications for startups and enterprises.
             Our team ensures clean code, robust APIs, and seamless deployments to exceed expectations.
           </p>
@@ -510,14 +518,14 @@ function TemplateC() {
           {/* Feature Highlights */}
           <div className="grid gap-6 mt-10 sm:grid-cols-2">
             {[
-              { title: "APIs & Integrations", desc: "REST/GraphQL endpoints with documentation and third-party integrations.", color: "from-purple-200 to-purple-100" },
-              { title: "Performance", desc: "Optimized queries, server-side caching, and lazy-loading for lightning-fast apps.", color: "from-pink-200 to-pink-100" },
-              { title: "Scalability", desc: "Cloud-native deployments with CI/CD pipelines and microservices.", color: "from-indigo-200 to-indigo-100" },
-              { title: "Security", desc: "JWT/OAuth authentication, role-based access, and data encryption.", color: "from-yellow-200 to-yellow-100" }
+              { title: "APIs & Integrations", desc: "REST/GraphQL endpoints with documentation and third-party integrations.", color: "from-purple-700 to-purple-900" },
+              { title: "Performance", desc: "Optimized queries, server-side caching, and lazy-loading for lightning-fast apps.", color: "from-pink-700 to-pink-900" },
+              { title: "Scalability", desc: "Cloud-native deployments with CI/CD pipelines and microservices.", color: "from-indigo-700 to-indigo-900" },
+              { title: "Security", desc: "JWT/OAuth authentication, role-based access, and data encryption.", color: "from-yellow-600 to-yellow-800" }
             ].map((feature, idx) => (
-              <div key={idx} className={`p-6 rounded-xl shadow-lg bg-gradient-to-br ${feature.color} hover:scale-105 transition transform`}>
-                <h4 className="font-semibold text-gray-800">{feature.title}</h4>
-                <p className="mt-2 text-sm text-gray-600">{feature.desc}</p>
+              <div key={idx} className={`p-6 rounded-xl shadow-xl bg-gradient-to-br ${feature.color} hover:scale-105 transition transform`}>
+                <h4 className="font-semibold text-white">{feature.title}</h4>
+                <p className="mt-2 text-sm text-gray-300">{feature.desc}</p>
               </div>
             ))}
           </div>
@@ -525,7 +533,7 @@ function TemplateC() {
 
         {/* Right Illustration */}
         <div className="hidden mt-10 md:block md:w-1/3">
-          <div className="flex items-center justify-center p-6 shadow-2xl h-72 bg-gradient-to-br from-pink-400 to-purple-500 rounded-2xl">
+          <div className="flex items-center justify-center p-6 shadow-2xl h-72 bg-gradient-to-br from-pink-600 to-purple-700 rounded-2xl">
             <div className="text-center">
               <svg xmlns="http://www.w3.org/2000/svg" className="w-24 h-24 mx-auto text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v12m6-6H6" />
@@ -538,68 +546,68 @@ function TemplateC() {
       </div>
 
       {/* Mission Section */}
-      <div className="px-6 py-16 bg-white md:px-12">
-        <h2 className="text-3xl font-bold text-center text-pink-600">Our Mission</h2>
-        <p className="max-w-3xl mx-auto mt-4 text-center text-gray-700">
+      <div className="px-6 py-16 bg-gray-900 md:px-12">
+        <h2 className="text-3xl font-bold text-center text-pink-400">Our Mission</h2>
+        <p className="max-w-3xl mx-auto mt-4 text-center text-gray-300">
           Empower businesses with reliable, scalable, and user-centric digital products. Bridging innovation and practicality to drive measurable growth.
         </p>
       </div>
 
       {/* Core Values Section */}
-      <div className="px-6 py-16 bg-gradient-to-r from-purple-50 via-pink-50 to-rose-50 md:px-12">
-        <h2 className="text-3xl font-bold text-center text-purple-700">Our Core Values</h2>
+      <div className="px-6 py-16 bg-gray-950 md:px-12">
+        <h2 className="text-3xl font-bold text-center text-purple-400">Our Core Values</h2>
         <div className="grid gap-8 mt-10 md:grid-cols-3">
           {[
             { icon: "💡", title: "Innovation", desc: "Exploring cutting-edge technologies to deliver next-gen solutions." },
             { icon: "🤝", title: "Collaboration", desc: "Partnering with clients for transparent and impactful results." },
             { icon: "🏆", title: "Excellence", desc: "Delivering quality products with attention to detail and user satisfaction." }
           ].map((value, idx) => (
-            <div key={idx} className="p-6 transition bg-white shadow rounded-xl hover:shadow-lg">
-              <h4 className="text-xl font-semibold text-pink-600">{value.icon} {value.title}</h4>
-              <p className="mt-2 text-sm text-gray-700">{value.desc}</p>
+            <div key={idx} className="p-6 transition bg-gray-800 shadow-lg rounded-xl hover:shadow-2xl">
+              <h4 className="text-xl font-semibold text-pink-400">{value.icon} {value.title}</h4>
+              <p className="mt-2 text-sm text-gray-300">{value.desc}</p>
             </div>
           ))}
         </div>
       </div>
 
       {/* Client Success Stories */}
-      <div className="px-6 py-16 bg-white md:px-12">
-        <h2 className="text-3xl font-bold text-center text-purple-700">Client Success Stories</h2>
+      <div className="px-6 py-16 bg-gray-900 md:px-12">
+        <h2 className="text-3xl font-bold text-center text-purple-400">Client Success Stories</h2>
         <div className="grid gap-8 mt-10 md:grid-cols-3">
           {[
             { title: "🌾 AgriTech Platform", desc: "Streamlined farmer operations with real-time analytics and mobile-first dashboards." },
             { title: "🛍️ E-Commerce Solution", desc: "Responsive marketplace with advanced search, filtering, and checkout experiences." },
             { title: "🎬 Media Streaming App", desc: "Optimized for performance with user-personalized recommendations." }
           ].map((story, idx) => (
-            <div key={idx} className="p-6 transition shadow bg-purple-50 rounded-xl hover:shadow-lg">
-              <h4 className="font-semibold text-purple-700">{story.title}</h4>
-              <p className="mt-2 text-sm text-gray-700">{story.desc}</p>
+            <div key={idx} className="p-6 transition bg-gray-800 shadow rounded-xl hover:shadow-lg">
+              <h4 className="font-semibold text-purple-400">{story.title}</h4>
+              <p className="mt-2 text-sm text-gray-300">{story.desc}</p>
             </div>
           ))}
         </div>
       </div>
 
       {/* Tech Stack */}
-      <div className="px-6 py-16 bg-gradient-to-r from-purple-100 to-pink-100 md:px-12">
-        <h2 className="text-3xl font-bold text-center text-pink-600">Our Technology Stack</h2>
-        <p className="max-w-3xl mx-auto mt-4 text-center text-gray-700">
+      <div className="px-6 py-16 bg-gray-950 md:px-12">
+        <h2 className="text-3xl font-bold text-center text-pink-400">Our Technology Stack</h2>
+        <p className="max-w-3xl mx-auto mt-4 text-center text-gray-300">
           Modern frameworks, cloud tools, and enterprise-grade security to ensure every project is robust and scalable.
         </p>
         <div className="flex flex-wrap items-center justify-center gap-6 mt-10">
           {["⚛️ React", "🟢 Node.js", "🍃 MongoDB", "🐳 Docker", "☁️ AWS", "🔐 OAuth/JWT", "🧪 Jest / Cypress", "📦 Nginx / CI-CD"].map((tech, idx) => (
-            <span key={idx} className="px-4 py-2 font-medium text-gray-800 bg-white shadow rounded-xl">{tech}</span>
+            <span key={idx} className="px-4 py-2 font-medium text-gray-100 bg-gray-800 shadow rounded-xl">{tech}</span>
           ))}
         </div>
       </div>
 
       {/* Call to Action */}
-      <div className="px-6 py-16 text-center bg-pink-600">
+      <div className="px-6 py-16 text-center bg-gradient-to-r from-pink-600 to-purple-700">
         <h2 className="text-3xl font-bold text-white">Let’s Build Your Next Big Idea</h2>
         <p className="mt-4 text-white/90">
           Partner with <span className="font-semibold">Ready Tech Solutions</span> for reliable, scalable, and modern MERN development.
         </p>
         <button
-          onClick={handleDemoClick} // <-- Navigate to Demo.jsx
+          onClick={handleDemoClick}
           className="px-8 py-4 mt-8 font-semibold text-pink-600 transition transform bg-white rounded-full shadow-lg hover:scale-105 hover:shadow-2xl"
         >
           🚀 Book a Free Demo
@@ -608,4 +616,6 @@ function TemplateC() {
     </section>
   );
 }
+
+
 
