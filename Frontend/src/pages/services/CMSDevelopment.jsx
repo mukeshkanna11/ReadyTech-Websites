@@ -1,12 +1,17 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { FaWordpress, FaDrupal, FaMagento, FaJoomla } from "react-icons/fa";
-
+import { Helmet } from "react-helmet-async";
 export default function CMSDevelopment() {
   const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
+      <Helmet>  
+        <title>CMS Development Services | Ready Tech Solution</title>        
+        <meta name="description" content="Ready Tech Solution provides CMS development services to help businesses manage their content effectively." />        
+        <meta name="keywords" content="Ready Tech, CMS Development, IT Solutions, Training, Coimbatore, Bangalore" />
+      </Helmet>
       {/* Top Banner */}
       <section className="relative bg-gray-800 text-white h-[400px] md:h-[500px] flex items-center justify-center overflow-hidden">
         <img

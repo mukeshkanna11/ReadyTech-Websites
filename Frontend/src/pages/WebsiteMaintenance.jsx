@@ -1,5 +1,6 @@
 import React from "react";
 import { CheckCircle } from "lucide-react";
+import { Helmet } from "react-helmet-async";
 
 export default function WebsiteMaintenance() {
   const features = [
@@ -33,6 +34,14 @@ export default function WebsiteMaintenance() {
   return (
     <section className="relative py-20 bg-gradient-to-b from-white to-indigo-50">
       <div className="max-w-6xl px-6 mx-auto">
+        <Helmet>
+          <title>Website Maintenance | ReadyTech Solutions</title>
+          <meta
+            name="description"            
+            content="ReadyTech Solutions provides expert website maintenance services to ensure your website stays secure, optimized, and fully functional."
+          />        
+          <meta name="keywords" content="Ready Tech, Website Maintenance, IT Solutions, Training, Coimbatore, Bangalore" />        
+        </Helmet>
         {/* Hero Heading */}
         <div className="text-center">
           <h1 className="text-4xl font-extrabold text-indigo-600 sm:text-5xl">

@@ -1,5 +1,7 @@
 import React from "react";
 import { Users, Headset, ClipboardList, TrendingUp } from "lucide-react";
+import { motion } from "framer-motion";
+import {Helmet} from "react-helmet-async";
 
 export default function Bpo() {
   const services = [
@@ -32,6 +34,11 @@ export default function Bpo() {
   return (
     <section className="relative py-20 overflow-hidden bg-gradient-to-b from-white to-indigo-50">
       <div className="max-w-6xl px-6 mx-auto">
+
+        <Helmet><title>BPO Services | ReadyTech Solutions</title>
+        <meta name="description" content="ReadyTech BPO Services: Streamline Operations, Improve Customer Engagement, and Increase Business Efficiency." />
+        <meta name="keywords" content="ReadyTech, BPO, Business Process Outsourcing, Customer Support, Telemarketing, Lead Generation, Sales Support" />
+        </Helmet>
         {/* Hero Section */}
         <div className="relative z-10 text-center">
           <h1 className="text-4xl font-extrabold text-indigo-600 sm:text-5xl">

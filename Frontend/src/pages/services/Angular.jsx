@@ -1,13 +1,17 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { FaArrowRight, FaCogs, FaRocket, FaCode, FaLayerGroup, FaServer } from "react-icons/fa";
-
+import {Helmet} from "react-helmet-async";
 export default function Angular() {
   const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
-
+<Helmet>  
+        <title>Angular JS Development | Ready Tech Solutions</title>        
+        <meta name="description" content="Ready Tech Solutions provides Angular JS development services to help businesses build robust, scalable, and high-performance applications." />        
+        <meta name="keywords" content="Ready Tech, Angular JS Development, IT Solutions, Training, Coimbatore, Bangalore" />
+      </Helmet>
       {/* Top Banner */}
       <section className="relative bg-indigo-600 text-white h-[400px] md:h-[450px] flex items-center justify-center overflow-hidden">
         <img

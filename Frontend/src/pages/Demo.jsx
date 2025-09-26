@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 export default function Demo() {
   const navigate = useNavigate();
@@ -78,6 +79,11 @@ export default function Demo() {
   return (
     <section className="py-20 bg-gradient-to-b from-indigo-50 via-white to-indigo-100">
       <div className="max-w-5xl px-6 mx-auto">
+        <Helmet>
+          <title>Ready Tech Solutions - Demo</title>
+          <meta name="description" content="Ready Tech Solutions - Demo" />
+          <meta name="keywords" content="Ready Tech, Demo, IT Solutions, Training, Coimbatore, Bangalore" />
+        </Helmet>
         <h1 className="text-4xl font-extrabold text-center text-indigo-700 sm:text-5xl">
           Get a Free Consultation & Choose Your Plan
         </h1>

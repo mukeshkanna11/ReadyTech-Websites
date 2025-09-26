@@ -1,5 +1,6 @@
 import React from "react";
 import { CheckCircle } from "lucide-react";
+import {Helmet} from "react-helmet-async";
 
 export default function BusinessIntelligence() {
   const services = [
@@ -28,6 +29,10 @@ export default function BusinessIntelligence() {
   return (
     <section className="relative py-20 bg-gradient-to-b from-white to-indigo-50">
       <div className="max-w-6xl px-6 mx-auto">
+
+        <Helmet>  
+          <title>Business Intelligence (BI) Services | ReadyTech Solutions</title>  
+        </Helmet>
         {/* Hero Heading */}
         <div className="text-center">
           <h1 className="text-4xl font-extrabold text-indigo-600 sm:text-5xl">
@@ -64,7 +69,7 @@ export default function BusinessIntelligence() {
             {services.map((service, index) => (
               <div
                 key={index}
-                className="flex items-start gap-3 p-4 transition text-gray-800 bg-white rounded-lg shadow hover:shadow-lg"
+                className="flex items-start gap-3 p-4 text-gray-800 transition bg-white rounded-lg shadow hover:shadow-lg"
               >
                 <CheckCircle className="flex-shrink-0 w-6 h-6 text-indigo-500" />
                 <span>{service}</span>

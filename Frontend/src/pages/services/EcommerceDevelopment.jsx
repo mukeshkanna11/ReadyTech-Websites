@@ -1,12 +1,17 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { FaShoppingCart, FaStore, FaGem, FaTshirt, FaPlane, FaUtensils } from "react-icons/fa";
-
+import {Helmet} from "react-helmet-async";
 export default function EcommerceDevelopment() {
   const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
+      <Helmet>  
+        <title>Ready Tech Solutions - Ecommerce Development</title>        
+        <meta name="description" content="Ready Tech Solutions provides Ecommerce development services to help businesses build feature-rich, reliable, and scalable eCommerce websites." />        
+        <meta name="keywords" content="Ready Tech, Ecommerce Development, IT Solutions, Training, Coimbatore, Bangalore" />
+      </Helmet>
       {/* Top Banner */}
       <section className="relative bg-gray-800 text-white h-[400px] md:h-[500px] flex items-center justify-center overflow-hidden">
         <img

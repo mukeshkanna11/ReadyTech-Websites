@@ -1,5 +1,6 @@
 import React from "react";
 import { CheckCircle } from "lucide-react";
+import {Helmet} from "react-helmet-async";
 
 export default function ArtificialIntelligence() {
   const aiServices = [
@@ -36,6 +37,12 @@ export default function ArtificialIntelligence() {
   return (
     <section className="relative py-20 bg-gradient-to-b from-white to-indigo-50">
       <div className="max-w-6xl px-6 mx-auto">
+
+        <Helmet>
+          <title>Artificial Intelligence (AI) | ReadyTech AI</title>
+          <meta name="description" content="Artificial Intelligence (AI) solutions for businesses. Improve efficiency, accuracy, and decision-making with ReadyTech AI." />
+          <meta name="keywords" content="Artificial Intelligence, AI, ReadyTech AI, Business Intelligence, Machine Learning, Data Analysis, Data Science, Data Analytics, Data Visualization" />
+        </Helmet>
         {/* Hero Section */}
         <div className="text-center">
           <h1 className="text-4xl font-extrabold text-indigo-600 sm:text-5xl">

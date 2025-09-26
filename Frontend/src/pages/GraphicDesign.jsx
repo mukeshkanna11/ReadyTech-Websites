@@ -1,5 +1,6 @@
 import React from "react";
 import { CheckCircle } from "lucide-react";
+import { Helmet } from "react-helmet-async";
 
 export default function GraphicDesign() {
   const services = [
@@ -29,6 +30,11 @@ export default function GraphicDesign() {
   return (
     <section className="relative py-20 bg-gradient-to-b from-white to-indigo-50">
       <div className="max-w-6xl px-6 mx-auto">
+        <Helmet>  
+          <title>Graphic Design | Ready Tech Solutions</title>        
+          <meta name="description" content="Ready Tech Solutions provides expert graphic design services to help businesses grow and succeed in the digital world." />        
+          <meta name="keywords" content="Ready Tech, Graphic Design, IT Solutions, Training, Coimbatore, Bangalore" />
+        </Helmet>
         {/* Hero Heading */}
         <div className="text-center">
           <h1 className="text-4xl font-extrabold text-indigo-600 sm:text-5xl">

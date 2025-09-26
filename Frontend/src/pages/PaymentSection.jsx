@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import QRCode from "react-qr-code";
 import { FaGooglePay } from "react-icons/fa";
 import { SiPhonepe, SiPaytm, SiFlipkart } from "react-icons/si";
+import { Helmet } from "react-helmet-async";
 
 export default function PaymentSection() {
   const location = useLocation();
@@ -13,6 +14,11 @@ export default function PaymentSection() {
   if (!plan) {
     return (
       <div className="flex flex-col items-center justify-center h-screen text-white bg-gray-900">
+       <Helmet>    
+          <title>Payment Section | Ready Tech Solutions</title>        
+          <meta name="description" content="Ready Tech Solutions provides expert IT solutions to help businesses grow and succeed in the digital world." />        
+          <meta name="keywords" content="Ready Tech, IT Solutions, Training, Coimbatore, Bangalore" />
+        </Helmet>
         <p className="text-xl">No plan selected!</p>
         <button
           className="px-4 py-2 mt-4 bg-indigo-600 rounded-lg"

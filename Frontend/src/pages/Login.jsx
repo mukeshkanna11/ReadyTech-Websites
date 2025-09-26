@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -58,6 +59,10 @@ export default function Login() {
 
   return (
     <div className="flex items-center justify-center min-h-screen p-6 bg-gradient-to-r from-blue-500 via-indigo-600 to-purple-700">
+
+      <Helmet>
+        <title>ReadyTech | Login</title>
+      </Helmet> 
       <div className="w-full max-w-md p-10 shadow-2xl bg-white/10 backdrop-blur-xl rounded-2xl">
         <h2 className="mb-8 text-3xl font-bold text-center text-white">
           Welcome Back 👋

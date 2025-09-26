@@ -7,10 +7,15 @@ import {
   FaCloud,
   FaLock,
 } from "react-icons/fa";
-
+import { Helmet } from "react-helmet-async";  
 export default function WebDevelopment() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
+      <Helmet>  
+        <title>Web Development Services | Web Development Company</title>        
+        <meta name="description" content="Ready Tech Solutions provides web development services to help businesses build scalable, secure, and modern web applications." />        
+        <meta name="keywords" content="Ready Tech, Web Development Services, IT Solutions, Training, Coimbatore, Bangalore" />
+      </Helmet>
       {/* Hero Section */}
       <section className="relative px-6 pt-24 pb-16 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600">
         <div className="max-w-6xl mx-auto text-center text-white">

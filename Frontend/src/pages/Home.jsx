@@ -8,6 +8,7 @@ import {
   FaPhoneAlt,
   FaCloud,
 } from "react-icons/fa";
+import { Helmet} from "react-helmet-async";
 
 //Images 
 import Img1 from "../assets/images/image1.png";
@@ -22,7 +23,11 @@ export default function Home() {
     <div className="min-h-screen overflow-hidden text-white bg-gray-950 font-poppins">
       {/* Navbar */}
       <Navbar />
-
+<Helmet>  
+        <title>Home | Ready Tech Solutions</title>        
+        <meta name="description" content="Ready Tech Solutions provides expert IT solutions to help businesses grow and succeed in the digital world." />        
+        <meta name="keywords" content="Ready Tech, IT Solutions, Training, Coimbatore, Bangalore" />
+      </Helmet>
       {/* Hero Banner */}
       <section className="relative flex flex-col items-center justify-center w-full min-h-screen overflow-hidden">
         {/* Background Tech Lines (Animated Grid) */}

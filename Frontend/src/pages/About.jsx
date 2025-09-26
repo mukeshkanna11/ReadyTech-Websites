@@ -1,6 +1,6 @@
 import React from "react";
 import { FaLaptopCode, FaChalkboardTeacher, FaTools, FaBullseye, FaLightbulb, FaHeart, FaMapMarkerAlt } from "react-icons/fa";
-
+import {Helmet} from "react-helmet-async";
 export default function AboutReadyTech() {
   const locations = [
     { city: "Coimbatore", address: "149 2nd Floor, Hopes, Coimbatore, Tamil Nadu", phone: " +91 7010797721" },
@@ -10,6 +10,12 @@ export default function AboutReadyTech() {
 
   return (
     <div className="min-h-screen text-gray-100 bg-gray-900">
+
+      <Helmet>
+        <title>About Us | Ready Tech Solutions</title>        
+        <meta name="description" content="Get to know the team behind Ready Tech Solutions. We're a team of passionate professionals who are dedicated to delivering top-notch IT solutions." />
+        <meta name="keywords" content="Ready Tech, About, Team, Coimbatore, Bangalore" />
+      </Helmet>
 
       {/* Glowing Animated Hero Section */}
       <section className="relative flex flex-col items-center justify-center py-24 overflow-hidden text-white">

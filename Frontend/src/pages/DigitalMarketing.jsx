@@ -1,5 +1,6 @@
 import React from "react";
 import { CheckCircle } from "lucide-react";
+import { Helmet } from "react-helmet-async";
 
 export default function DigitalMarketing() {
   const features = [
@@ -24,6 +25,11 @@ export default function DigitalMarketing() {
   return (
     <section className="relative py-20 bg-gradient-to-b from-white to-indigo-50">
       <div className="max-w-6xl px-6 mx-auto">
+        <Helmet>  
+          <title>Digital Marketing | Ready Tech Solutions</title>        
+          <meta name="description" content="Ready Tech Solutions provides expert digital marketing services to help businesses grow and succeed in the digital world." />        
+          <meta name="keywords" content="Ready Tech, Digital Marketing, IT Solutions, Training, Coimbatore, Bangalore" />
+        </Helmet>
         {/* Hero Heading */}
         <div className="text-center">
           <h1 className="text-4xl font-extrabold text-indigo-600 sm:text-5xl">

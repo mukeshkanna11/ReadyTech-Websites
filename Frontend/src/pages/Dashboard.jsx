@@ -8,6 +8,7 @@ import {
   FaBuilding, 
   FaBell 
 } from "react-icons/fa";
+import {Helmet} from "react-helmet-async";
 
 export default function Dashboard() {
   const [userData, setUserData] = useState(null);
@@ -57,6 +58,10 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen p-6 bg-gray-100">
+
+      <Helmet>
+        <title>Dashboard | Ready Tech Solutions</title>
+      </Helmet>
       {/* Header */}
       <header className="flex flex-col items-center justify-between mb-8 md:flex-row">
         <h1 className="mb-4 text-3xl font-bold text-gray-800 md:mb-0">

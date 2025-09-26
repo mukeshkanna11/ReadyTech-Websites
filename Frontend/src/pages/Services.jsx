@@ -11,6 +11,7 @@ import {
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 export default function Services() {
   const navigate = useNavigate();
@@ -107,6 +108,9 @@ export default function Services() {
 
   return (
     <div className="min-h-screen bg-gray-900">
+      <Helmet>
+        <title>Services | Ready Tech Solutions</title>
+      </Helmet>
       {/* Services Banner with Animated Bubbles */}
       <section className="relative flex flex-col items-center justify-center w-full min-h-[80vh] overflow-hidden text-white bg-gradient-to-r from-black via-gray-900 to-black">
         {[...Array(60)].map((_, i) => (

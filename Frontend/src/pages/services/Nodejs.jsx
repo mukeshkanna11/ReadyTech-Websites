@@ -1,13 +1,17 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { FaServer, FaBolt, FaCode, FaLayerGroup, FaDatabase, FaRocket } from "react-icons/fa";
-
+import {Helmet} from "react-helmet-async";
 export default function NodeJS() {
   const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
-
+<Helmet>  
+        <title>Node JS Development | Ready Tech Solutions</title>        
+        <meta name="description" content="Ready Tech Solutions provides Node JS development services to help businesses build fast, scalable, and efficient server-side applications." />        
+        <meta name="keywords" content="Ready Tech, Node JS Development, IT Solutions, Training, Coimbatore, Bangalore" />
+      </Helmet>
       {/* Top Banner */}
       <section className="relative bg-green-600 text-white h-[400px] md:h-[450px] flex items-center justify-center overflow-hidden">
         <img

@@ -1,9 +1,15 @@
 import React from "react";
-import { FaReact, FaBolt, FaMobileAlt, FaCloud } from "react-icons/fa";
+import { FaReact, FaBolt, FaMobileAlt, FaCloud } from "react-icons/fa"; 
+import { Helmet } from "react-helmet-async";
 
 export default function Reactjs() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
+      <Helmet>  
+        <title>React.js Development | Ready Tech Solutions</title>        
+        <meta name="description" content="Ready Tech Solutions provides React.js development services to help businesses build fast, resilient, and delightful user experiences." />        
+        <meta name="keywords" content="Ready Tech, React.js Development, IT Solutions, Training, Coimbatore, Bangalore" />
+      </Helmet>
       <section className="relative max-w-6xl px-6 pt-24 mx-auto pb-14">
         <div className="md:flex md:items-center md:gap-10">
           <div className="md:flex-1">

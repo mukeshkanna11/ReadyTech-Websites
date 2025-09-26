@@ -7,6 +7,7 @@ import {
   FaGlobe 
 } from "react-icons/fa";
 import React from "react";
+import { Helmet } from "react-helmet-async";
 
 export default function Contact() {
   const contactInfo = [
@@ -17,14 +18,21 @@ export default function Contact() {
 
   const locations = [
     { city: "Coimbatore", address: "No 149 2nd Floor, Hopes, Coimbatore", phone: "+91 7010797721" },
-    { city: "Coimbatore", address: "Tidel Park, Peelamedu, B.R Puram Industrial Estate  Coimbatore, Chennai", phone: "+91 7010797721" },
+    { city: "Coimbatore", address: "Tidel Park, Peelamedu, B.R Puram Industrial Estate Coimbatore, Chennai", phone: "+91 7010797721" },
     { city: "Bangalore", address: "2nd floor, Hanumanthappa building, 21/8, Konanakunte Cross Rd, Vasanthapura, Bikasipura, Bangalore", phone: "+91 7010797721" },
   ];
 
   return (
     <div className="relative min-h-screen overflow-hidden text-gray-100 bg-gray-900">
 
-      {/* Hero Section with Animated Gradient + Particles */}
+      {/* React Helmet for SEO */}
+      <Helmet>
+        <title>Contact Us | Ready Tech Solutions</title>
+        <meta name="description" content="Get in touch with Ready Tech Solutions. We provide innovative IT solutions, training, and services." />
+        <meta name="keywords" content="Ready Tech, Contact, IT Solutions, Training, Coimbatore, Bangalore" />
+      </Helmet>
+
+      {/* Hero Section */}
       <section className="relative flex flex-col items-center justify-center h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden text-white">
         <div
           className="absolute inset-0"
@@ -186,6 +194,7 @@ export default function Contact() {
           </form>
         </div>
       </section>
+
     </div>
   );
 }

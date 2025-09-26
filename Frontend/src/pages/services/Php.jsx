@@ -1,10 +1,15 @@
 import { FaPhp, FaServer, FaCogs, FaUsers, FaDollarSign, FaRocket } from "react-icons/fa";
 import { MdWeb } from "react-icons/md";
 import { SiApache, SiNginx } from "react-icons/si";
-
+import {Helmet} from "react-helmet-async";
 export default function Php() {
   return (
     <div className="text-gray-800 bg-gradient-to-b from-gray-50 to-white">
+      < Helmet>
+        <title>PHP Web Development | Webify</title>
+        <meta name="description" content="Ready Tech Solutions provides PHP web development services to help businesses build highly functional, scalable, and secure web applications." />
+        <meta name="keywords" content="Ready Tech, PHP Web Development, IT Solutions, Training, Coimbatore, Bangalore" />
+      </Helmet>
       {/* Hero Section */}
       <section className="px-6 py-16 text-center md:px-20">
         <FaPhp className="mx-auto mb-4 text-6xl text-indigo-600" />

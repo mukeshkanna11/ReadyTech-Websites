@@ -1,5 +1,6 @@
 import React from "react";
 import { CheckCircle } from "lucide-react";
+import { Helmet } from "react-helmet-async";
 
 export default function Hosting() {
   const hostingFeatures = [
@@ -25,6 +26,11 @@ export default function Hosting() {
   return (
     <section className="py-20 bg-gradient-to-b from-white to-indigo-50">
       <div className="max-w-6xl px-6 mx-auto">
+        <Helmet>  
+          <title>Domain & Hosting Services | Ready Tech Solutions</title>        
+          <meta name="description" content="Ready Tech Solutions provides domain and hosting services to help businesses establish a strong online presence." />        
+          <meta name="keywords" content="Ready Tech, Domain & Hosting Services, IT Solutions, Training, Coimbatore, Bangalore" />
+        </Helmet>
         {/* Hero Section */}
         <div className="text-center">
           <h1 className="text-4xl font-extrabold text-indigo-600 sm:text-5xl">

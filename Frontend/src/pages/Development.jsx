@@ -1,11 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import {Helmet} from  "react-helmet-async";
 
 export default function Development() {
   const navigate = useNavigate();
 
   return (
     <div className="min-h-screen text-white bg-gray-950 font-poppins">
+
+      <Helmet>  
+        <title>Development | Ready Tech Solutions</title>        
+        <meta name="description" content="Ready Tech Solutions provides expert development services to help businesses grow and succeed in the digital world." />        
+        <meta name="keywords" content="Ready Tech, Development, IT Solutions, Training, Coimbatore, Bangalore" />
+      </Helmet>
       {/* Banner */}
       <section className="relative flex items-center justify-center h-[500px] overflow-hidden">
   {/* Floating Lines Background */}
