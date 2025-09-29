@@ -87,7 +87,7 @@ export default function Navbar() {
             to="/login"
             className="px-4 py-2 font-semibold text-yellow-400 transition-all duration-300 border-2 border-yellow-400 rounded-full hover:bg-yellow-400 hover:text-black hover:shadow-lg hover:scale-105"
           >
-            Login
+            DashBoard
           </Link>
         </div>
 
