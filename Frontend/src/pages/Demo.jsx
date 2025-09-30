@@ -1,9 +1,17 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { Helmet } from "react-helmet-async";
 
 export default function Demo() {
-  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+    selectedServices: [],
+  });
+
+  const [loading, setLoading] = useState(false);
 
   const servicesOptions = [
     "Website Development",
@@ -16,37 +24,9 @@ export default function Demo() {
     "Domain & Hosting",
   ];
 
-  const paymentPlans = [
-    {
-      name: "Starter",
-      price: "$99",
-      tagline: "For small projects",
-      features: ["1 Project", "Basic Support", "Email Updates"],
-    },
-    {
-      name: "Professional",
-      price: "$199",
-      tagline: "Most Popular",
-      features: ["3 Projects", "Priority Support", "Monthly Reports"],
-      highlight: true,
-    },
-    {
-      name: "Enterprise",
-      price: "$299",
-      tagline: "For growing businesses",
-      features: ["Unlimited Projects", "24/7 Support", "Dedicated Manager"],
-    },
-  ];
-
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    selectedServices: [],
-    message: "",
-  });
-
-  const [selectedPlan, setSelectedPlan] = useState(null);
+  const handleChange = (e) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
   const handleCheckboxChange = (service) => {
     setFormData((prev) => ({
@@ -57,70 +37,116 @@ export default function Demo() {
     }));
   };
 
-  const handleChange = (e) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const handleSubmitRequest = () => {
-    if (!formData.name || !formData.email || formData.selectedServices.length === 0) {
-      alert("Please fill in your name, email, and select at least one service.");
+    if (!formData.name || !formData.email || !formData.message) {
+      alert("Please fill in Name, Email, and Message fields.");
       return;
     }
 
-    if (!selectedPlan) {
-      alert("Please select a payment plan before submitting.");
+    if (formData.selectedServices.length === 0) {
+      alert("Please select at least one service.");
       return;
     }
 
-    // Navigate to PaymentSection page with selected plan + form data
-    navigate("/payment", { state: { plan: selectedPlan, formData } });
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        "http://localhost:5000/api/contact",
+        formData
+      );
+
+      alert(response.data.msg); // Success message from backend
+
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        message: "",
+        selectedServices: [],
+      });
+    } catch (err) {
+      console.error(err);
+      alert(
+        err.response?.data?.msg || "Something went wrong. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <section className="py-20 bg-gradient-to-b from-indigo-50 via-white to-indigo-100">
-      <div className="max-w-5xl px-6 mx-auto">
-        <Helmet>
-          <title>Ready Tech Solutions - Demo</title>
-          <meta name="description" content="Ready Tech Solutions - Demo" />
-          <meta name="keywords" content="Ready Tech, Demo, IT Solutions, Training, Coimbatore, Bangalore" />
-        </Helmet>
+    <section className="relative py-20 overflow-hidden bg-gradient-to-b from-indigo-50 via-white to-indigo-100">
+      <Helmet>
+        <title>Free Consultation Demo | Ready Tech Solutions</title>
+        <meta
+          name="description"
+          content="Get a free consultation demo with Ready Tech Solutions for web development, digital marketing, UI/UX design, and IT services."
+        />
+        <meta
+          name="keywords"
+          content="Demo, Free Consultation, Ready Tech Solutions, Web Development, Digital Marketing"
+        />
+      </Helmet>
+
+      {/* Background Illustration */}
+      <div className="absolute top-0 transform -translate-x-1/2 pointer-events-none left-1/2 -translate-y-1/3 opacity-10">
+        <img
+          src="https://undraw.co/api/illustrations/9b4a5c45-42e8-4cbb-8f54-1d0f1e3cbb37" // Free undraw illustration
+          alt="Illustration Background"
+          className="w-[800px] md:w-[1000px]"
+        />
+      </div>
+
+      <div className="relative max-w-4xl px-6 mx-auto">
         <h1 className="text-4xl font-extrabold text-center text-indigo-700 sm:text-5xl">
-          Get a Free Consultation & Choose Your Plan
+          Request a Free Demo
         </h1>
         <p className="mt-4 text-center text-gray-600 sm:text-lg">
-          Let’s understand your requirements and provide flexible pricing for your business.
+          Let us understand your business requirements and provide the best
+          solutions tailored for you.
         </p>
 
-        {/* Form */}
-        <form className="mt-12 space-y-6">
+        <form
+          onSubmit={handleSubmit}
+          className="relative z-10 p-10 mt-12 space-y-6 bg-white shadow-2xl rounded-3xl md:p-16"
+        >
+          {/* Name */}
           <input
             type="text"
             name="name"
-            placeholder="Your Full Name"
+            placeholder="Full Name"
             value={formData.name}
             onChange={handleChange}
-            className="w-full px-4 py-3 border rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500"
+            className="w-full px-4 py-3 text-gray-700 border rounded-xl focus:ring-2 focus:ring-indigo-500"
           />
+
+          {/* Email */}
           <input
             type="email"
             name="email"
-            placeholder="Your Email Address"
+            placeholder="Email Address"
             value={formData.email}
             onChange={handleChange}
-            className="w-full px-4 py-3 border rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500"
+            className="w-full px-4 py-3 text-gray-700 border rounded-xl focus:ring-2 focus:ring-indigo-500"
           />
+
+          {/* Phone */}
           <input
             type="text"
             name="phone"
             placeholder="Phone Number (Optional)"
             value={formData.phone}
             onChange={handleChange}
-            className="w-full px-4 py-3 border rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500"
+            className="w-full px-4 py-3 text-gray-700 border rounded-xl focus:ring-2 focus:ring-indigo-500"
           />
 
-          {/* Services */}
+          {/* Services Selection */}
           <div>
-            <p className="mb-3 font-semibold text-gray-700">Select Services:</p>
+            <p className="mb-3 font-semibold text-gray-700">
+              Select Services:
+            </p>
             <div className="grid gap-3 md:grid-cols-2">
               {servicesOptions.map((service, idx) => (
                 <label
@@ -143,64 +169,34 @@ export default function Demo() {
             </div>
           </div>
 
+          {/* Message */}
           <textarea
             name="message"
-            placeholder="Additional notes / requirements..."
+            placeholder="Your Message"
             value={formData.message}
             onChange={handleChange}
-            className="w-full px-4 py-3 border rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500"
-            rows={4}
+            rows={5}
+            className="w-full px-4 py-3 text-gray-700 border rounded-xl focus:ring-2 focus:ring-indigo-500"
           ></textarea>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={loading}
+            className={`w-full py-3 font-semibold text-white rounded-full shadow-lg transition ${
+              loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-indigo-600 hover:bg-indigo-700"
+            }`}
+          >
+            {loading ? "Sending..." : "Request Free Demo"}
+          </button>
         </form>
 
-        {/* Payment Plans */}
-        <div className="mt-12">
-          <p className="mb-6 text-2xl font-bold text-center text-gray-800">
-            Select a Payment Plan
-          </p>
-          <div className="grid gap-6 md:grid-cols-3">
-            {paymentPlans.map((plan) => (
-              <div
-                key={plan.name}
-                onClick={() => setSelectedPlan(plan)}
-                className={`relative p-6 rounded-2xl border-2 cursor-pointer transition-transform duration-500 ${
-                  selectedPlan?.name === plan.name
-                    ? "border-indigo-600 shadow-xl scale-105"
-                    : "border-gray-200 bg-white hover:scale-105 hover:shadow-lg"
-                }`}
-              >
-                {plan.highlight && (
-                  <div className="absolute top-0 left-0 px-3 py-1 text-xs font-bold text-white bg-indigo-600 rounded-tr-lg rounded-bl-lg">
-                    Most Popular
-                  </div>
-                )}
-
-                <h3 className="mb-2 text-xl font-bold text-indigo-700">{plan.name}</h3>
-                <p className="mb-4 text-sm text-gray-500">{plan.tagline}</p>
-                <p className="mb-6 text-3xl font-extrabold text-gray-900">{plan.price}</p>
-                <ul className="mb-4 space-y-2 text-sm text-gray-600">
-                  {plan.features.map((f, i) => (
-                    <li key={i} className="flex items-center gap-2">
-                      <span className="w-3 h-3 bg-indigo-500 rounded-full shrink-0"></span>
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-
-          {/* Submit Request Button */}
-          <div className="mt-8 text-center">
-            <button
-              type="button"
-              onClick={handleSubmitRequest}
-              className="px-8 py-3 font-semibold text-white transition transform bg-indigo-600 rounded-lg shadow-lg hover:bg-indigo-700 hover:scale-105"
-            >
-              Submit Request
-            </button>
-          </div>
-        </div>
+        {/* Footer Note */}
+        <p className="mt-6 text-sm text-center text-gray-500">
+          We respect your privacy and will never share your contact information.
+        </p>
       </div>
     </section>
   );

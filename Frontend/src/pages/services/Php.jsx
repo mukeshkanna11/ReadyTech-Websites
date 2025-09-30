@@ -1,15 +1,27 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import { FaPhp, FaServer, FaCogs, FaUsers, FaDollarSign, FaRocket } from "react-icons/fa";
 import { MdWeb } from "react-icons/md";
 import { SiApache, SiNginx } from "react-icons/si";
-import {Helmet} from "react-helmet-async";
+import { Helmet } from "react-helmet-async";
+
 export default function Php() {
+  const navigate = useNavigate();
+
   return (
     <div className="text-gray-800 bg-gradient-to-b from-gray-50 to-white">
-      < Helmet>
-        <title>PHP Web Development | Webify</title>
-        <meta name="description" content="Ready Tech Solutions provides PHP web development services to help businesses build highly functional, scalable, and secure web applications." />
-        <meta name="keywords" content="Ready Tech, PHP Web Development, IT Solutions, Training, Coimbatore, Bangalore" />
+      <Helmet>
+        <title>PHP Web Development | Ready Tech Solutions</title>
+        <meta
+          name="description"
+          content="Ready Tech Solutions provides PHP web development services to help businesses build highly functional, scalable, and secure web applications."
+        />
+        <meta
+          name="keywords"
+          content="Ready Tech, PHP Web Development, IT Solutions, Training, Coimbatore, Bangalore"
+        />
       </Helmet>
+
       {/* Hero Section */}
       <section className="px-6 py-16 text-center md:px-20">
         <FaPhp className="mx-auto mb-4 text-6xl text-indigo-600" />
@@ -24,7 +36,7 @@ export default function Php() {
       </section>
 
       {/* Description */}
-      <section className="grid items-center gap-10 px-6 py-10 md:px-20 md:grid-cols-2">
+      <section className="grid items-center gap-10 px-6 py-10 md:px-20 md:grid-cols-1">
         <div>
           <h2 className="mb-4 text-2xl font-semibold text-indigo-700">
             Why PHP for Web Development?
@@ -53,13 +65,6 @@ export default function Php() {
               Extremely flexible, scalable, and open-source.
             </li>
           </ul>
-        </div>
-        <div className="relative">
-          <img
-            src="https://cdn.dribbble.com/users/118246/screenshots/14488720/media/7b8c7f3e1f36a4e77d3bbd84e4b3bfa4.png"
-            alt="PHP Development Illustration"
-            className="shadow-lg rounded-2xl"
-          />
         </div>
       </section>
 
@@ -100,7 +105,10 @@ export default function Php() {
           tailored PHP solutions that deliver performance, scalability, and
           growth for your business.
         </p>
-        <button className="px-8 py-3 mt-8 text-white transition bg-indigo-600 rounded-full shadow-lg hover:bg-indigo-700">
+        <button
+          onClick={() => navigate("/contact")}
+          className="px-8 py-3 mt-8 text-white transition bg-indigo-600 rounded-full shadow-lg hover:bg-indigo-700"
+        >
           Get Started Today
         </button>
       </section>
