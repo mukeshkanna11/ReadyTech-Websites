@@ -13,41 +13,42 @@ export default function Navbar() {
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > lastScrollY) {
-        setShowNavbar(false); // hide on scroll down
+        setShowNavbar(false);
       } else {
-        setShowNavbar(true); // show on scroll up
+        setShowNavbar(true);
       }
       setLastScrollY(window.scrollY);
-
-      if (window.scrollY > 30) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      setScrolled(window.scrollY > 30);
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
-  // Active + hover underline animation
+  // Active + double hover line animation
   const getLinkClass = (path) =>
-    `relative transition-colors duration-300 ${location.pathname === path
-      ? "text-yellow-400 font-semibold"
-      : "text-gray-300 hover:text-yellow-400"
+    `relative px-1 py-1 transition-colors duration-300 ${
+      location.pathname === path
+        ? "text-yellow-400 font-semibold"
+        : "text-gray-300 hover:text-yellow-400"
     }
-    after:content-[''] after:absolute after:left-0 after:-bottom-1
+    before:content-[''] before:absolute before:left-0 before:bottom-0
+    before:w-full before:h-[2px] before:bg-yellow-400 before:scale-x-0
+    before:origin-left before:transition-transform before:duration-300
+    after:content-[''] after:absolute after:left-0 after:-top-0.5
     after:w-full after:h-[2px] after:bg-yellow-400 after:scale-x-0
-    after:origin-left after:transition-transform after:duration-300
-    hover:after:scale-x-100`;
+    after:origin-right after:transition-transform after:duration-300
+    hover:before:scale-x-100 hover:after:scale-x-100`;
 
   return (
     <nav
-      className={`fixed top-0 left-0 z-50 w-full transition-all duration-500 backdrop-blur-md ${showNavbar ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
-        } ${scrolled
-          ? "bg-gradient-to-r from-pink-500 to-purple-700 shadow-lg"
-          : "bg-gradient-to-b from-gray-900 via-black to-gray-950"
-        }`}
+      className={`fixed top-0 left-0 z-50 w-full transition-all duration-500 backdrop-blur-md ${
+        showNavbar ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
+      } ${
+        scrolled
+          ? "bg-gradient-to-r from-gray-900/95 via-gray-950/95 to-black/95 shadow-xl border-b border-gray-800"
+          : "bg-gradient-to-b from-black/90 via-gray-950/80 to-gray-900/80"
+      }`}
     >
       <div className="flex items-center justify-between w-full px-6 py-3 mx-auto max-w-7xl">
         {/* Logo */}

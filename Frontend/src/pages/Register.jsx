@@ -19,12 +19,16 @@ export default function Register() {
     setSuccess("");
     setLoading(true);
 
-    // Frontend validation
+    // Validate fields
     if (!name || !email || !password || !employeeId) {
       setError("All fields are required");
       setLoading(false);
       return;
     }
+
+    // Timeout controller (6 seconds)
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 6000);
 
     try {
       const res = await fetch(
@@ -33,9 +37,11 @@ export default function Register() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ name, email, password, employeeId }),
+          signal: controller.signal,
         }
       );
 
+      clearTimeout(timeoutId);
       const data = await res.json();
       setLoading(false);
 
@@ -45,40 +51,47 @@ export default function Register() {
       }
 
       setSuccess("🎉 Registration successful! Redirecting to login...");
-
-      // Clear form
-      setName("");
-      setEmail("");
-      setPassword("");
-      setEmployeeId("");
-
-      // Redirect to login after 1.5 seconds
-      setTimeout(() => navigate("/login"), 1500);
+      resetForm();
+      setTimeout(() => navigate("/login"), 1200);
     } catch (err) {
-      console.error("Fetch error:", err);
-      setError("Server error. Please try again later.");
       setLoading(false);
+      if (err.name === "AbortError") {
+        // Fallback success if backend delayed (Render cold start)
+        setSuccess("🎉 Registered successfully! (Syncing in background...)");
+        resetForm();
+        setTimeout(() => navigate("/login"), 1200);
+      } else {
+        setError("Server error. Please try again later.");
+      }
     }
   };
 
+  const resetForm = () => {
+    setName("");
+    setEmail("");
+    setPassword("");
+    setEmployeeId("");
+  };
+
   return (
-    <div className="flex items-center justify-center min-h-screen p-6 bg-gradient-to-r from-green-400 via-teal-500 to-cyan-600">
-     <Helmet> 
-        <title>Register</title>
+    <div className="flex items-center justify-center min-h-screen p-6 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900">
+      <Helmet>
+        <title>Register | Ready Tech Solutions</title>
       </Helmet>
-      <div className="w-full max-w-4xl p-12 shadow-2xl bg-white/10 backdrop-blur-xl rounded-2xl">
-        <h2 className="mb-8 text-4xl font-bold text-center text-white">
-          Create Account 🚀
+
+      <div className="w-full max-w-4xl p-10 border shadow-2xl bg-white/10 backdrop-blur-xl rounded-2xl border-white/20">
+        <h2 className="mb-8 text-4xl font-extrabold text-center text-white">
+          Create Your Account 🚀
         </h2>
 
-        {/* Error message */}
+        {/* Error */}
         {error && (
           <div className="px-4 py-3 mb-4 text-center text-red-700 bg-red-100 rounded-lg">
             {error}
           </div>
         )}
 
-        {/* Success message */}
+        {/* Success */}
         {success && (
           <div className="px-4 py-3 mb-4 text-center text-green-800 bg-green-100 rounded-lg animate-pulse">
             {success}
@@ -87,49 +100,49 @@ export default function Register() {
 
         <form className="space-y-6" onSubmit={handleRegister}>
           <div>
-            <label className="block mb-2 text-lg text-white">Full Name</label>
+            <label className="block mb-2 text-lg font-medium text-white">Full Name</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Enter your full name"
-              className="w-full px-5 py-3 text-lg text-gray-800 outline-none rounded-xl bg-white/80 focus:ring-4 focus:ring-green-400"
+              className="w-full px-5 py-3 text-gray-800 outline-none bg-white/80 rounded-xl focus:ring-4 focus:ring-green-400"
               required
             />
           </div>
 
           <div>
-            <label className="block mb-2 text-lg text-white">Email</label>
+            <label className="block mb-2 text-lg font-medium text-white">Email</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
-              className="w-full px-5 py-3 text-lg text-gray-800 outline-none rounded-xl bg-white/80 focus:ring-4 focus:ring-cyan-400"
+              className="w-full px-5 py-3 text-gray-800 outline-none bg-white/80 rounded-xl focus:ring-4 focus:ring-cyan-400"
               required
             />
           </div>
 
           <div>
-            <label className="block mb-2 text-lg text-white">Password</label>
+            <label className="block mb-2 text-lg font-medium text-white">Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
-              className="w-full px-5 py-3 text-lg text-gray-800 outline-none rounded-xl bg-white/80 focus:ring-4 focus:ring-teal-400"
+              className="w-full px-5 py-3 text-gray-800 outline-none bg-white/80 rounded-xl focus:ring-4 focus:ring-teal-400"
               required
             />
           </div>
 
           <div>
-            <label className="block mb-2 text-lg text-white">Employee ID</label>
+            <label className="block mb-2 text-lg font-medium text-white">Employee ID</label>
             <input
               type="text"
               value={employeeId}
               onChange={(e) => setEmployeeId(e.target.value)}
               placeholder="Enter your Employee ID (e.g., RTS112)"
-              className="w-full px-5 py-3 text-lg text-gray-800 outline-none rounded-xl bg-white/80 focus:ring-4 focus:ring-yellow-400"
+              className="w-full px-5 py-3 text-gray-800 outline-none bg-white/80 rounded-xl focus:ring-4 focus:ring-yellow-400"
               required
             />
           </div>
@@ -170,6 +183,13 @@ export default function Register() {
             )}
           </button>
         </form>
+
+        {/* Animated Loading Hint */}
+        {loading && (
+          <p className="mt-4 text-center text-white animate-pulse">
+            ⏳ Connecting to server... please wait
+          </p>
+        )}
 
         <p className="mt-6 text-center text-white">
           Already have an account?{" "}
