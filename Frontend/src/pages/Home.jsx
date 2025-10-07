@@ -1,114 +1,145 @@
 import { useState } from "react";
-import Navbar from "../components/Navbar"; // ✅ Path check
+import Navbar from "../components/Navbar";
 import { motion } from "framer-motion";
 import {
-  FaLock,
-  FaUserAlt,
-  FaHome,
-  FaPhoneAlt,
   FaCloud,
+  FaCode,
+  FaLaptopCode,
+  FaChartLine,
+  FaDatabase,
+  FaLock,
 } from "react-icons/fa";
-import { Helmet} from "react-helmet-async";
+import { Helmet } from "react-helmet-async";
+import heroImg from "../assets/images/il1.jpg"; // ✅ Replace with your illustration
 
-//Images 
 import Img1 from "../assets/images/image1.png";
 import Img2 from "../assets/images/image2.png";
 import Img3 from "../assets/images/image3.png";
 
-// ✅ Home Component (main export)
+
 export default function Home() {
   const [template, setTemplate] = useState("A");
 
   return (
     <div className="min-h-screen overflow-hidden text-white bg-gray-950 font-poppins">
-      {/* Navbar */}
       <Navbar />
-<Helmet>  
-        <title>Home | Ready Tech Solutions</title>        
-        <meta name="description" content="Ready Tech Solutions provides expert IT solutions to help businesses grow and succeed in the digital world." />        
-        <meta name="keywords" content="Ready Tech, IT Solutions, Training, Coimbatore, Bangalore" />
+
+      <Helmet>
+        <title>Home | Ready Tech Solutions</title>
+        <meta
+          name="description"
+          content="Ready Tech Solutions provides expert IT solutions to help businesses grow and succeed in the digital world."
+        />
+        <meta
+          name="keywords"
+          content="Ready Tech, IT Solutions, Web Development, Software, Cloud, Training"
+        />
       </Helmet>
-      {/* Hero Banner */}
-      <section className="relative flex flex-col items-center justify-center w-full min-h-screen overflow-hidden">
-        {/* Background Tech Lines (Animated Grid) */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.04),transparent_70%)]"></div>
+
+      {/* Hero Section */}
+      <section className="relative flex flex-col justify-center min-h-screen px-6 overflow-hidden bg-gradient-to-br from-gray-900 via-gray-950 to-black sm:px-16 md:flex-row md:items-center">
+        {/* Animated Gradient Overlay */}
         <motion.div
-          className="absolute inset-0"
-          animate={{ backgroundPosition: ["0% 0%", "100% 100%"] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          style={{
-            backgroundImage:
-              "linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(180deg, rgba(255,255,255,0.08) 1px, transparent 1px)",
-            backgroundSize: "50px 50px",
+          className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_center,_rgba(109,40,217,0.3),_transparent_70%)]"
+          animate={{
+            backgroundPosition: ["0% 0%", "100% 100%"],
+          }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+            ease: "linear",
           }}
         />
 
-        {/* Glowing Nodes */}
-        {[...Array(12)].map((_, i) => (
-          <motion.span
-            key={i}
-            className="absolute w-2 h-2 bg-yellow-400 rounded-full shadow-[0_0_20px_#fcd34d]"
-            style={{
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              scale: [1, 1.5, 1],
-              opacity: [0.3, 1, 0.3],
-            }}
-            transition={{
-              duration: 3 + Math.random() * 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
+        {/* Floating Tech Icons */}
+        {[FaCloud, FaCode, FaChartLine, FaDatabase, FaLaptopCode, FaLock].map(
+          (Icon, i) => (
+            <motion.div
+              key={i}
+              className="absolute text-indigo-400/40"
+              style={{
+                top: `${20 + Math.random() * 60}%`,
+                left: `${10 + Math.random() * 80}%`,
+              }}
+              animate={{
+                y: [0, -10, 0],
+                opacity: [0.5, 1, 0.5],
+                rotate: [0, 15, -15, 0],
+              }}
+              transition={{
+                duration: 6 + Math.random() * 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            >
+              <Icon size={28} />
+            </motion.div>
+          )
+        )}
 
-        {/* Hero Content */}
+        {/* Left Content */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1.2 }}
-          className="relative z-10 px-6 text-center"
+          className="relative z-10 w-full md:w-1/2"
         >
-          <h1 className="text-2xl font-bold leading-tight tracking-wide text-indigo-400 sm:text-4xl md:text-5xl">
-            Ready Tech Solutions ⚡
+          <h1 className="text-2xl font-bold leading-snug text-indigo-400 sm:text-3xl md:text-4xl">
+            Ready Tech <span className="text-yellow-400">Solutions</span>
           </h1>
-
-          <p className="max-w-3xl mx-auto mt-6 text-lg leading-relaxed text-gray-300 sm:text-xl">
-            🚀 Powering{" "}
+          <p className="mt-6 text-lg leading-relaxed text-gray-300 sm:text-xl">
+            Empowering businesses through{" "}
             <span className="font-semibold text-pink-400">
-              digital innovation
+              scalable software
             </span>{" "}
-            with{" "}
+            and{" "}
             <span className="font-semibold text-yellow-300">
-              scalable solutions
+              digital transformation
             </span>
-            . <br /> We craft{" "}
-            <span className="text-indigo-300">smart software</span> that fuels
-            your business growth.
+            . From web development to AI-driven systems, we make ideas come
+            alive.
           </p>
 
-          {/* Action Buttons */}
-          <div className="flex flex-col items-center justify-center gap-5 mt-10 sm:flex-row">
+          <div className="flex flex-col items-center gap-5 mt-10 sm:flex-row">
             <motion.a
               href="/services"
-              whileHover={{ scale: 1.08, boxShadow: "0 0 20px #fcd34d" }}
-              className="inline-block px-10 py-4 text-lg font-semibold text-purple-800 transition-all duration-300 bg-yellow-200 rounded-full shadow-md hover:bg-yellow-300"
+              whileHover={{ scale: 1.08 }}
+              className="inline-block px-10 py-4 text-lg font-semibold text-gray-900 transition-all duration-300 bg-yellow-300 rounded-full shadow-lg hover:bg-yellow-400"
             >
-              Get Started
+              Explore Services
             </motion.a>
 
             <motion.a
-              href="/demo"
-              whileHover={{ scale: 1.08, boxShadow: "0 0 20px #c4b5fd" }}
-              className="inline-block px-10 py-4 text-lg font-semibold text-white transition-all duration-300 rounded-full shadow-md bg-gradient-to-r from-purple-400 to-pink-400 hover:from-purple-500 hover:to-pink-500"
+              href="/contact"
+              whileHover={{ scale: 1.08 }}
+              className="inline-block px-10 py-4 text-lg font-semibold text-white transition-all duration-300 rounded-full shadow-lg bg-gradient-to-r from-indigo-500 to-pink-500 hover:from-indigo-600 hover:to-pink-600"
             >
-              Book a Demo
+              Contact Us
             </motion.a>
           </div>
         </motion.div>
+
+        {/* Right Illustration */}
+        <motion.div
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1.5 }}
+          className="relative z-10 w-full mt-10 md:w-1/2 md:mt-0"
+        >
+          <div className="flex justify-center">
+            <motion.img
+              src={heroImg}
+              alt="Tech Illustration"
+              className="w-[90%] max-w-lg rounded-2xl drop-shadow-[0_0_30px_rgba(168,85,247,0.5)]"
+              whileHover={{ scale: 1.05, rotate: 1 }}
+              transition={{ type: "spring", stiffness: 150 }}
+            />
+          </div>
+        </motion.div>
       </section>
+
+    
+
 
       {/* Vision & Mission Section */}
       <section className="relative py-20 bg-gradient-to-b from-gray-950 via-black to-gray-900">
