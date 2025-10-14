@@ -5,49 +5,72 @@ import { Helmet } from "react-helmet-async";
 export default function Hosting() {
   const hostingFeatures = [
     "Secure your personal information & website data",
-    "Easy to use Control Panel",
-    "Firewall Protection",
-    "Bulk domain name search facility",
-    "Facility to book Premium Domains",
-    "Secure your domain from hijacking risks with domain lock",
-    "Free URL Forwarding",
-    "Choose Domain TLDs that matches your profession (like .photo, .music, .photography)",
-    "Multiple year registration",
+    "Easy-to-use Control Panel (cPanel & Plesk)",
+    "Firewall & DDoS Protection",
+    "Bulk Domain Search & Registration",
+    "Premium Domain Booking",
+    "Domain Lock to prevent hijacking",
+    "Free URL Forwarding & Subdomain Management",
+    "TLD Selection for specific professions (.photo, .music, .tech)",
+    "Multi-year Domain Registration",
+    "High-speed SSD Hosting",
+    "Automated Backups & Recovery",
+    "99.9% Uptime Guarantee",
   ];
 
   const domainServices = [
+    "Domain Registration & Management",
     "Best Dedicated Servers Hosting",
     "WordPress Hosting",
     "VPS Hosting",
     "Windows Hosting",
     "Linux Reseller Hosting",
+    "Email Hosting Solutions",
+    "SSL Certificate Installation & Management",
+  ];
+
+  const hostingBenefits = [
+    "Reliable & Secure Website Access 24/7",
+    "Fast website performance with optimized servers",
+    "Professional support & assistance",
+    "Scalable solutions for businesses of all sizes",
+    "Easy integration with existing systems",
+    "Flexible hosting plans & pricing",
+    "Complete control over your domains and data",
   ];
 
   return (
     <section className="py-20 bg-gradient-to-b from-white to-indigo-50">
       <div className="max-w-6xl px-6 mx-auto">
-        <Helmet>  
-          <title>Domain & Hosting Services | Ready Tech Solutions</title>        
-          <meta name="description" content="Ready Tech Solutions provides domain and hosting services to help businesses establish a strong online presence." />        
-          <meta name="keywords" content="Ready Tech, Domain & Hosting Services, IT Solutions, Training, Coimbatore, Bangalore" />
+        <Helmet>
+          <title>Domain & Hosting Services | Ready Tech Solutions</title>
+          <meta
+            name="description"
+            content="Ready Tech Solutions provides domain registration and secure hosting services to ensure businesses maintain a reliable and professional online presence."
+          />
+          <meta
+            name="keywords"
+            content="Domain & Hosting, Web Hosting, Ready Tech Solutions, VPS Hosting, WordPress Hosting, Dedicated Server, Email Hosting, IT Solutions"
+          />
         </Helmet>
+
         {/* Hero Section */}
         <div className="text-center">
           <h1 className="text-4xl font-extrabold text-indigo-600 sm:text-5xl">
             Domain & Hosting Services
           </h1>
           <p className="mt-4 text-lg text-gray-700 sm:text-xl">
-            Ready Tech Solution provides certified, secure, and reliable web hosting and domain services with dedicated support to ensure your online presence thrives.
+            Secure, reliable, and fully managed domain & hosting services designed to ensure your online presence thrives with Ready Tech Solutions.
           </p>
         </div>
 
         {/* Description */}
-        <div className="mt-12 space-y-4 text-gray-700">
+        <div className="mt-12 space-y-4 leading-relaxed text-gray-700">
           <p>
-            With dedicated servers in the USA and India, we provide both shared and individual web hosting services. Our control panel allows easy management of all hosting activities. We host websites on Linux and Windows servers suitable for static and dynamic websites, supporting platforms like PHP, ASP, ASP.net, Java, and more.
+            We provide high-performance web hosting and domain registration services with dedicated servers in India and the USA. Whether you need Linux, Windows, WordPress, or VPS hosting, our solutions are optimized for speed, reliability, and security.
           </p>
           <p>
-            Web hosting ensures your website is accessible online. Servers, internet connection, and data centers work together to keep your site live and reachable by your users.
+            Hosting ensures your website is always online and accessible. Our control panel simplifies management of domains, emails, databases, and SSL certificates. We provide automated backups, firewalls, and DDoS protection for peace of mind.
           </p>
         </div>
 
@@ -82,6 +105,24 @@ export default function Hosting() {
               >
                 <CheckCircle className="flex-shrink-0 w-6 h-6 text-indigo-500" />
                 <span>{service}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Hosting Benefits */}
+        <div className="mt-16">
+          <h2 className="mb-6 text-2xl font-semibold text-center text-gray-800">
+            Benefits of Choosing Us
+          </h2>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {hostingBenefits.map((benefit, index) => (
+              <div
+                key={index}
+                className="flex items-start gap-3 p-4 text-gray-800 transition bg-white rounded-lg shadow hover:shadow-lg"
+              >
+                <CheckCircle className="flex-shrink-0 w-6 h-6 text-indigo-500" />
+                <span>{benefit}</span>
               </div>
             ))}
           </div>

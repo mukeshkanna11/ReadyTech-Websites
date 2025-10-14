@@ -6,6 +6,10 @@ import {
   FaLaptopCode,
   FaCloud,
   FaLock,
+  FaTools,
+  FaCodeBranch,
+  FaSyncAlt,
+  FaCogs,
 } from "react-icons/fa";
 import { Helmet } from "react-helmet-async";
 
@@ -13,14 +17,14 @@ export default function WebDevelopment() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
       <Helmet>
-        <title>Web Development Services | Web Development Company</title>
+        <title>Web Development Services | Full Stack & Maintenance Solutions</title>
         <meta
           name="description"
-          content="Ready Tech Solutions provides web development services to help businesses build scalable, secure, and modern web applications."
+          content="Ready Tech Solutions offers full stack web development, website maintenance, and enterprise-grade digital solutions to keep your business ahead."
         />
         <meta
           name="keywords"
-          content="Ready Tech, Web Development Services, IT Solutions, Training, Coimbatore, Bangalore"
+          content="Ready Tech Solutions, Web Development, Website Maintenance, Full Stack Developer, MERN Stack, IT Company, Coimbatore, Bangalore"
         />
       </Helmet>
 
@@ -31,8 +35,8 @@ export default function WebDevelopment() {
             Web Development Services
           </h1>
           <p className="max-w-2xl mx-auto mt-4 text-lg md:text-xl text-white/90">
-            We create scalable, secure, and modern web applications — from
-            business websites to enterprise platforms.
+            Build fast, secure, and scalable web solutions with our expert full
+            stack development team — from UI design to cloud deployment.
           </p>
           <div className="flex justify-center gap-4 mt-8">
             <a
@@ -51,10 +55,10 @@ export default function WebDevelopment() {
           Why Choose Our Web Development?
         </h2>
         <p className="max-w-3xl mx-auto mt-4 text-gray-600">
-          A web application is more than just a website — it’s the backbone of
-          your digital presence. At Ready Tech Solutions, we go beyond
-          stand-alone sites and build enterprise-grade apps, e-commerce
-          platforms, ERP systems, portals, and much more.
+          Websites are not just digital brochures — they are the backbone of
+          your online success. At Ready Tech Solutions, we combine modern design,
+          robust backend systems, and cloud integration to create seamless
+          digital experiences.
         </p>
       </section>
 
@@ -63,48 +67,88 @@ export default function WebDevelopment() {
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           <FeatureCard
             icon={<FaLaptopCode className="w-8 h-8 text-indigo-600" />}
-            title="Custom Web Apps"
-            description="Tailored software that matches your unique business workflows and UX."
+            title="Full Stack Development"
+            description="We specialize in MERN, MEAN, and LAMP stacks — building end-to-end web applications with both frontend and backend excellence."
           />
           <FeatureCard
             icon={<FaCloud className="w-8 h-8 text-indigo-600" />}
-            title="Cloud Ready"
-            description="Seamless migrations and scalable architecture on AWS, GCP, or Azure."
+            title="Cloud Deployment"
+            description="Our applications are designed to scale effortlessly on AWS, Azure, or Google Cloud environments."
           />
           <FeatureCard
             icon={<FaLock className="w-8 h-8 text-indigo-600" />}
-            title="Secure by Design"
-            description="We follow OWASP, encryption, and GDPR/HIPAA compliance practices."
+            title="Security & Compliance"
+            description="We integrate SSL, encryption, and follow OWASP & GDPR standards for data protection."
           />
           <FeatureCard
             icon={<FaServer className="w-8 h-8 text-indigo-600" />}
-            title="Enterprise Apps"
-            description="Scalable, high-performing enterprise-grade web applications."
+            title="API & Database Integration"
+            description="We connect your web apps with databases, CRMs, payment gateways, and third-party APIs for automation."
           />
           <FeatureCard
             icon={<FaGlobe className="w-8 h-8 text-indigo-600" />}
-            title="SEO Optimized"
-            description="Fast, mobile-first, semantic markup for better ranking and visibility."
+            title="SEO & Performance"
+            description="Optimized architecture, semantic markup, and fast loading ensure better ranking and visibility."
           />
           <FeatureCard
             icon={<FaLayerGroup className="w-8 h-8 text-indigo-600" />}
-            title="Modular Code"
-            description="Future-proof, maintainable codebases with CI/CD pipelines."
+            title="Modular Architecture"
+            description="Future-ready code with maintainable, reusable, and scalable modules using CI/CD pipelines."
           />
         </div>
       </section>
 
-      {/* Enterprise App Section (Text only, no illustration) */}
+      {/* Website Maintenance Section */}
       <section className="py-16 bg-gray-100">
         <div className="max-w-5xl px-6 mx-auto text-center">
           <h2 className="text-3xl font-bold text-gray-900">
-            Enterprise App Development
+            Website Maintenance & Support
           </h2>
           <p className="mt-4 text-gray-600">
-            Enterprise applications demand more — security, scalability, and
-            efficient project management. Using Agile methodology and tools like
-            Jira, we build apps that automate up to 90% of operations and
-            establish smooth workflows.
+            Launching your website is just the beginning. Our maintenance plans
+            ensure your platform stays updated, secure, and optimized for
+            performance. We handle everything — updates, bug fixes, security
+            patches, content uploads, and performance audits.
+          </p>
+
+          <div className="grid gap-8 mt-10 sm:grid-cols-2 lg:grid-cols-3">
+            <FeatureCard
+              icon={<FaTools className="w-8 h-8 text-indigo-600" />}
+              title="Regular Updates"
+              description="Keep your site up-to-date with the latest technologies and security patches."
+            />
+            <FeatureCard
+              icon={<FaCodeBranch className="w-8 h-8 text-indigo-600" />}
+              title="Version Control"
+              description="All updates and new features are tracked and managed via Git workflows."
+            />
+            <FeatureCard
+              icon={<FaSyncAlt className="w-8 h-8 text-indigo-600" />}
+              title="Performance Monitoring"
+              description="We continuously monitor uptime, load speed, and resolve errors proactively."
+            />
+          </div>
+
+          <a
+            href="/contact"
+            className="inline-block px-6 py-3 mt-8 text-white bg-indigo-600 rounded-lg shadow hover:bg-indigo-700"
+          >
+            Request Maintenance Plan
+          </a>
+        </div>
+      </section>
+
+      {/* Enterprise App Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-5xl px-6 mx-auto text-center">
+          <h2 className="text-3xl font-bold text-gray-900">
+            Enterprise & Business Applications
+          </h2>
+          <p className="mt-4 text-gray-600">
+            We deliver enterprise-grade web applications built with scalable
+            architecture, Agile methodology, and continuous integration tools
+            like Jira and GitHub Actions. Automate up to 90% of your business
+            operations through digital transformation.
           </p>
           <a
             href="/contact"

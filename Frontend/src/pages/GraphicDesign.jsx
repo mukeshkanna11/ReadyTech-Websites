@@ -4,67 +4,90 @@ import { Helmet } from "react-helmet-async";
 
 export default function GraphicDesign() {
   const services = [
-    "Graphic Designing",
-    "Logo Design",
-    "Pamphlet Designing",
-    "Brochure Design",
-    "Banner / Poster Design",
-    "Mascot Design",
-    "Visual Design",
-    "Corporate Flyer Design",
+    "Logo Design & Brand Identity",
+    "Pamphlet, Brochure & Catalogue Design",
+    "Banner, Poster & Billboard Design",
+    "Packaging & Label Design",
+    "UI/UX Branding & Product Design",
+    "Corporate Presentation & Flyer Design",
+    "Infographic & Data Visualization Design",
+    "Social Media Creative Design",
+    "Business Card & Stationery Mockups",
     "Portfolio Design",
-    "Business Stationery Mockups",
-    "UI Branding Design",
-    "Package Designing",
-    "Sales Video",
+    "Mascot & Illustration Design",
+    "Sales Videos & Motion Graphics",
   ];
 
   const advantages = [
-    "Creative designs beyond technical abilities",
-    "Highly compatible for printing & publishing",
-    "Affordable designs that outshine competitors",
-    "Attracts customer attention & boosts conversions",
-    "Analysis of business goals, services, customer behavior & industry standards",
+    "Creative storytelling that visually represents your brand’s message.",
+    "Customized concepts tailored for both digital and print media.",
+    "Affordable, high-quality visuals that outperform competitors.",
+    "Designed for scalability — from startups to global enterprises.",
+    "Deep understanding of marketing psychology & brand positioning.",
+    "Built with brand consistency — maintaining tone, colors, and identity.",
+    "Optimized for engagement on all platforms (Web, Social, Print).",
+  ];
+
+  const process = [
+    "Understanding client goals & brand values",
+    "Market & competitor research",
+    "Concept creation & visual mood boards",
+    "Design development & refinement",
+    "Client feedback integration",
+    "Final delivery with multiple formats (AI, PNG, PDF, etc.)",
   ];
 
   return (
     <section className="relative py-20 bg-gradient-to-b from-white to-indigo-50">
       <div className="max-w-6xl px-6 mx-auto">
-        <Helmet>  
-          <title>Graphic Design | Ready Tech Solutions</title>        
-          <meta name="description" content="Ready Tech Solutions provides expert graphic design services to help businesses grow and succeed in the digital world." />        
-          <meta name="keywords" content="Ready Tech, Graphic Design, IT Solutions, Training, Coimbatore, Bangalore" />
+        <Helmet>
+          <title>Graphic Design | ReadyTech Solutions</title>
+          <meta
+            name="description"
+            content="ReadyTech Solutions offers creative graphic design services including logo, brochure, poster, UI branding, and package design that elevate your brand’s identity."
+          />
+          <meta
+            name="keywords"
+            content="Graphic Design, Logo Design, Brochure Design, Branding, UI Design, Poster Design, ReadyTech Solutions, Coimbatore, Bangalore"
+          />
         </Helmet>
-        {/* Hero Heading */}
+
+        {/* Hero Section */}
         <div className="text-center">
           <h1 className="text-4xl font-extrabold text-indigo-600 sm:text-5xl">
-            Graphic Design
+            Graphic Design Services
           </h1>
           <p className="mt-4 text-lg text-gray-700 sm:text-xl">
-            Create visually stunning designs that communicate your brand’s
-            story effectively with{" "}
-            <span className="font-semibold text-indigo-500">Lilac Designs</span>.
+            Build a lasting visual identity with{" "}
+            <span className="font-semibold text-indigo-500">
+              Lilac Designs by ReadyTech Solutions
+            </span>
+            — where creativity meets strategy.
           </p>
         </div>
 
-        {/* Service Description */}
+        {/* Overview */}
         <div className="mt-12 space-y-6 text-gray-700">
           <p>
-            Graphic design plays a crucial role in a competitive market as a
-            tool for communication. An impressive design combines text and
-            visuals to express your business ideas effectively. Our unique
-            approach transforms your brand identity into memorable visuals and
-            symbolism.
+            In today’s competitive market, visuals speak louder than words.
+            <strong> Graphic Design</strong> is not just about aesthetics — it’s about
+            communicating your brand’s message, creating emotions, and inspiring action.
           </p>
           <p>
-            Your branding is more than a color palette or logo—it's what sets
-            your business apart. We ensure that your brand identity resonates
-            with your target audience and drives engagement.
+            At ReadyTech Solutions, our creative team blends innovation and strategy to
+            design visuals that leave a strong, memorable impression. From startup
+            branding to enterprise marketing assets, our designs reflect your unique
+            story and connect with your audience.
+          </p>
+          <p>
+            Every design we create is backed by research, creativity, and purpose —
+            ensuring your visuals don’t just look good but also deliver measurable
+            business impact.
           </p>
         </div>
 
         {/* Services Offered */}
-        <div className="mt-12">
+        <div className="mt-16">
           <h2 className="mb-6 text-2xl font-semibold text-center text-gray-800">
             Our Graphic Design Services
           </h2>
@@ -84,7 +107,7 @@ export default function GraphicDesign() {
         {/* Why Choose Us */}
         <div className="mt-16">
           <h2 className="mb-6 text-2xl font-semibold text-center text-gray-800">
-            Why Graphic Designing With Us
+            Why Choose Our Design Team?
           </h2>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {advantages.map((item, index) => (
@@ -99,13 +122,35 @@ export default function GraphicDesign() {
           </div>
         </div>
 
-        {/* Call-to-Action */}
-        <div className="mt-16 text-center">
+        {/* Design Process */}
+        <div className="mt-16">
+          <h2 className="mb-6 text-2xl font-semibold text-center text-gray-800">
+            Our Design Process
+          </h2>
+          <p className="max-w-3xl mx-auto mb-6 text-center text-gray-700">
+            We follow a structured design workflow that ensures clarity, creativity,
+            and collaboration — delivering results that align with your vision.
+          </p>
+          <div className="grid gap-4 text-gray-600 sm:grid-cols-2 md:grid-cols-3">
+            {process.map((step, index) => (
+              <div
+                key={index}
+                className="p-4 text-center transition bg-white rounded-lg shadow hover:shadow-lg"
+              >
+                <CheckCircle className="w-6 h-6 mx-auto mb-2 text-indigo-500" />
+                {step}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* CTA */}
+        <div className="mt-20 text-center">
           <a
             href="/contact"
             className="inline-block px-10 py-4 text-lg font-semibold text-white transition-transform transform bg-indigo-600 rounded-full shadow-lg hover:bg-indigo-700 hover:scale-105"
           >
-            Get Your Graphic Design
+            Get Your Custom Design
           </a>
         </div>
       </div>
