@@ -1,7 +1,11 @@
 import mongoose from "mongoose";
 
-// Allowed Employee IDs
-export const allowedEmployeeIds = ["RTS001", "RTS002", "RTS003", "RTS112"];
+// Generate allowed Employee IDs dynamically
+export const isAllowedEmployeeId = (id) => {
+  const prefix = "RTS";
+  const number = parseInt(id.replace(prefix, ""), 10);
+  return prefix && number >= 1 && number <= 1500;
+};
 
 const UserSchema = new mongoose.Schema(
   {
@@ -29,7 +33,7 @@ const UserSchema = new mongoose.Schema(
     role: {
       type: String,
       required: true,
-      enum: ["admin", "employee"], // only allow admin or employee
+      enum: ["admin", "employee"], // only admin or employee
     },
     department: { type: String, default: "General" },
   },
