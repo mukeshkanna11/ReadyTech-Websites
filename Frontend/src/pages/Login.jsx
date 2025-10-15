@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import BgImage from "../assets/images/landing.jpg";
+import { motion } from "framer-motion";
+import { FaUserShield, FaUserTie } from "react-icons/fa";
+
+// 🖼 Role-based Backgrounds
+import AdminBg from "../assets/images/landing.jpg"; // upload a premium office / control room style image
+import EmployeeBg from "../assets/images/p3.png"; // upload a teamwork / workspace image
 
 export default function Login() {
   const navigate = useNavigate();
@@ -11,11 +16,11 @@ export default function Login() {
   const [employeeId, setEmployeeId] = useState("");
   const [error, setError] = useState("");
 
-  // Check role selected from Dashboard
+  // Fetch selected role
   useEffect(() => {
     const selectedRole = localStorage.getItem("selectedRole");
     if (!selectedRole) {
-      navigate("/dashboard"); // go back to role selection if none
+      navigate("/dashboard");
     } else {
       setRole(selectedRole);
     }
@@ -31,7 +36,6 @@ export default function Login() {
     }
 
     try {
-      // Call backend login API
       const response = await fetch(
         "https://readytech-websites.onrender.com/api/auth/login",
         {
@@ -42,87 +46,132 @@ export default function Login() {
       );
 
       const data = await response.json();
+      if (!response.ok) throw new Error(data.msg || "Login failed");
 
-      if (!response.ok) {
-        throw new Error(data.msg || "Login failed");
-      }
-
-      // Ensure role is lowercase
       const userRole = data.user.role?.toLowerCase();
-
-      // Only allow admin or employee
       if (userRole !== "admin" && userRole !== "employee") {
         setError("Invalid role assigned.");
         return;
       }
 
-      // Save user info
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
-      // Navigate to respective dashboard
       navigate(userRole === "admin" ? "/admin-dashboard" : "/employee-dashboard");
     } catch (err) {
-      console.error(err);
       setError(err.message);
     }
   };
 
-  if (!role) return null; // Prevent render until role selected
+  if (!role) return null;
+
+  // 🎨 Dynamic Theme by Role
+  const isAdmin = role === "admin";
+  const bgImage = isAdmin ? AdminBg : EmployeeBg;
+  const accentColor = isAdmin ? "yellow" : "blue";
+  const accentClasses = isAdmin
+    ? "bg-yellow-400 text-black hover:bg-yellow-500"
+    : "bg-blue-400 text-black hover:bg-blue-500";
 
   return (
     <div
-      className="flex items-center justify-center min-h-screen bg-center bg-cover"
-      style={{ backgroundImage: `url(${BgImage})` }}
+      className="flex items-center justify-center min-h-screen bg-center bg-no-repeat bg-cover"
+      style={{
+        backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)), url(${bgImage})`,
+      }}
     >
       <Helmet>
-        <title>Login | Ready Tech</title>
+        <title>{isAdmin ? "Admin Login" : "Employee Login"} | ReadyTech</title>
       </Helmet>
 
-      <form
-        onSubmit={handleLogin}
-        className="w-full max-w-md p-8 text-center text-white bg-black/70 backdrop-blur-md rounded-2xl"
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-sm p-8 text-white border shadow-2xl bg-black/60 backdrop-blur-md rounded-2xl border-white/10"
       >
-        <h1 className="mb-6 text-3xl font-bold">
-          Login as {role === "admin" ? "Admin" : "Employee"}
-        </h1>
+        {/* Role Icon + Title */}
+        <div className="flex flex-col items-center mb-6">
+          <div
+            className={`w-16 h-16 flex items-center justify-center rounded-full mb-4 text-3xl ${
+              isAdmin
+                ? "bg-yellow-400/20 text-yellow-400"
+                : "bg-blue-400/20 text-blue-400"
+            }`}
+          >
+            {isAdmin ? <FaUserShield /> : <FaUserTie />}
+          </div>
 
-        {error && <p className="mb-4 font-semibold text-red-400">{error}</p>}
+          <motion.h1
+            initial={{ y: -10 }}
+            animate={{ y: 0 }}
+            className="text-2xl font-bold tracking-wide"
+          >
+            {isAdmin ? "Admin Login" : "Employee Login"}
+          </motion.h1>
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full px-4 py-3 mb-4 text-black rounded"
-          required
-        />
+          <span
+            className={`mt-2 px-3 py-1 text-xs font-semibold rounded-full ${
+              isAdmin
+                ? "bg-yellow-500/20 text-yellow-300 border border-yellow-400/40"
+                : "bg-blue-500/20 text-blue-300 border border-blue-400/40"
+            }`}
+          >
+            {isAdmin ? "Admin Access Only" : "Employee Access Only"}
+          </span>
+        </div>
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full px-4 py-3 mb-4 text-black rounded"
-          required
-        />
+        {/* Error Message */}
+        {error && (
+          <p className="p-2 mb-3 text-sm font-medium text-red-400 rounded-lg bg-red-500/10">
+            ⚠️ {error}
+          </p>
+        )}
 
-        <input
-          type="text"
-          placeholder="Employee ID"
-          value={employeeId}
-          onChange={(e) => setEmployeeId(e.target.value)}
-          className="w-full px-4 py-3 mb-6 text-black rounded"
-          required
-        />
+        {/* Login Form */}
+        <form onSubmit={handleLogin} className="flex flex-col space-y-4">
+          <input
+            type="email"
+            placeholder="Official Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="px-4 py-2 text-white placeholder-gray-300 border rounded-lg bg-white/10 border-white/20 focus:outline-none focus:ring-2 focus:ring-green-400"
+            required
+          />
 
-        <button
-          type="submit"
-          className="w-full px-5 py-3 font-semibold text-black transition-all bg-green-400 rounded-xl hover:bg-green-500 hover:scale-105"
-        >
-          Login
-        </button>
-      </form>
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="px-4 py-2 text-white placeholder-gray-300 border rounded-lg bg-white/10 border-white/20 focus:outline-none focus:ring-2 focus:ring-green-400"
+            required
+          />
+
+          <input
+            type="text"
+            placeholder="Employee ID (e.g., RTS1001)"
+            value={employeeId}
+            onChange={(e) => setEmployeeId(e.target.value)}
+            className="px-4 py-2 text-white placeholder-gray-300 border rounded-lg bg-white/10 border-white/20 focus:outline-none focus:ring-2 focus:ring-green-400"
+            required
+          />
+
+          <button
+            type="submit"
+            className={`w-full py-2 font-semibold rounded-lg shadow-md transition-all hover:scale-105 ${accentClasses}`}
+          >
+            {isAdmin ? "Login as Admin" : "Login as Employee"}
+          </button>
+        </form>
+
+        {/* Footer */}
+        <div className="mt-6 text-center">
+          <p className="text-xs text-gray-300">
+            🚀 ReadyTech Secure Portal • {new Date().getFullYear()}
+          </p>
+        </div>
+      </motion.div>
     </div>
   );
 }
