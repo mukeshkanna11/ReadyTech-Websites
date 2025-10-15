@@ -1,6 +1,6 @@
 // App.jsx
 import React from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 
 // Components
 import Navbar from "./components/Navbar";
@@ -14,10 +14,14 @@ import Services from "./pages/Services";
 import Contact from "./pages/Contact";
 import Development from "./pages/Development";
 import Demo from "./pages/Demo";
-import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
 import PaymentSection from "./pages/PaymentSection";
+import Login from "./pages/Login"; // Optional login page
+
+// Dashboards
+import Dashboard from "./pages/Dashboard"; // Role selection
+import EmployeeDashboard from "./pages/EmployeeDashboard";
+import AdminDashboard from "./pages/AdminDashboard";
 
 // Service Detail Pages
 import WebsiteMaintenance from "./pages/WebsiteMaintenance";
@@ -38,24 +42,43 @@ import EcommerceDevelopment from "./pages/services/EcommerceDevelopment";
 import WebDevelopment from "./pages/services/WebDevelopment";
 import Angular from "./pages/services/Angular";
 
-export default function App() {
-  const location = useLocation(); // Get current route
+// -------------------- Private Route --------------------
+const PrivateRoute = ({ children, allowedRole }) => {
+  const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user"));
 
-  // Check if current route is login
-  const hideFooter = ["/login", "/register", "/payment"].includes(location.pathname);
+  if (!token || !user) {
+    return <Navigate to="/dashboard" replace />; // redirect to role selection
+  }
+
+  if (allowedRole && user.role !== allowedRole) {
+    return <Navigate to="/dashboard" replace />; // redirect if role mismatch
+  }
+
+  return children;
+};
+
+// -------------------- Main App --------------------
+export default function App() {
+  const location = useLocation();
+
+  // Hide Navbar/Footer on role selection, register, payment, dashboards
+  const hideLayout = [
+    "/dashboard",
+    "/register",
+    "/payment",
+    "/employee-dashboard",
+    "/admin-dashboard",
+    "/login",
+  ].includes(location.pathname);
 
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Navbar always visible */}
-      <Navbar />
-
-      {/* Scroll to top */}
+      {!hideLayout && <Navbar />}
       <ScrollToTop />
-
-      {/* Page content */}
-      <main className="flex-1 pt-20">
+      <main className={`flex-1 ${!hideLayout ? "pt-20" : "pt-0"}`}>
         <Routes>
-          {/* Main Pages */}
+          {/* Public Pages */}
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/services" element={<Services />} />
@@ -63,9 +86,33 @@ export default function App() {
           <Route path="/development" element={<Development />} />
           <Route path="/demo" element={<Demo />} />
           <Route path="/payment" element={<PaymentSection />} />
-          <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+
+          {/* Optional Login Page */}
+          <Route path="/login" element={<Login />} />
+
+          {/* Role Selection Page */}
           <Route path="/dashboard" element={<Dashboard />} />
+
+          {/* Employee Dashboard */}
+          <Route
+            path="/employee-dashboard"
+            element={
+              <PrivateRoute allowedRole="employee">
+                <EmployeeDashboard />
+              </PrivateRoute>
+            }
+          />
+
+          {/* Admin Dashboard */}
+          <Route
+            path="/admin-dashboard"
+            element={
+              <PrivateRoute allowedRole="admin">
+                <AdminDashboard />
+              </PrivateRoute>
+            }
+          />
 
           {/* Service Detail Pages */}
           <Route path="/services/website-maintenance" element={<WebsiteMaintenance />} />
@@ -85,11 +132,12 @@ export default function App() {
           <Route path="/services/web-development" element={<WebDevelopment />} />
           <Route path="/services/angular" element={<Angular />} />
           <Route path="/services/php-development" element={<Php />} />
+
+          {/* Redirect unknown routes to home */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
-
-      {/* Footer visible only if not on login page */}
-      {!hideFooter && <Footer />}
+      {!hideLayout && <Footer />}
     </div>
   );
 }

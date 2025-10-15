@@ -23,8 +23,12 @@ const UserSchema = new mongoose.Schema(
       required: true,
       unique: true
     },
-    role: { type: String, default: "Employee" },
-    department: { type: String, default: "General" }, // new field
+    role: {
+      type: String,
+      required: true,
+      enum: ["admin", "employee"], // only allow these values
+    },
+    department: { type: String, default: "General" },
   },
   { timestamps: true }
 );

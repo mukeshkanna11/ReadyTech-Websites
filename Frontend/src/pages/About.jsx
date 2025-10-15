@@ -1,16 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import {
-  FaLaptopCode,
-  FaChalkboardTeacher,
-  FaTools,
+  FaRobot,
+  FaCloud,
   FaBullseye,
   FaLightbulb,
   FaHeart,
   FaMapMarkerAlt,
+  FaMicrochip,
 } from "react-icons/fa";
 import { Helmet } from "react-helmet-async";
+import InnovationImg from "../assets/images/C1.jpg";
+import AIImg from "../assets/images/C2.jpg";
 
 export default function AboutReadyTech() {
+  useEffect(() => {
+    AOS.init({ duration: 1000, once: true });
+  }, []);
+
   const locations = [
     {
       city: "Coimbatore",
@@ -32,127 +40,138 @@ export default function AboutReadyTech() {
   ];
 
   return (
-    <div className="min-h-screen text-gray-100 bg-gradient-to-b from-gray-950 via-gray-900 to-black">
-
+    <div className="relative min-h-screen overflow-hidden text-gray-100">
       <Helmet>
         <title>About Us | Ready Tech Solutions</title>
         <meta
           name="description"
-          content="Get to know the team behind Ready Tech Solutions. We're a team of passionate professionals who are dedicated to delivering top-notch IT solutions."
-        />
-        <meta
-          name="keywords"
-          content="Ready Tech, About, Team, Coimbatore, Bangalore"
+          content="Discover how Ready Tech Solutions drives innovation with AI, automation, and smart IT systems."
         />
       </Helmet>
 
-      {/* 🌌 Dark Glowing Animated Hero Section */}
-      <section className="relative flex flex-col items-center justify-center py-24 overflow-hidden text-white">
+      {/* === FULL BACKGROUND WITH TWO IMAGES === */}
+      <div className="absolute inset-0 overflow-hidden -z-10">
+        {/* Two blended background layers */}
         <div
-          className="absolute inset-0 w-full h-full"
+          className="absolute inset-0 bg-center bg-cover opacity-70 animate-bgShift"
           style={{
-            background: `linear-gradient(270deg, #0f172a, #1e3a8a, #0ea5e9, #1e1b4b)`,
-            backgroundSize: "400% 400%",
-            animation: "darkGlowShift 16s ease infinite",
+            backgroundImage: `url(${AIImg})`,
+            backgroundAttachment: "fixed",
+          }}
+        ></div>
+        <div
+          className="absolute inset-0 bg-center bg-cover opacity-50 mix-blend-overlay animate-bgShiftReverse"
+          style={{
+            backgroundImage: `url(${InnovationImg})`,
+            backgroundAttachment: "fixed",
           }}
         ></div>
 
-        <div className="relative z-10 px-6 text-center">
+        {/* Overlay gradient for text clarity */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black/90"></div>
+      </div>
+
+      {/* === PAGE CONTENT === */}
+      <section className="relative flex flex-col items-center justify-center text-center text-white py-28">
+        <div className="relative z-10 px-6" data-aos="zoom-in">
           <h1 className="mb-4 text-4xl font-extrabold md:text-5xl drop-shadow-lg">
-            Hi, We Are Ready Tech Solutions
+            We Build the Future with AI & Technology
           </h1>
-          <p className="max-w-2xl mx-auto text-lg md:text-xl text-gray-200/90">
-            Since 2019, Ready Tech Solutions has been offering professional
-            training and innovative IT solutions. We specialize in web design,
-            programming, networking, accounting, and more.
+          <p
+            className="max-w-2xl mx-auto text-lg md:text-xl text-gray-200/90"
+            data-aos="fade-up"
+            data-aos-delay="200"
+          >
+            Since 2019, Ready Tech Solutions has redefined innovation with
+            automation, data-driven systems, and AI products that empower
+            businesses to scale smarter.
           </p>
         </div>
-
-        <style>
-          {`
-            @keyframes darkGlowShift {
-              0% { background-position: 0% 50%; }
-              50% { background-position: 100% 50%; }
-              100% { background-position: 0% 50%; }
-            }
-          `}
-        </style>
       </section>
 
-      {/* About Section */}
-      <section className="max-w-6xl px-6 py-20 mx-auto">
+      {/* ABOUT SECTION */}
+      <section className="relative z-10 max-w-6xl px-6 py-20 mx-auto">
         <div className="grid items-center gap-12 md:grid-cols-2">
-          <div>
+          <div data-aos="fade-right">
             <h2 className="mb-4 text-3xl font-bold text-white">
-              Our Expertise & Innovation
+              Our Expertise in AI & Digital Innovation
             </h2>
             <p className="mb-6 leading-relaxed text-gray-300">
-              Ready Tech Solutions brings you a team of experts delivering
-              innovative web solutions that combine captivating design and
-              flawless functionality. Our multipurpose approach ensures user-friendly,
-              scalable, and visually appealing outcomes.
+              We craft next-gen AI systems that automate workflows, optimize
+              decisions, and unlock digital growth opportunities.
             </p>
             <p className="mb-6 leading-relaxed text-gray-300">
-              We provide end-to-end IT services, including software development,
-              cloud solutions, mobile applications, digital marketing, and
-              technical training. Our team ensures seamless integration of
-              technology and business objectives for sustainable growth.
+              Our tech stack spans predictive analytics, cloud solutions, and
+              ML-powered automation — blending innovation with intelligence.
             </p>
             <p className="leading-relaxed text-gray-300">
-              Our passion is to empower students and businesses with premium
-              training, IT development, and unmatched services that accelerate
-              growth and achieve superior results. We thrive on innovation,
-              creativity, and delivering measurable outcomes for every client.
+              Each solution we design evolves with your business, adapting to
+              the ever-changing digital landscape.
             </p>
           </div>
-          <div className="flex justify-center">
+          <div
+            className="flex justify-center"
+            data-aos="fade-left"
+            data-aos-delay="200"
+          >
             <img
-              src="https://opendoodles.s3-us-west-1.amazonaws.com/loving.svg"
-              alt="Team Illustration"
-              className="h-auto p-4 mx-auto border shadow-lg rounded-xl w-72 bg-gradient-to-br from-gray-800 via-gray-900 to-black border-indigo-500/30"
+              src={AIImg}
+              alt="AI Development Illustration"
+              className="h-auto p-4 mx-auto border shadow-xl rounded-2xl w-80 bg-gradient-to-br from-gray-800 via-gray-900 to-black border-cyan-500/20 animate-float"
             />
           </div>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-16 border-t border-gray-800 bg-gray-900/70 backdrop-blur-sm">
+      {/* FLOW SECTION */}
+      <section className="relative z-10 py-20 bg-black/30 backdrop-blur-sm">
         <div className="max-w-6xl px-6 mx-auto text-center">
-          <h2 className="mb-12 text-3xl font-bold text-white">Our Impact</h2>
-          <div className="grid gap-12 md:grid-cols-3">
-            <StatCard icon={<FaLaptopCode />} title="Development" value={95} />
-            <StatCard icon={<FaChalkboardTeacher />} title="Training" value={90} />
-            <StatCard icon={<FaTools />} title="Services" value={85} />
+          <h2 className="mb-12 text-3xl font-bold text-white" data-aos="fade-up">
+            Innovation Flows Through Everything We Do
+          </h2>
+          <div className="grid ">
+            <div data-aos="fade-right">
+              {/* <img
+                src={InnovationImg}
+                alt="Innovation Illustration"
+                className="border shadow-xl rounded-2xl border-cyan-500/30"
+              /> */}
+            </div>
+            <div className="flex flex-col justify-center" data-aos="fade-left">
+              <p className="mb-6 text-lg leading-relaxed text-gray-300">
+                Innovation isn’t a department — it’s our DNA. From AI-powered
+                customer support to automated analytics pipelines, every project
+                we build is designed to create impact, speed, and intelligence.
+              </p>
+              <p className="text-lg leading-relaxed text-gray-300">
+                We believe technology should evolve alongside you — transforming
+                ideas into intelligent systems that move industries forward.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Mission & Vision Section */}
-      <section className="grid max-w-6xl gap-12 px-6 py-20 mx-auto md:grid-cols-2">
-        <div className="p-8 transition border shadow-lg bg-gradient-to-br from-gray-800 via-gray-900 to-black border-indigo-500/20 rounded-xl hover:shadow-indigo-700/40">
-          <h3 className="flex items-center gap-2 mb-4 text-2xl font-bold text-cyan-400">
-            <FaBullseye /> Mission
-          </h3>
-          <p className="leading-relaxed text-gray-300">
-            Facilitate our people in offering superior performance to our valued
-            customers. Grow business at an accelerated pace. Foster an
-            environment that enables growth and nurtures leaders.
-          </p>
-        </div>
-        <div className="p-8 transition border shadow-lg bg-gradient-to-br from-gray-800 via-gray-900 to-black border-indigo-500/20 rounded-xl hover:shadow-indigo-700/40">
-          <h3 className="flex items-center gap-2 mb-4 text-2xl font-bold text-cyan-400">
-            <FaLightbulb /> Vision
-          </h3>
-          <p className="leading-relaxed text-gray-300">
-            Our greatest vision is "Manufacturing All Robotics for our human
-            and organizational needs." We aim to innovate, empower, and lead in
-            IT solutions and training.
-          </p>
+      {/* CAPABILITIES */}
+      <section className="relative z-10 py-16 border-t border-gray-800 bg-black/40 backdrop-blur-sm">
+        <div className="max-w-6xl px-6 mx-auto text-center" data-aos="fade-up">
+          <h2 className="mb-12 text-3xl font-bold text-white">Our Capabilities</h2>
+          <div className="grid gap-12 md:grid-cols-3">
+            <StatCard icon={<FaRobot />} title="AI Development" value={95} />
+            <StatCard icon={<FaCloud />} title="Web Development" value={90} />
+            <StatCard icon={<FaMicrochip />} title="BPO Services" value={88} />
+          </div>
         </div>
       </section>
 
-      {/* Values Section */}
-      <section className="py-20 bg-gray-950">
+      {/* MISSION & VISION */}
+      <section className="relative z-10 grid max-w-6xl gap-12 px-6 py-20 mx-auto md:grid-cols-2">
+        <MissionCard />
+        <VisionCard />
+      </section>
+
+      {/* VALUES */}
+      <section className="relative z-10 py-20 bg-black/60" data-aos="fade-up">
         <div className="max-w-6xl px-6 mx-auto text-center">
           <h2 className="mb-12 text-3xl font-bold text-white">
             Our Core Values
@@ -160,39 +179,39 @@ export default function AboutReadyTech() {
           <div className="grid gap-8 md:grid-cols-3">
             <ValueCard
               icon={<FaHeart />}
-              title="Empowerment"
-              description="We empower our students and clients to achieve excellence and grow continuously."
+              title="Innovation"
+              description="Exploring new frontiers in AI and automation to redefine possibilities."
             />
             <ValueCard
               icon={<FaHeart />}
-              title="Empathy"
-              description="Understanding and catering to the unique needs of every learner and customer."
+              title="Integrity"
+              description="We build technology with transparency, ethics, and impact."
             />
             <ValueCard
               icon={<FaHeart />}
-              title="Respect"
-              description="Respect for personal aspirations and individual growth is the backbone of our culture."
+              title="Excellence"
+              description="Delivering world-class solutions that exceed standards."
             />
           </div>
         </div>
       </section>
 
-      {/* Locations Section */}
-      <section className="py-20 bg-gray-900 border-t border-gray-800">
+      {/* LOCATIONS */}
+      <section className="relative z-10 py-20 border-t border-gray-800 bg-black/40" data-aos="zoom-in">
         <div className="max-w-6xl px-6 mx-auto text-center">
           <h2 className="mb-12 text-3xl font-bold text-white">Our Locations</h2>
           <div className="grid gap-8 md:grid-cols-3">
             {locations.map((loc, idx) => (
               <div
                 key={idx}
-                className="p-6 transition transform border shadow-lg bg-gradient-to-br from-gray-800 to-gray-900 border-indigo-500/20 rounded-xl hover:-translate-y-1 hover:shadow-indigo-700/40"
+                className="p-6 transition transform border shadow-lg bg-gradient-to-br from-gray-800/80 to-gray-900/90 border-cyan-500/20 rounded-xl hover:-translate-y-1 hover:shadow-cyan-500/40"
+                data-aos="fade-up"
+                data-aos-delay={idx * 150}
               >
-                <div className="flex justify-center mb-4 text-3xl text-cyan-400">
+                <div className="flex justify-center mb-4 text-3xl text-cyan-400 animate-bounce">
                   <FaMapMarkerAlt />
                 </div>
-                <h4 className="mb-2 text-xl font-semibold text-white">
-                  {loc.city}
-                </h4>
+                <h4 className="mb-2 text-xl font-semibold text-white">{loc.city}</h4>
                 <p className="text-sm text-gray-300">{loc.address}</p>
                 <p className="mt-2 text-sm font-medium text-cyan-400">
                   {loc.phone}
@@ -202,16 +221,42 @@ export default function AboutReadyTech() {
           </div>
         </div>
       </section>
+
+      {/* ANIMATIONS */}
+      <style>
+        {`
+        @keyframes bgShift {
+          0% { transform: scale(1) translateY(0px); opacity: 0.65; }
+          50% { transform: scale(1.05) translateY(-15px); opacity: 0.75; }
+          100% { transform: scale(1) translateY(0px); opacity: 0.65; }
+        }
+        @keyframes bgShiftReverse {
+          0% { transform: scale(1) translateY(0px); opacity: 0.55; }
+          50% { transform: scale(1.07) translateY(15px); opacity: 0.65; }
+          100% { transform: scale(1) translateY(0px); opacity: 0.55; }
+        }
+        .animate-bgShift { animation: bgShift 20s ease-in-out infinite; }
+        .animate-bgShiftReverse { animation: bgShiftReverse 22s ease-in-out infinite; }
+
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
+        }
+        .animate-float { animation: float 4s ease-in-out infinite; }
+      `}
+      </style>
     </div>
   );
 }
 
-/* === Reusable Components === */
-
+/* COMPONENTS */
 function StatCard({ icon, title, value }) {
   return (
-    <div className="p-6 transition border shadow-lg bg-gradient-to-br from-gray-800 via-gray-900 to-black border-indigo-500/20 rounded-xl hover:shadow-indigo-700/40">
-      <div className="flex items-center justify-center mb-4 text-4xl text-cyan-400">
+    <div
+      className="p-6 transition border shadow-lg bg-gradient-to-br from-gray-800 via-gray-900 to-black border-cyan-500/20 rounded-xl hover:shadow-cyan-500/40 hover:-translate-y-1"
+      data-aos="flip-left"
+    >
+      <div className="flex items-center justify-center mb-4 text-4xl text-cyan-400 animate-pulse">
         {icon}
       </div>
       <h4 className="text-xl font-semibold text-white">{title}</h4>
@@ -226,10 +271,48 @@ function StatCard({ icon, title, value }) {
   );
 }
 
+function MissionCard() {
+  return (
+    <div
+      className="p-8 transition border shadow-lg bg-gradient-to-br from-gray-800 via-gray-900 to-black border-cyan-500/20 rounded-xl hover:shadow-cyan-500/40"
+      data-aos="fade-right"
+    >
+      <h3 className="flex items-center gap-2 mb-4 text-2xl font-bold text-cyan-400">
+        <FaBullseye /> Mission
+      </h3>
+      <p className="leading-relaxed text-gray-300">
+        Empower businesses with intelligent, scalable AI systems that simplify
+        challenges, automate processes, and drive measurable growth.
+      </p>
+    </div>
+  );
+}
+
+function VisionCard() {
+  return (
+    <div
+      className="p-8 transition border shadow-lg bg-gradient-to-br from-gray-800 via-gray-900 to-black border-cyan-500/20 rounded-xl hover:shadow-cyan-500/40"
+      data-aos="fade-left"
+      data-aos-delay="200"
+    >
+      <h3 className="flex items-center gap-2 mb-4 text-2xl font-bold text-cyan-400">
+        <FaLightbulb /> Vision
+      </h3>
+      <p className="leading-relaxed text-gray-300">
+        Lead the global AI transformation by creating systems that think, learn,
+        and evolve — revolutionizing industries with intelligent progress.
+      </p>
+    </div>
+  );
+}
+
 function ValueCard({ icon, title, description }) {
   return (
-    <div className="p-6 transition transform border shadow-lg bg-gradient-to-br from-gray-800 via-gray-900 to-black border-indigo-500/20 rounded-xl hover:shadow-indigo-700/40 hover:-translate-y-1">
-      <div className="flex justify-center mb-4 text-3xl text-cyan-400">
+    <div
+      className="p-6 transition transform border shadow-lg bg-gradient-to-br from-gray-800 via-gray-900 to-black border-cyan-500/20 rounded-xl hover:shadow-cyan-500/40 hover:-translate-y-1"
+      data-aos="zoom-in-up"
+    >
+      <div className="flex justify-center mb-4 text-3xl text-cyan-400 animate-pulse">
         {icon}
       </div>
       <h4 className="mb-2 text-xl font-semibold text-white">{title}</h4>

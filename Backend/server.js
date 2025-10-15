@@ -13,23 +13,32 @@ dotenv.config();
 const app = express();
 
 // ---------------- Middleware ----------------
+
+// Allow requests from these origins
 const allowedOrigins = [
-  "http://localhost:5173",           // React dev server (check your Vite port)
-  "https://readytech-site.netlify.app"
+  "http://localhost:5173",           // Vite dev server
+  "http://localhost:5174",           // Alternate dev port
+  "https://readytech-site.netlify.app" // Production frontend
 ];
 
 app.use(
   cors({
     origin: (origin, callback) => {
+      // Allow requests with no origin like Postman or CURL
       if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) return callback(null, true);
-      return callback(new Error("Not allowed by CORS"));
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("Not allowed by CORS"));
+      }
     },
-    credentials: true,
+    credentials: true, // Allow cookies, authorization headers
   })
 );
 
-app.use(express.json()); // parse JSON body
+// Parse incoming JSON
+app.use(express.json());
 
 // ---------------- Routes ----------------
 app.get("/", (req, res) => {
@@ -37,13 +46,16 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
-app.use("/api/contact", contactRoutes);   // ✅ Mounting Contact Route
+app.use("/api/contact", contactRoutes);
 app.use("/api/protected", protectedRoutes);
 
 // ---------------- MongoDB Connection ----------------
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI);
+    await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     console.log("✅ MongoDB connected");
   } catch (err) {
     console.error("❌ MongoDB error:", err.message);
@@ -51,6 +63,12 @@ const connectDB = async () => {
   }
 };
 connectDB();
+
+// ---------------- Global Error Handler ----------------
+app.use((err, req, res, next) => {
+  console.error("GLOBAL ERROR:", err.message);
+  res.status(500).json({ msg: err.message });
+});
 
 // ---------------- Server Listener ----------------
 const PORT = process.env.PORT || 5000;

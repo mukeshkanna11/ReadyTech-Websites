@@ -1,173 +1,128 @@
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import BgImage from "../assets/images/landing.jpg";
 
 export default function Login() {
+  const navigate = useNavigate();
+  const [role, setRole] = useState(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [employeeId, setEmployeeId] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+
+  // Check role selected from Dashboard
+  useEffect(() => {
+    const selectedRole = localStorage.getItem("selectedRole");
+    if (!selectedRole) {
+      navigate("/dashboard"); // go back to role selection if none
+    } else {
+      setRole(selectedRole);
+    }
+  }, [navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
-    setLoading(true);
+
+    if (!role || !email || !password || !employeeId) {
+      setError("All fields are required.");
+      return;
+    }
 
     try {
-      const res = await fetch(
+      // Call backend login API
+      const response = await fetch(
         "https://readytech-websites.onrender.com/api/auth/login",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: email.trim().toLowerCase(),
-            password: password.trim(),
-            employeeId: employeeId.trim(),
-          }),
+          body: JSON.stringify({ email, password, employeeId }),
         }
       );
 
-      const data = await res.json();
-      setLoading(false);
+      const data = await response.json();
 
-      if (!res.ok) {
-        if (res.status === 403) {
-          setError("Employee ID does not match our records for this email.");
-        } else if (res.status === 400) {
-          setError(data.msg || "Invalid email or password.");
-        } else {
-          setError("Login failed. Please try again.");
-        }
+      if (!response.ok) {
+        throw new Error(data.msg || "Login failed");
+      }
+
+      // Ensure role is lowercase
+      const userRole = data.user.role?.toLowerCase();
+
+      // Only allow admin or employee
+      if (userRole !== "admin" && userRole !== "employee") {
+        setError("Invalid role assigned.");
         return;
       }
 
+      // Save user info
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
-      navigate("/dashboard");
+      // Navigate to respective dashboard
+      navigate(userRole === "admin" ? "/admin-dashboard" : "/employee-dashboard");
     } catch (err) {
-      setLoading(false);
-      setError("Server error. Please check your connection and try again.");
-      console.error("LOGIN ERROR:", err);
+      console.error(err);
+      setError(err.message);
     }
   };
 
+  if (!role) return null; // Prevent render until role selected
+
   return (
-    <div className="flex items-center justify-center min-h-screen p-6 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900">
+    <div
+      className="flex items-center justify-center min-h-screen bg-center bg-cover"
+      style={{ backgroundImage: `url(${BgImage})` }}
+    >
       <Helmet>
-        <title>Login | Ready Tech Solutions</title>
+        <title>Login | Ready Tech</title>
       </Helmet>
 
-      <div className="w-full max-w-4xl p-10 border shadow-2xl bg-white/10 backdrop-blur-xl rounded-2xl border-white/20">
-        <h2 className="mb-8 text-4xl font-extrabold text-center text-white">
-          Welcome Back 👋
-        </h2>
+      <form
+        onSubmit={handleLogin}
+        className="w-full max-w-md p-8 text-center text-white bg-black/70 backdrop-blur-md rounded-2xl"
+      >
+        <h1 className="mb-6 text-3xl font-bold">
+          Login as {role === "admin" ? "Admin" : "Employee"}
+        </h1>
 
-        {/* Error message */}
-        {error && (
-          <div className="px-4 py-3 mb-4 text-center text-red-700 bg-red-100 rounded-lg">
-            {error}
-          </div>
-        )}
+        {error && <p className="mb-4 font-semibold text-red-400">{error}</p>}
 
-        <form className="space-y-6" onSubmit={handleLogin}>
-          <div>
-            <label className="block mb-2 text-lg font-medium text-white">
-              Employee ID
-            </label>
-            <input
-              type="text"
-              value={employeeId}
-              onChange={(e) => setEmployeeId(e.target.value)}
-              placeholder="Enter your Employee ID"
-              className="w-full px-5 py-3 text-gray-800 outline-none bg-white/80 rounded-xl focus:ring-4 focus:ring-yellow-400"
-              required
-            />
-          </div>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="w-full px-4 py-3 mb-4 text-black rounded"
+          required
+        />
 
-          <div>
-            <label className="block mb-2 text-lg font-medium text-white">
-              Email
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-              className="w-full px-5 py-3 text-gray-800 outline-none bg-white/80 rounded-xl focus:ring-4 focus:ring-cyan-400"
-              required
-            />
-          </div>
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="w-full px-4 py-3 mb-4 text-black rounded"
+          required
+        />
 
-          <div>
-            <label className="block mb-2 text-lg font-medium text-white">
-              Password
-            </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
-              className="w-full px-5 py-3 text-gray-800 outline-none bg-white/80 rounded-xl focus:ring-4 focus:ring-teal-400"
-              required
-            />
-          </div>
+        <input
+          type="text"
+          placeholder="Employee ID"
+          value={employeeId}
+          onChange={(e) => setEmployeeId(e.target.value)}
+          className="w-full px-4 py-3 mb-6 text-black rounded"
+          required
+        />
 
-          <button
-            type="submit"
-            disabled={loading}
-            className={`w-full py-3 text-lg font-semibold text-white transition transform rounded-xl bg-gradient-to-r from-green-500 to-teal-500 hover:scale-105 ${
-              loading ? "opacity-60 cursor-not-allowed" : ""
-            }`}
-          >
-            {loading ? (
-              <span className="flex items-center justify-center gap-2">
-                <svg
-                  className="w-5 h-5 text-white animate-spin"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                  ></path>
-                </svg>
-                Authenticating...
-              </span>
-            ) : (
-              "Login"
-            )}
-          </button>
-        </form>
-
-        {loading && (
-          <p className="mt-4 text-center text-white animate-pulse">
-            ⏳ Verifying credentials... please wait
-          </p>
-        )}
-
-        <p className="mt-6 text-center text-white">
-          Don’t have an account?{" "}
-          <Link
-            to="/register"
-            className="font-semibold text-yellow-300 hover:underline"
-          >
-            Sign Up
-          </Link>
-        </p>
-      </div>
+        <button
+          type="submit"
+          className="w-full px-5 py-3 font-semibold text-black transition-all bg-green-400 rounded-xl hover:bg-green-500 hover:scale-105"
+        >
+          Login
+        </button>
+      </form>
     </div>
   );
 }

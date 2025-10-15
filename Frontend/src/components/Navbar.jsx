@@ -12,11 +12,7 @@ export default function Navbar() {
   // Detect scroll direction + background change
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > lastScrollY) {
-        setShowNavbar(false);
-      } else {
-        setShowNavbar(true);
-      }
+      setShowNavbar(window.scrollY < lastScrollY || window.scrollY < 50);
       setLastScrollY(window.scrollY);
       setScrolled(window.scrollY > 30);
     };
@@ -53,11 +49,7 @@ export default function Navbar() {
       <div className="flex items-center justify-between w-full px-6 py-3 mx-auto max-w-7xl">
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-2">
-          <img
-            src={Logo}
-            alt="Ready Tech"
-            className="object-contain w-10 h-10"
-          />
+          <img src={Logo} alt="Ready Tech" className="object-contain w-10 h-10" />
           <span className="text-lg font-bold tracking-wide text-white font-poppins">
             ReadyTech Solutions
           </span>
@@ -82,13 +74,13 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* Buttons */}
+        {/* Dashboard Button */}
         <div className="hidden space-x-4 md:flex">
           <Link
-            to="/login"
+            to="/dashboard"
             className="px-4 py-2 font-semibold text-yellow-400 transition-all duration-300 border-2 border-yellow-400 rounded-full hover:bg-yellow-400 hover:text-black hover:shadow-lg hover:scale-105"
           >
-            DashBoard
+            Dashboard
           </Link>
         </div>
 
@@ -123,10 +115,10 @@ export default function Navbar() {
               Contact
             </Link>
             <Link
-              to="/login"
+              to="/dashboard"
               className="block py-2 text-center text-yellow-400 transition-all duration-300 border-2 border-yellow-400 rounded-full hover:bg-yellow-400 hover:text-black hover:shadow-lg"
             >
-              Login
+              Dashboard
             </Link>
           </div>
         </div>
