@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
@@ -15,6 +15,10 @@ import {
   FaBug,
   FaMoneyBillWave,
   FaHeartbeat,
+  FaSearch,
+  FaFilter,
+  FaHistory,
+  FaSyncAlt,
 } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -27,14 +31,66 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+/* ------------------- MAIN COMPONENT ------------------- */
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showEmployeePanel, setShowEmployeePanel] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const [realtimeStats, setRealtimeStats] = useState({
+    users: 245,
+    projects: 32,
+    revenue: 54000,
+    bugs: 12,
+  });
+
+  const [employees] = useState([
+    {
+      id: 1,
+      name: "Mukeshkanna Murugan",
+      role: "MERN SDE",
+      department: "Software Development",
+      status: "Active",
+      attendance: "98%",
+      incentives: "₹10,500",
+    },
+    {
+      id: 2,
+      name: "Priyadharshini P",
+      role: "UI/UX Designer",
+      department: "Design",
+      status: "Remote",
+      attendance: "95%",
+      incentives: "₹8,200",
+    },
+    {
+      id: 3,
+      name: "Stalin S",
+      role: "QA Engineer",
+      department: "Testing",
+      status: "Active",
+      attendance: "97%",
+      incentives: "₹7,500",
+    },
+  ]);
+
+  // Simulate real-time updates
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRealtimeStats((prev) => ({
+        ...prev,
+        revenue: prev.revenue + Math.floor(Math.random() * 200 - 100),
+        bugs: Math.max(0, prev.bugs + Math.floor(Math.random() * 3 - 1)),
+      }));
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleLogout = () => {
     localStorage.clear();
-    navigate("/dashboard");
+    navigate("/login");
   };
 
   const performanceData = [
@@ -49,31 +105,31 @@ export default function AdminDashboard() {
   const notifications = [
     {
       id: 1,
-      title: "New Employee Joined",
-      message: "Mukeshkanna added to the Development Team.",
-      time: "5 mins ago",
+      title: "Employee Performance Bonus",
+      message: "Mukeshkanna received ₹10,500 performance bonus.",
+      time: "10 mins ago",
       color: "bg-green-500",
     },
     {
       id: 2,
-      title: "Server Maintenance",
-      message: "Planned downtime on Oct 20 at 3 AM.",
+      title: "Attendance Report",
+      message: "All teams marked attendance for today.",
+      time: "1 hour ago",
+      color: "bg-blue-500",
+    },
+    {
+      id: 3,
+      title: "New Task Assigned",
+      message: "UI update for Admin Panel assigned to Aishwarya.",
       time: "2 hours ago",
       color: "bg-yellow-500",
     },
     {
-      id: 3,
-      title: "Security Alert",
-      message: "New login detected from Chennai office.",
+      id: 4,
+      title: "System Security Check",
+      message: "Routine scan completed successfully.",
       time: "Yesterday",
       color: "bg-red-500",
-    },
-    {
-      id: 4,
-      title: "Project Assigned",
-      message: "Alpha CRM assigned to DevOps team.",
-      time: "3 days ago",
-      color: "bg-blue-500",
     },
   ];
 
@@ -81,16 +137,12 @@ export default function AdminDashboard() {
     <div className="min-h-screen text-white bg-gradient-to-br from-gray-900 via-black to-gray-950">
       <Helmet>
         <title>
-          {user?.name
-            ? `${user.name} | Admin Dashboard`
-            : "Admin Dashboard"}{" "}
-          | ReadyTech
+          {user?.name ? `${user.name} | Admin Dashboard` : "Admin Dashboard"} | ReadyTech
         </title>
       </Helmet>
 
       {/* HEADER */}
       <header className="relative flex items-center justify-between p-6 border-b shadow-lg bg-black/50 backdrop-blur-lg border-white/10 rounded-b-2xl">
-        {/* LEFT */}
         <div className="flex items-center gap-3">
           <FaUserCircle className="text-4xl text-yellow-400" />
           <div>
@@ -103,22 +155,31 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* RIGHT */}
-        <div className="flex items-center gap-4">
-          {/* Notification Button */}
-          <div>
-            <button
-              onClick={() => setShowNotifications(!showNotifications)}
-              className="flex items-center justify-center w-10 h-10 text-gray-300 transition rounded-full hover:text-yellow-400 hover:bg-white/10"
-              title="Notifications"
-            >
-              <FaBell className="text-xl" />
-            </button>
-            {/* Badge */}
-            <span className="absolute -top-0.5 -right-0.5 flex items-center justify-center w-2.5 h-2.5 bg-red-500 rounded-full ring-2 ring-black"></span>
+        {/* SEARCH + FILTER + NOTIFICATIONS */}
+        <div className="flex items-center gap-3">
+          <div className="items-center hidden gap-2 px-3 py-2 rounded-lg md:flex bg-white/10">
+            <FaSearch className="text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search employees..."
+              className="w-48 text-sm text-gray-200 bg-transparent outline-none"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <FaFilter
+              className="text-gray-400 cursor-pointer hover:text-yellow-400"
+              onClick={() => setShowEmployeePanel(!showEmployeePanel)}
+            />
           </div>
 
-          {/* Logout */}
+          <button
+            onClick={() => setShowNotifications(!showNotifications)}
+            className="relative flex items-center justify-center w-10 h-10 text-gray-300 transition rounded-full hover:text-yellow-400 hover:bg-white/10"
+          >
+            <FaBell className="text-xl" />
+            <span className="absolute -top-0.5 -right-0.5 flex items-center justify-center w-2.5 h-2.5 bg-red-500 rounded-full ring-2 ring-black"></span>
+          </button>
+
           <button
             onClick={handleLogout}
             className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white transition-all bg-red-600 rounded-lg hover:bg-red-700"
@@ -127,7 +188,7 @@ export default function AdminDashboard() {
           </button>
         </div>
 
-        {/* Notification Dropdown Portal */}
+        {/* NOTIFICATION PANEL */}
         <AnimatePresence>
           {showNotifications &&
             createPortal(
@@ -155,12 +216,58 @@ export default function AdminDashboard() {
                     </li>
                   ))}
                 </ul>
-                <button
-                  onClick={() => setShowNotifications(false)}
-                  className="w-full px-4 py-2 text-xs text-gray-400 transition hover:text-yellow-400 hover:bg-white/5"
-                >
-                  View All Notifications →
-                </button>
+              </motion.div>,
+              document.body
+            )}
+        </AnimatePresence>
+
+        {/* EMPLOYEE FILTER PANEL */}
+        <AnimatePresence>
+          {showEmployeePanel &&
+            createPortal(
+              <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 50 }}
+                transition={{ duration: 0.3 }}
+                className="fixed right-6 top-24 w-96 rounded-xl bg-white/10 backdrop-blur-2xl border border-white/10 shadow-xl z-[9999] overflow-hidden"
+              >
+                <div className="px-5 py-3 font-semibold text-yellow-400 border-b border-white/10">
+                  👥 Employee Details
+                </div>
+                <div className="overflow-y-auto max-h-72">
+                  {employees
+                    .filter((e) =>
+                      e.name.toLowerCase().includes(searchTerm.toLowerCase())
+                    )
+                    .map((e) => (
+                      <div
+                        key={e.id}
+                        className="px-4 py-3 text-sm border-b border-white/5 hover:bg-white/10"
+                      >
+                        <p className="text-lg font-semibold text-white">
+                          {e.name}
+                        </p>
+                        <p className="text-gray-300">
+                          {e.role} • {e.department}
+                        </p>
+                        <p className="mt-1 text-xs text-gray-400">
+                          Status:{" "}
+                          <span
+                            className={`${
+                              e.status === "Active"
+                                ? "text-green-400"
+                                : "text-yellow-400"
+                            }`}
+                          >
+                            {e.status}
+                          </span>{" "}
+                          | Attendance: {e.attendance} | Incentives:{" "}
+                          <span className="text-yellow-300">{e.incentives}</span>
+                        </p>
+                      </div>
+                    ))}
+                </div>
               </motion.div>,
               document.body
             )}
@@ -168,13 +275,13 @@ export default function AdminDashboard() {
       </header>
 
       {/* MAIN DASHBOARD */}
-      <DashboardMain performanceData={performanceData} />
+      <DashboardMain performanceData={performanceData} stats={realtimeStats} />
     </div>
   );
 }
 
-/* ------------------- MAIN DASHBOARD CONTENT ------------------- */
-function DashboardMain({ performanceData }) {
+/* ------------------- DASHBOARD CONTENT ------------------- */
+function DashboardMain({ performanceData, stats }) {
   return (
     <>
       <motion.div
@@ -183,16 +290,17 @@ function DashboardMain({ performanceData }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <StatCard icon={<FaUsers />} title="Total Employees" value="245" color="bg-blue-500" />
-        <StatCard icon={<FaTasks />} title="Active Projects" value="32" color="bg-green-500" />
-        <StatCard icon={<FaMoneyBillWave />} title="Monthly Revenue" value="$54K" color="bg-yellow-400" />
-        <StatCard icon={<FaBug />} title="Reported Bugs" value="12" color="bg-red-500" />
+        <StatCard icon={<FaUsers />} title="Total Users" value={stats.users} color="bg-blue-500" />
+        <StatCard icon={<FaTasks />} title="Active Projects" value={stats.projects} color="bg-green-500" />
+        <StatCard icon={<FaMoneyBillWave />} title="Revenue (Monthly)" value={`$${stats.revenue.toLocaleString()}`} color="bg-yellow-400" />
+        <StatCard icon={<FaBug />} title="Open Bugs" value={stats.bugs} color="bg-red-500" />
       </motion.div>
 
       <div className="grid grid-cols-1 gap-6 p-6 xl:grid-cols-3">
         <div className="space-y-6 xl:col-span-2">
           <PerformanceChart performanceData={performanceData} />
           <RecentActivities />
+          <HistoricalData />
         </div>
         <div className="space-y-6">
           <SystemHealth />
@@ -201,7 +309,7 @@ function DashboardMain({ performanceData }) {
       </div>
 
       <footer className="p-6 mt-8 text-center text-gray-400 border-t border-white/10">
-        <p>© {new Date().getFullYear()} ReadyTech Solutions • Powered by Admin Intelligence Suite</p>
+        <p>© {new Date().getFullYear()} ReadyTech • Admin Intelligence Suite</p>
       </footer>
     </>
   );
@@ -225,6 +333,7 @@ function StatCard({ icon, title, value, color }) {
   );
 }
 
+/* ------------------- PERFORMANCE + HEALTH + ACTIVITIES (unchanged below) ------------------- */
 function PerformanceChart({ performanceData }) {
   return (
     <motion.div
@@ -234,7 +343,7 @@ function PerformanceChart({ performanceData }) {
       className="p-6 border rounded-2xl bg-white/10 backdrop-blur-lg border-white/10"
     >
       <h2 className="flex items-center gap-2 mb-4 text-xl font-bold">
-        <FaChartLine className="text-green-400" /> Team Performance (6 Months)
+        <FaChartLine className="text-green-400" /> Team Performance
       </h2>
       <ResponsiveContainer width="100%" height={250}>
         <LineChart data={performanceData}>
@@ -252,8 +361,8 @@ function PerformanceChart({ performanceData }) {
 
 function RecentActivities() {
   const activities = [
-    { icon: "✅", text: "New employee <b>Mukeshkanna</b> joined the <b>DevOps</b> team.", time: "2 hours ago" },
-    { icon: "📊", text: "Q4 Revenue report uploaded by <b>Finance Department</b>.", time: "Yesterday" },
+    { icon: "✅", text: "New user <b>Mukeshkanna</b> assigned to <b>DevOps</b>.", time: "2 hours ago" },
+    { icon: "📊", text: "Revenue report uploaded by <b>Finance Dept</b>.", time: "Yesterday" },
     { icon: "⚙️", text: "System upgrade completed for <b>Server 3</b>.", time: "2 days ago" },
   ];
   return (
@@ -271,7 +380,9 @@ function RecentActivities() {
           <li
             key={i}
             className="p-3 transition-all rounded-lg bg-white/5 hover:bg-white/10"
-            dangerouslySetInnerHTML={{ __html: `${a.icon} ${a.text}<span class='block text-xs text-gray-400'>${a.time}</span>` }}
+            dangerouslySetInnerHTML={{
+              __html: `${a.icon} ${a.text}<span class='block text-xs text-gray-400'>${a.time}</span>`,
+            }}
           />
         ))}
       </ul>
@@ -314,9 +425,9 @@ function ProgressBar({ label, value, color }) {
 function QuickActions() {
   const actions = [
     { icon: <FaLaptopCode />, title: "Manage Projects", color: "from-green-500 to-teal-500" },
-    { icon: <FaUsers />, title: "Manage Employees", color: "from-blue-500 to-cyan-500" },
-    { icon: <FaTasks />, title: "Assign Tasks", color: "from-yellow-500 to-orange-500" },
-    { icon: <FaCogs />, title: "System Settings", color: "from-purple-500 to-pink-500" },
+    { icon: <FaUsers />, title: "User Management", color: "from-blue-500 to-cyan-500" },
+    { icon: <FaTasks />, title: "Bulk Actions", color: "from-yellow-500 to-orange-500" },
+    { icon: <FaCogs />, title: "Integrations", color: "from-purple-500 to-pink-500" },
   ];
 
   return (
@@ -332,5 +443,26 @@ function QuickActions() {
         </motion.div>
       ))}
     </div>
+  );
+}
+
+function HistoricalData() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      className="p-6 border rounded-2xl bg-white/10 backdrop-blur-md border-white/10"
+    >
+      <h2 className="flex items-center gap-2 mb-4 text-xl font-bold">
+        <FaHistory className="text-cyan-400" /> Historical Data & Trends
+      </h2>
+      <p className="text-sm text-gray-300">
+        Compare data from previous quarters and identify long-term trends. Coming soon: export to Excel & system integration support.
+      </p>
+      <div className="flex items-center justify-end gap-2 mt-3 text-sm text-yellow-400 cursor-pointer hover:text-yellow-300">
+        <FaSyncAlt /> Refresh Trends
+      </div>
+    </motion.div>
   );
 }

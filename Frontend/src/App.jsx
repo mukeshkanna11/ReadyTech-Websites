@@ -16,7 +16,7 @@ import Development from "./pages/Development";
 import Demo from "./pages/Demo";
 import Register from "./pages/Register";
 import PaymentSection from "./pages/PaymentSection";
-import Login from "./pages/Login"; // Optional login page
+import Login from "./pages/Login";
 
 // Dashboards
 import Dashboard from "./pages/Dashboard"; // Role selection
@@ -48,11 +48,11 @@ const PrivateRoute = ({ children, allowedRole }) => {
   const user = JSON.parse(localStorage.getItem("user"));
 
   if (!token || !user) {
-    return <Navigate to="/dashboard" replace />; // redirect to role selection
+    return <Navigate to="/dashboard" replace />;
   }
 
   if (allowedRole && user.role !== allowedRole) {
-    return <Navigate to="/dashboard" replace />; // redirect if role mismatch
+    return <Navigate to="/dashboard" replace />;
   }
 
   return children;
@@ -62,8 +62,10 @@ const PrivateRoute = ({ children, allowedRole }) => {
 export default function App() {
   const location = useLocation();
 
-  // Hide Navbar/Footer on role selection, register, payment, dashboards
-  const hideLayout = [
+  const token = localStorage.getItem("token");
+
+  // Pages where we hide Footer
+  const hideFooter = [
     "/dashboard",
     "/register",
     "/payment",
@@ -72,11 +74,14 @@ export default function App() {
     "/login",
   ].includes(location.pathname);
 
+  // Pages where Navbar is hidden (optional, currently always shown)
+  const hideNavbar = ["/register", "/payment", "/login"].includes(location.pathname);
+
   return (
     <div className="flex flex-col min-h-screen">
-      {!hideLayout && <Navbar />}
+      {!hideNavbar && <Navbar />}
       <ScrollToTop />
-      <main className={`flex-1 ${!hideLayout ? "pt-20" : "pt-0"}`}>
+      <main className={`flex-1 ${!hideNavbar ? "pt-20" : "pt-0"}`}>
         <Routes>
           {/* Public Pages */}
           <Route path="/" element={<Home />} />
@@ -87,12 +92,19 @@ export default function App() {
           <Route path="/demo" element={<Demo />} />
           <Route path="/payment" element={<PaymentSection />} />
           <Route path="/register" element={<Register />} />
-
-          {/* Optional Login Page */}
           <Route path="/login" element={<Login />} />
 
-          {/* Role Selection Page */}
-          <Route path="/dashboard" element={<Dashboard />} />
+          {/* Role Selection / Dashboard page */}
+          <Route
+            path="/dashboard"
+            element={
+              token ? (
+                <Navigate to={`/${JSON.parse(localStorage.getItem("user")).role}-dashboard`} replace />
+              ) : (
+                <Dashboard />
+              )
+            }
+          />
 
           {/* Employee Dashboard */}
           <Route
@@ -137,7 +149,8 @@ export default function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
-      {!hideLayout && <Footer />}
+
+      {!hideFooter && <Footer />}
     </div>
   );
 }
