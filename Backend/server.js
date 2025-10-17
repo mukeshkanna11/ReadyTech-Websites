@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 
 // Import routes
 import authRoutes from "./routes/auth.js";
-import contactRoutes from "./routes/contact.js";
+import contactRoutes from "./routes/contact.js"; // ✅ contains both contact & subscribe
 import protectedRoutes from "./routes/protected.js";
 
 dotenv.config();
@@ -46,7 +46,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
-app.use("/api/contact", contactRoutes);
+app.use("/api/contact", contactRoutes);  // ✅ handles both contact & subscribe
 app.use("/api/protected", protectedRoutes);
 
 // ---------------- MongoDB Connection ----------------

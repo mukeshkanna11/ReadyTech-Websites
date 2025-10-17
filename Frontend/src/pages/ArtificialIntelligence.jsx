@@ -178,21 +178,53 @@ export default function ArtificialIntelligence() {
         </div>
 
         {/* Call to Action */}
-        <div className="mt-20 text-center">
-          <h3 className="mb-4 text-2xl font-semibold text-gray-800">
-            Ready to Transform Your Business with AI?
-          </h3>
-          <p className="max-w-2xl mx-auto mb-8 text-gray-700">
-            Partner with <strong>ReadyTech AI</strong> to implement intelligent, innovative, 
-            and scalable AI solutions tailored to your organization’s goals.
-          </p>
-          <a
-            href="/contact"
-            className="inline-block px-10 py-4 text-lg font-semibold text-white transition-transform transform bg-indigo-600 rounded-full shadow-lg hover:bg-indigo-700 hover:scale-105"
-          >
-            Schedule Your AI Consultation
-          </a>
-        </div>
+       {/* 🌍 New Settler CTA Section */}
+<div className="py-16 mt-24 text-center border border-gray-100 shadow-lg bg-gradient-to-b from-gray-50 to-white rounded-3xl">
+  {/* Section Title */}
+  <h3 className="mb-2 font-semibold tracking-widest text-indigo-600 uppercase">
+    New Settler
+  </h3>
+
+  {/* Main Heading */}
+  <h2 className="text-3xl font-extrabold text-gray-800 sm:text-4xl">
+    Let’s Build Your Next Digital Success Story 🚀
+  </h2>
+
+  {/* Subtitle */}
+  <p className="max-w-2xl mx-auto mt-4 text-gray-600">
+    Join our community of growing brands — get insights, updates, and strategies
+    that help you lead in the digital world.
+  </p>
+
+  {/* Subscribe Form */}
+  <form
+    onSubmit={(e) => e.preventDefault()}
+    className="flex flex-col items-center justify-center gap-3 mt-8 sm:flex-row sm:gap-4"
+  >
+    <input
+      type="email"
+      placeholder="Enter your email address"
+      required
+      className="px-5 py-3 text-gray-800 border border-gray-300 rounded-full w-72 sm:w-96 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+    />
+    <button
+      type="submit"
+      className="px-8 py-3 font-semibold text-white transition-transform transform bg-indigo-600 rounded-full shadow-lg hover:bg-indigo-700 hover:scale-105"
+    >
+      Subscribe
+    </button>
+  </form>
+
+  {/* Small Footer CTA */}
+  <div className="mt-8">
+    <a
+      href="/contact"
+      className="inline-block px-8 py-3 font-semibold text-indigo-600 transition-transform transform border border-indigo-600 rounded-full hover:bg-indigo-50 hover:scale-105"
+    >
+      Let’s Get Started
+    </a>
+  </div>
+</div>
       </div>
     </section>
   );

@@ -2,82 +2,145 @@
 import express from "express";
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
+import validator from "validator";
 
 dotenv.config();
-
 const router = express.Router();
 
+// ---------------- Nodemailer Transporter ----------------
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: process.env.MAIL_USER,
+    pass: process.env.MAIL_PASS,
+  },
+});
+
+// Verify transporter at startup
+transporter.verify((error, success) => {
+  if (error) {
+    console.error("❌ Email transporter error:", error);
+  } else {
+    console.log("✅ Email transporter ready to send messages.");
+  }
+});
+
+// ---------------- POST /api/contact ----------------
 /**
- * @route   POST /api/contact
- * @desc    Send contact form message via email and confirm to user
- * @access  Public
+ * Send contact form message
+ * Sends notification to company and confirmation to user
  */
 router.post("/", async (req, res) => {
   try {
     const { name, email, phone, message } = req.body;
 
-    // ---------------- Validate Input ----------------
+    // Validation
     if (!name || !email || !message) {
-      return res.status(400).json({
-        msg: "Name, email, and message are required"
-      });
+      return res.status(400).json({ msg: "Name, email, and message are required." });
     }
 
-    // Basic email format validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return res.status(400).json({ msg: "Invalid email format" });
+    if (!validator.isEmail(email)) {
+      return res.status(400).json({ msg: "Invalid email address." });
     }
 
-    // ---------------- Nodemailer Transport ----------------
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASS
-      }
-    });
-
-    // ---------------- Email to Company ----------------
-    const companyMailOptions = {
+    // Email to company
+    const companyMail = {
       from: `"ReadyTech Contact" <${process.env.MAIL_USER}>`,
-      to: "uiuxmukesh@gmail.com", // Replace with your company inbox
-      subject: "📩 New Contact Form Submission",
+      to: process.env.COMPANY_EMAIL || "uiuxmukesh@gmail.com",
+      subject: `📬 New Contact from ${name}`,
       html: `
-        <h2>📩 New Contact Form Message</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
+        <h2 style="color:#4f46e5;">📩 New Contact Submission</h2>
+        <p><strong>Name:</strong> ${validator.escape(name)}</p>
+        <p><strong>Email:</strong> ${validator.escape(email)}</p>
         <p><strong>Phone:</strong> ${phone || "N/A"}</p>
         <p><strong>Message:</strong></p>
-        <p>${message}</p>
-      `
+        <blockquote style="border-left:4px solid #4f46e5;padding-left:10px;">
+          ${validator.escape(message)}
+        </blockquote>
+        <p style="font-size:12px;color:#999;">Sent via ReadyTech Website</p>
+      `,
     };
 
-    // ---------------- Confirmation Email to User ----------------
-    const userMailOptions = {
+    // Email to user (confirmation)
+    const userMail = {
       from: `"ReadyTech Solutions" <${process.env.MAIL_USER}>`,
       to: email,
-      subject: "✅ We received your message!",
+      subject: "✅ We’ve received your message!",
       html: `
-        <h2>Hello ${name},</h2>
-        <p>Thank you for contacting ReadyTech Solutions. We have received your message and our team will get back to you shortly.</p>
+        <h2 style="color:#4f46e5;">Hello ${validator.escape(name)},</h2>
+        <p>Thanks for reaching out to <strong>ReadyTech Solutions</strong>.</p>
+        <p>We’ve received your message and our team will contact you soon.</p>
         <p><strong>Your Message:</strong></p>
-        <p>${message}</p>
-        <p>Best Regards,<br/>ReadyTech Solutions Team</p>
-      `
+        <blockquote style="border-left:4px solid #4f46e5;padding-left:10px;">
+          ${validator.escape(message)}
+        </blockquote>
+        <p>Warm regards,<br/>ReadyTech Solutions Team</p>
+      `,
     };
 
-    // ---------------- Send Emails ----------------
-    await transporter.sendMail(companyMailOptions);
-    await transporter.sendMail(userMailOptions);
+    // Send both emails in parallel
+    await Promise.all([
+      transporter.sendMail(companyMail),
+      transporter.sendMail(userMail),
+    ]);
 
-    res.status(200).json({ msg: "Message sent successfully ✅" });
+    res.status(200).json({ msg: "✅ Message sent successfully." });
   } catch (err) {
-    console.error("CONTACT ERROR:", err);
-    res.status(500).json({
-      msg: "Server error, failed to send message",
-      error: err.message
-    });
+    console.error("❌ CONTACT ERROR:", err);
+    res.status(500).json({ msg: "Failed to send message", error: err.message });
+  }
+});
+
+// ---------------- POST /api/contact/subscribe ----------------
+/**
+ * Subscribe user to newsletter
+ * Sends notification to company and confirmation to user
+ */
+router.post("/subscribe", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email || !validator.isEmail(email)) {
+      return res.status(400).json({ msg: "Please provide a valid email address." });
+    }
+
+    // Email to company
+    const companyMail = {
+      from: `"New Settler Subscriptions" <${process.env.MAIL_USER}>`,
+      to: process.env.COMPANY_EMAIL || "uiuxmukesh@gmail.com",
+      subject: `📰 New Newsletter Subscriber`,
+      html: `
+        <h2 style="color:#4f46e5;">🆕 New Subscriber Alert</h2>
+        <p><strong>Email:</strong> ${validator.escape(email)}</p>
+        <p style="font-size:12px;color:#999;">New Settler Newsletter - ${new Date().toLocaleDateString()}</p>
+      `,
+    };
+
+    // Email to user
+    const userMail = {
+      from: `"New Settler" <${process.env.MAIL_USER}>`,
+      to: email,
+      subject: "🎉 Welcome to New Settler!",
+      html: `
+        <h2 style="color:#4f46e5;">Welcome to <strong>New Settler</strong> 🚀</h2>
+        <p>Thank you for subscribing! You're now part of our community.</p>
+        <p>We’ll share growth insights, digital marketing tips, and updates directly to your inbox.</p>
+        <p>Stay tuned for your first edition soon!</p>
+        <p>– The ReadyTech / New Settler Team</p>
+      `,
+    };
+
+    await Promise.all([
+      transporter.sendMail(companyMail),
+      transporter.sendMail(userMail),
+    ]);
+
+    res.status(200).json({ msg: "🎉 Subscribed successfully! Confirmation email sent." });
+  } catch (err) {
+    console.error("❌ SUBSCRIBE ERROR:", err);
+    res.status(500).json({ msg: "Failed to subscribe. Please try again later.", error: err.message });
   }
 });
 
