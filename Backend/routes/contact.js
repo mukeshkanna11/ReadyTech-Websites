@@ -8,17 +8,18 @@ dotenv.config();
 const router = express.Router();
 
 // ---------------- Nodemailer Transporter ----------------
+// Uses Gmail SMTP with App Password (secure)
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 465,
   secure: true,
   auth: {
-    user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PASS,
+    user: process.env.MAIL_USER, // Gmail address
+    pass: process.env.MAIL_PASS, // Gmail App Password
   },
 });
 
-// Verify transporter at startup
+// Verify transporter on startup
 transporter.verify((error, success) => {
   if (error) {
     console.error("❌ Email transporter error:", error);
@@ -36,16 +37,15 @@ router.post("/", async (req, res) => {
   try {
     const { name, email, phone, message } = req.body;
 
-    // Validation
+    // Basic validation
     if (!name || !email || !message) {
       return res.status(400).json({ msg: "Name, email, and message are required." });
     }
-
     if (!validator.isEmail(email)) {
       return res.status(400).json({ msg: "Invalid email address." });
     }
 
-    // Email to company
+    // Company notification email
     const companyMail = {
       from: `"ReadyTech Contact" <${process.env.MAIL_USER}>`,
       to: process.env.COMPANY_EMAIL || "uiuxmukesh@gmail.com",
@@ -63,7 +63,7 @@ router.post("/", async (req, res) => {
       `,
     };
 
-    // Email to user (confirmation)
+    // User confirmation email
     const userMail = {
       from: `"ReadyTech Solutions" <${process.env.MAIL_USER}>`,
       to: email,
@@ -81,10 +81,7 @@ router.post("/", async (req, res) => {
     };
 
     // Send both emails in parallel
-    await Promise.all([
-      transporter.sendMail(companyMail),
-      transporter.sendMail(userMail),
-    ]);
+    await Promise.all([transporter.sendMail(companyMail), transporter.sendMail(userMail)]);
 
     res.status(200).json({ msg: "✅ Message sent successfully." });
   } catch (err) {
@@ -106,7 +103,7 @@ router.post("/subscribe", async (req, res) => {
       return res.status(400).json({ msg: "Please provide a valid email address." });
     }
 
-    // Email to company
+    // Company notification email
     const companyMail = {
       from: `"New Settler Subscriptions" <${process.env.MAIL_USER}>`,
       to: process.env.COMPANY_EMAIL || "uiuxmukesh@gmail.com",
@@ -118,7 +115,7 @@ router.post("/subscribe", async (req, res) => {
       `,
     };
 
-    // Email to user
+    // User confirmation email
     const userMail = {
       from: `"New Settler" <${process.env.MAIL_USER}>`,
       to: email,
@@ -132,10 +129,8 @@ router.post("/subscribe", async (req, res) => {
       `,
     };
 
-    await Promise.all([
-      transporter.sendMail(companyMail),
-      transporter.sendMail(userMail),
-    ]);
+    // Send both emails
+    await Promise.all([transporter.sendMail(companyMail), transporter.sendMail(userMail)]);
 
     res.status(200).json({ msg: "🎉 Subscribed successfully! Confirmation email sent." });
   } catch (err) {

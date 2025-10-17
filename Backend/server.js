@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 
 // Import routes
 import authRoutes from "./routes/auth.js";
-import contactRoutes from "./routes/contact.js"; // ✅ contains both contact & subscribe
+import contactRoutes from "./routes/contact.js"; // ✅ handles both contact & subscribe
 import protectedRoutes from "./routes/protected.js";
 
 dotenv.config();
@@ -14,7 +14,7 @@ const app = express();
 
 // ---------------- Middleware ----------------
 
-// Allow requests from these origins
+// CORS configuration
 const allowedOrigins = [
   "http://localhost:5173",           // Vite dev server
   "http://localhost:5174",           // Alternate dev port
@@ -24,16 +24,12 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin like Postman or CURL
+      // Allow requests with no origin (Postman, curl)
       if (!origin) return callback(null, true);
-
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      } else {
-        return callback(new Error("Not allowed by CORS"));
-      }
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      return callback(new Error("Not allowed by CORS"));
     },
-    credentials: true, // Allow cookies, authorization headers
+    credentials: true,
   })
 );
 
@@ -58,7 +54,7 @@ const connectDB = async () => {
     });
     console.log("✅ MongoDB connected");
   } catch (err) {
-    console.error("❌ MongoDB error:", err.message);
+    console.error("❌ MongoDB connection error:", err.message);
     process.exit(1);
   }
 };
@@ -66,8 +62,8 @@ connectDB();
 
 // ---------------- Global Error Handler ----------------
 app.use((err, req, res, next) => {
-  console.error("GLOBAL ERROR:", err.message);
-  res.status(500).json({ msg: err.message });
+  console.error("GLOBAL ERROR:", err);
+  res.status(500).json({ msg: "Internal Server Error", error: err.message });
 });
 
 // ---------------- Server Listener ----------------
