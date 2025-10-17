@@ -173,31 +173,7 @@ export default function Services() {
         </div>
       </section>
 
-      {/* Subscribe Section */}
-      <section className="py-20 text-white bg-gradient-to-r from-indigo-600 to-purple-700">
-        <div className="max-w-4xl px-6 mx-auto text-center">
-          <h3 className="text-3xl font-bold">Stay Updated</h3>
-          <p className="mt-3 text-lg text-indigo-100">
-            Subscribe to our newsletter for industry insights, updates, and exclusive offers.
-          </p>
-          <form className="flex flex-col justify-center gap-4 mt-8 sm:flex-row">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="w-full px-5 py-3 text-gray-900 rounded-lg sm:w-auto focus:outline-none focus:ring-2 focus:ring-yellow-400"
-            />
-            <button
-              type="submit"
-              className="px-8 py-3 font-medium text-purple-800 transition bg-yellow-400 rounded-lg shadow-lg hover:bg-yellow-300"
-            >
-              Subscribe Now
-            </button>
-          </form>
-          <p className="mt-4 text-sm text-indigo-200">
-            Join 5,000+ professionals who trust Ready Tech for digital success.
-          </p>
-        </div>
-      </section>
+    
     </div>
   );
 }

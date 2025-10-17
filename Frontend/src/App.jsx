@@ -6,6 +6,7 @@ import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
+import Newsletter from "./components/Newsletter";
 
 // Pages
 import Home from "./pages/Home";
@@ -19,7 +20,7 @@ import PaymentSection from "./pages/PaymentSection";
 import Login from "./pages/Login";
 
 // Dashboards
-import Dashboard from "./pages/Dashboard"; // Role selection
+import Dashboard from "./pages/Dashboard";
 import EmployeeDashboard from "./pages/EmployeeDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 
@@ -61,7 +62,6 @@ const PrivateRoute = ({ children, allowedRole }) => {
 // -------------------- Main App --------------------
 export default function App() {
   const location = useLocation();
-
   const token = localStorage.getItem("token");
 
   // Pages where we hide Footer
@@ -72,15 +72,17 @@ export default function App() {
     "/employee-dashboard",
     "/admin-dashboard",
     "/login",
+    "/newsletter",
   ].includes(location.pathname);
 
-  // Pages where Navbar is hidden (optional, currently always shown)
+  // Pages where Navbar is hidden
   const hideNavbar = ["/register", "/payment", "/login"].includes(location.pathname);
 
   return (
     <div className="flex flex-col min-h-screen">
       {!hideNavbar && <Navbar />}
       <ScrollToTop />
+
       <main className={`flex-1 ${!hideNavbar ? "pt-20" : "pt-0"}`}>
         <Routes>
           {/* Public Pages */}
@@ -94,12 +96,18 @@ export default function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
 
-          {/* Role Selection / Dashboard page */}
+          {/* Newsletter Standalone Page */}
+          <Route path="/newsletter" element={<Newsletter />} />
+
+          {/* Role Selection / Dashboard */}
           <Route
             path="/dashboard"
             element={
               token ? (
-                <Navigate to={`/${JSON.parse(localStorage.getItem("user")).role}-dashboard`} replace />
+                <Navigate
+                  to={`/${JSON.parse(localStorage.getItem("user")).role}-dashboard`}
+                  replace
+                />
               ) : (
                 <Dashboard />
               )
@@ -145,11 +153,15 @@ export default function App() {
           <Route path="/services/angular" element={<Angular />} />
           <Route path="/services/php-development" element={<Php />} />
 
-          {/* Redirect unknown routes to home */}
+          {/* Redirect unknown routes */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
 
+      {/* Global Newsletter (Optional) */}
+      {!hideFooter && <Newsletter />}
+
+      {/* Footer */}
       {!hideFooter && <Footer />}
     </div>
   );

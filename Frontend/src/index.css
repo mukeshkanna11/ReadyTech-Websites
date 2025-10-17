@@ -6,3 +6,47 @@
 body {
   @apply text-gray-200 bg-gradient-to-b from-black to-gray-900 font-poppins;
 }
+
+@keyframes scroll-fast {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Slightly faster scroll */
+.animate-scroll-fast {
+  animation: scroll-fast 10s linear infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-40px) scale(1.05);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-float {
+  animation: float 12s ease-in-out infinite;
+}
+
+/* For smooth logo scroll */
+@keyframes scroll-fast {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll-fast {
+  animation: scroll-fast 25s linear infinite;
+}

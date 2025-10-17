@@ -1,27 +1,19 @@
 import { useState } from "react";
 import Navbar from "../components/Navbar";
 import { motion } from "framer-motion";
-import {
-  FaCloud,
-  FaCode,
-  FaLaptopCode,
-  FaChartLine,
-  FaDatabase,
-  FaLock,
-} from "react-icons/fa";
 import { Helmet } from "react-helmet-async";
-import heroImg from "../assets/images/il1.jpg"; // ✅ Replace with your illustration
-
+import heroImg from "../assets/images/il1.jpg";
 import Img1 from "../assets/images/image1.png";
 import Img2 from "../assets/images/image2.png";
 import Img3 from "../assets/images/image3.png";
-
+import { FaCloud, FaCode, FaLaptopCode, FaChartLine, FaDatabase, FaLock } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const [template, setTemplate] = useState("A");
 
   return (
-    <div className="min-h-screen overflow-hidden text-white bg-gray-950 font-poppins">
+    <div className="relative min-h-screen overflow-x-hidden text-white font-poppins bg-gray-950">
       <Navbar />
 
       <Helmet>
@@ -36,46 +28,64 @@ export default function Home() {
         />
       </Helmet>
 
-      {/* Hero Section */}
+      {/* -------------------- Floating Background Bubbles -------------------- */}
+      <div className="absolute inset-0 -z-20">
+        {[...Array(15)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute rounded-full bg-indigo-500/20"
+            style={{
+              width: `${20 + Math.random() * 80}px`,
+              height: `${20 + Math.random() * 80}px`,
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              filter: `blur(${10 + Math.random() * 30}px)`,
+            }}
+            animate={{
+              y: [0, -50 + Math.random() * 100, 0],
+              x: [0, -50 + Math.random() * 100, 0],
+              opacity: [0.3, 0.6, 0.3],
+            }}
+            transition={{
+              duration: 20 + Math.random() * 30,
+              repeat: Infinity,
+              repeatType: "mirror",
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+      </div>
+
+      {/* -------------------- Hero Section -------------------- */}
       <section className="relative flex flex-col justify-center min-h-screen px-6 overflow-hidden bg-gradient-to-br from-gray-900 via-gray-950 to-black sm:px-16 md:flex-row md:items-center">
-        {/* Animated Gradient Overlay */}
         <motion.div
           className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_center,_rgba(109,40,217,0.3),_transparent_70%)]"
-          animate={{
-            backgroundPosition: ["0% 0%", "100% 100%"],
-          }}
-          transition={{
-            duration: 15,
-            repeat: Infinity,
-            ease: "linear",
-          }}
+          animate={{ backgroundPosition: ["0% 0%", "100% 100%"] }}
+          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
         />
 
-        {/* Floating Tech Icons */}
-        {[FaCloud, FaCode, FaChartLine, FaDatabase, FaLaptopCode, FaLock].map(
-          (Icon, i) => (
-            <motion.div
-              key={i}
-              className="absolute text-indigo-400/40"
-              style={{
-                top: `${20 + Math.random() * 60}%`,
-                left: `${10 + Math.random() * 80}%`,
-              }}
-              animate={{
-                y: [0, -10, 0],
-                opacity: [0.5, 1, 0.5],
-                rotate: [0, 15, -15, 0],
-              }}
-              transition={{
-                duration: 6 + Math.random() * 3,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            >
-              <Icon size={28} />
-            </motion.div>
-          )
-        )}
+        {[FaCloud, FaCode, FaChartLine, FaDatabase, FaLaptopCode, FaLock].map((Icon, i) => (
+          <motion.div
+            key={i}
+            className="absolute text-indigo-400/40"
+            style={{
+              top: `${20 + Math.random() * 60}%`,
+              left: `${10 + Math.random() * 80}%`,
+            }}
+            animate={{
+              y: [0, -10, 0],
+              opacity: [0.5, 1, 0.5],
+              rotate: [0, 15, -15, 0],
+            }}
+            transition={{
+              duration: 6 + Math.random() * 3,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          >
+            <Icon size={28} />
+          </motion.div>
+        ))}
 
         {/* Left Content */}
         <motion.div
@@ -95,9 +105,7 @@ export default function Home() {
             and{" "}
             <span className="font-semibold text-yellow-300">
               digital transformation
-            </span>
-            . From web development to AI-driven systems, we make ideas come
-            alive.
+            </span>.
           </p>
 
           <div className="flex flex-col items-center gap-5 mt-10 sm:flex-row">
@@ -138,126 +146,93 @@ export default function Home() {
         </motion.div>
       </section>
 
-    
+      {/* -------------------- Vision & Mission -------------------- */}
+      <VisionMissionSection />
 
-
-      {/* Vision & Mission Section */}
-      <section className="relative py-20 bg-gradient-to-b from-gray-950 via-black to-gray-900">
-        <div className="max-w-6xl px-6 mx-auto text-center">
-          <h2 className="text-4xl font-extrabold tracking-tight text-transparent sm:text-5xl bg-clip-text bg-gradient-to-r from-indigo-400 via-pink-500 to-yellow-400">
-            Our Vision & Mission
-          </h2>
-          <p className="max-w-3xl mx-auto mt-6 text-lg leading-relaxed text-gray-400">
-            At{" "}
-            <span className="font-semibold text-indigo-400">
-              ReadyTech Solutions
-            </span>
-            , we believe technology should not just solve today’s problems, but
-            also unlock tomorrow’s opportunities.
-          </p>
-
-          {/* Cards */}
-          <div className="grid gap-10 mt-16 md:grid-cols-2">
-            {/* Vision */}
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="relative p-8 overflow-hidden text-left transition-all duration-300 border shadow-lg rounded-2xl bg-white/5 backdrop-blur-xl border-white/10"
-            >
-              <div className="absolute top-0 left-0 w-40 h-40 rounded-full opacity-20 bg-gradient-to-tr from-indigo-600 to-cyan-400 blur-3xl"></div>
-              <h3 className="flex items-center gap-3 text-2xl font-bold text-indigo-400">
-                <span>🌐</span> Our Vision
-              </h3>
-              <p className="mt-4 text-gray-300">
-                To become a{" "}
-                <span className="font-semibold text-yellow-400">
-                  global leader in AI-powered solutions
-                </span>
-                , where innovation meets sustainability. We aim to craft next-gen
-                software that empowers enterprises, startups, and communities to
-                thrive in the digital era.
-              </p>
-            </motion.div>
-
-            {/* Mission */}
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="relative p-8 overflow-hidden text-left transition-all duration-300 border shadow-lg rounded-2xl bg-white/5 backdrop-blur-xl border-white/10"
-            >
-              <div className="absolute bottom-0 right-0 w-40 h-40 rounded-full opacity-20 bg-gradient-to-bl from-purple-600 to-pink-400 blur-3xl"></div>
-              <h3 className="flex items-center gap-3 text-2xl font-bold text-pink-400">
-                <span>🚀</span> Our Mission
-              </h3>
-              <p className="mt-4 text-gray-300">
-                To deliver{" "}
-                <span className="font-semibold text-indigo-400">
-                  cutting-edge, service-based digital solutions
-                </span>{" "}
-                with a focus on AI, cloud, and scalable architectures. Our
-                mission is to transform businesses by providing intelligent,
-                secure, and customer-first platforms that fuel sustainable
-                growth.
-              </p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Template Switcher Section */}
-      <section className="relative py-20 bg-gradient-to-b from-gray-900 via-black to-gray-950">
-        <div className="max-w-6xl px-6 mx-auto text-center">
-          <h2 className="mb-12 text-4xl font-extrabold tracking-tight text-transparent sm:text-5xl bg-clip-text bg-gradient-to-r from-pink-400 via-indigo-400 to-yellow-400">
-            Explore Our Templates
-          </h2>
-
-          {/* Switcher Buttons */}
-          <div className="flex justify-center gap-3 mb-12">
-            <button
-              onClick={() => setTemplate("A")}
-              className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${template === "A"
-                  ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/40 scale-105"
-                  : "bg-white/10 text-gray-300 hover:bg-indigo-500/20 hover:text-indigo-300"
-                }`}
-            >
-              Corporate
-            </button>
-            <button
-              onClick={() => setTemplate("B")}
-              className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${template === "B"
-                  ? "bg-rose-500 text-white shadow-lg shadow-rose-400/40 scale-105"
-                  : "bg-white/10 text-gray-300 hover:bg-rose-500/20 hover:text-rose-300"
-                }`}
-            >
-              Creative
-            </button>
-            <button
-              onClick={() => setTemplate("C")}
-              className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${template === "C"
-                  ? "bg-gray-200 text-gray-900 shadow-lg shadow-gray-400/40 scale-105" // light background when active
-                  : "bg-gray-100/20 text-gray-300 hover:bg-gray-300/30 hover:text-gray-100" // lighter transparent for inactive
-                }`}
-            >
-              Developer
-            </button>
-
-          </div>
-
-          {/* Templates */}
-          <motion.main
-            key={template}
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="space-y-12"
-          >
-            {template === "A" && <TemplateA />}
-            {template === "B" && <TemplateB />}
-            {template === "C" && <TemplateC />}
-          </motion.main>
-        </div>
-      </section>
+      {/* -------------------- Template Switcher -------------------- */}
+      <TemplateSwitcher template={template} setTemplate={setTemplate} />
     </div>
   );
 }
+
+/* -------------------- Vision & Mission Section -------------------- */
+function VisionMissionSection() {
+  return (
+    <section className="relative py-20 bg-gradient-to-b from-gray-950 via-black to-gray-900">
+      <div className="max-w-6xl px-6 mx-auto text-center">
+        <h2 className="text-4xl font-extrabold tracking-tight text-transparent sm:text-5xl bg-clip-text bg-gradient-to-r from-indigo-400 via-pink-500 to-yellow-400">
+          Our Vision & Mission
+        </h2>
+        <p className="max-w-3xl mx-auto mt-6 text-lg leading-relaxed text-gray-400">
+          At <span className="font-semibold text-indigo-400">ReadyTech Solutions</span>, we believe technology should not just solve today’s problems, but also unlock tomorrow’s opportunities.
+        </p>
+
+        {/* Cards */}
+        <div className="grid gap-10 mt-16 md:grid-cols-2">
+          <motion.div whileHover={{ scale: 1.05 }} className="relative p-8 overflow-hidden text-left transition-all duration-300 border shadow-lg rounded-2xl bg-white/5 backdrop-blur-xl border-white/10">
+            <div className="absolute top-0 left-0 w-40 h-40 rounded-full opacity-20 bg-gradient-to-tr from-indigo-600 to-cyan-400 blur-3xl"></div>
+            <h3 className="flex items-center gap-3 text-2xl font-bold text-indigo-400">🌐 Our Vision</h3>
+            <p className="mt-4 text-gray-300">
+              To become a <span className="font-semibold text-yellow-400">global leader in AI-powered solutions</span>, where innovation meets sustainability.
+            </p>
+          </motion.div>
+
+          <motion.div whileHover={{ scale: 1.05 }} className="relative p-8 overflow-hidden text-left transition-all duration-300 border shadow-lg rounded-2xl bg-white/5 backdrop-blur-xl border-white/10">
+            <div className="absolute bottom-0 right-0 w-40 h-40 rounded-full opacity-20 bg-gradient-to-bl from-purple-600 to-pink-400 blur-3xl"></div>
+            <h3 className="flex items-center gap-3 text-2xl font-bold text-pink-400">🚀 Our Mission</h3>
+            <p className="mt-4 text-gray-300">
+              To deliver <span className="font-semibold text-indigo-400">cutting-edge, service-based digital solutions</span> focusing on AI, cloud, and scalable architectures.
+            </p>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* -------------------- Template Switcher -------------------- */
+function TemplateSwitcher({ template, setTemplate }) {
+  return (
+    <section className="relative py-20 bg-gradient-to-b from-gray-900 via-black to-gray-950">
+      <div className="max-w-6xl px-6 mx-auto text-center">
+        <h2 className="mb-12 text-4xl font-extrabold tracking-tight text-transparent sm:text-5xl bg-clip-text bg-gradient-to-r from-pink-400 via-indigo-400 to-yellow-400">
+          Explore Our Templates
+        </h2>
+
+        <div className="flex justify-center gap-3 mb-12">
+          {["A", "B", "C"].map((t) => (
+            <button
+              key={t}
+              onClick={() => setTemplate(t)}
+              className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                template === t
+                  ? "bg-indigo-600 text-white shadow-lg scale-105"
+                  : "bg-white/10 text-gray-300 hover:bg-indigo-500/20 hover:text-indigo-300"
+              }`}
+            >
+              {t === "A" ? "Corporate" : t === "B" ? "Creative" : "Developer"}
+            </button>
+          ))}
+        </div>
+
+        <motion.main
+          key={template}
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="space-y-12"
+        >
+          {template === "A" && <TemplateA />}
+          {template === "B" && <TemplateB />}
+          {template === "C" && <TemplateC />}
+        </motion.main>
+      </div>
+    </section>
+  );
+}
+
+
+
 
 /* ---------------------- TemplateA Modern Dark UI ---------------------- */
 function TemplateA() {
@@ -297,17 +272,57 @@ function TemplateA() {
         </div>
 
         {/* Trust Signals */}
-        <div className="mt-20 text-center">
-          <h2 className="text-2xl font-bold text-pink-400">Trusted by Businesses Worldwide 🌍</h2>
-          <p className="mt-2 text-gray-300">
-            From startups in Silicon Valley to SMEs in Europe — ReadyTech delivers secure, scalable, and user-friendly platforms.
-          </p>
-          <div className="flex flex-wrap justify-center gap-8 mt-8">
-            <img src={Img1} alt="Client Logo" className="object-contain w-24 h-24 transition grayscale hover:grayscale-0" />
-            <img src={Img2} alt="Client Logo" className="object-contain w-24 h-24 transition grayscale hover:grayscale-0" />
-            <img src={Img3} alt="Client Logo" className="object-contain w-24 h-24 transition grayscale hover:grayscale-0" />
-          </div>
-        </div>
+      {/* Trusted by Businesses Section */}
+<div className="relative mt-20 overflow-hidden text-center">
+  <h2 className="text-2xl font-bold text-pink-400">
+    Trusted by Businesses Worldwide 🌍
+  </h2>
+  <p className="mt-2 text-gray-300">
+    From startups in Silicon Valley to SMEs in Europe — ReadyTech delivers secure, scalable, and user-friendly platforms.
+  </p>
+
+  {/* Gradient overlays for soft fade edges */}
+  <div className="absolute top-0 left-0 w-24 h-full pointer-events-none bg-gradient-to-r from-gray-900 to-transparent"></div>
+  <div className="absolute top-0 right-0 w-24 h-full pointer-events-none bg-gradient-to-l from-gray-900 to-transparent"></div>
+
+  {/* Scrolling Logo Carousel */}
+  <div className="relative mt-10 overflow-hidden">
+    <div className="flex animate-scroll-fast gap-16 w-max hover:[animation-play-state:paused]">
+      <img
+        src={Img1}
+        alt="Client Logo 1"
+        className="object-contain w-40 h-40 transition-transform duration-300 opacity-85 hover:opacity-100 hover:scale-110"
+      />
+      <img
+        src={Img2}
+        alt="Client Logo 2"
+        className="object-contain w-40 h-40 transition-transform duration-300 opacity-85 hover:opacity-100 hover:scale-110"
+      />
+      <img
+        src={Img3}
+        alt="Client Logo 3"
+        className="object-contain w-40 h-40 transition-transform duration-300 opacity-85 hover:opacity-100 hover:scale-110"
+      />
+      <img
+        src={Img1}
+        alt="Client Logo 4"
+        className="object-contain w-40 h-40 transition-transform duration-300 opacity-85 hover:opacity-100 hover:scale-110"
+      />
+      <img
+        src={Img2}
+        alt="Client Logo 5"
+        className="object-contain w-40 h-40 transition-transform duration-300 opacity-85 hover:opacity-100 hover:scale-110"
+      />
+      <img
+        src={Img3}
+        alt="Client Logo 6"
+        className="object-contain w-40 h-40 transition-transform duration-300 opacity-85 hover:opacity-100 hover:scale-110"
+      />
+    </div>
+  </div>
+</div>
+
+
 
         {/* Core Services */}
         <div className="mt-24">
@@ -345,19 +360,7 @@ function TemplateA() {
           </div>
         </div>
 
-        {/* Final CTA */}
-        <div className="px-6 py-16 mt-24 text-center shadow-lg rounded-xl bg-gradient-to-r from-pink-600 to-purple-700">
-          <h2 className="text-3xl font-bold text-white">Let’s Build Your Next-Gen Platform 🚀</h2>
-          <p className="mt-2 text-gray-200">
-            We combine strategy, design, and technology to deliver lasting results.
-          </p>
-          <a
-            href="/contact"
-            className="inline-block px-8 py-4 mt-6 text-lg font-semibold text-pink-600 transition bg-white rounded-full shadow-lg hover:scale-105 hover:shadow-2xl"
-          >
-            Schedule a Free Consultation
-          </a>
-        </div>
+        
       </div>
     </section>
   );
@@ -504,17 +507,7 @@ function TemplateB() {
       </div>
 
       {/* Call to Action */}
-      <div className="max-w-3xl px-6 mx-auto mt-12 text-center">
-        <a
-          href="/contact"
-          className="inline-block px-12 py-5 mb-6 text-lg font-semibold text-white transition-all duration-300 rounded-full shadow-xl bg-gradient-to-r from-pink-600 to-rose-500 hover:scale-105 hover:shadow-pink-500/40"
-        >
-          Schedule a Consultation
-        </a>
-        <p className="mb-12 text-lg text-gray-300">
-          Discover how <span className="font-semibold text-pink-400">ReadyTech Solutions</span> can help your business innovate, scale efficiently, and dominate the market.
-        </p>
-      </div>
+      
     </section>
   );
 }
@@ -526,8 +519,7 @@ function TemplateB() {
 
 
 /* ---------------------- TemplateC Modern Dark UI ---------------------- */
-import React from "react";
-import { useNavigate } from "react-router-dom";
+
 
 function TemplateC() {
   const navigate = useNavigate(); // For navigation
@@ -636,19 +628,7 @@ function TemplateC() {
         </div>
       </div>
 
-      {/* Call to Action */}
-      <div className="px-6 py-16 text-center bg-gradient-to-r from-pink-600 to-purple-700">
-        <h2 className="text-3xl font-bold text-white">Let’s Build Your Next Big Idea</h2>
-        <p className="mt-4 text-white/90">
-          Partner with <span className="font-semibold">Ready Tech Solutions</span> for reliable, scalable, and modern MERN development.
-        </p>
-        <button
-          onClick={handleDemoClick}
-          className="px-8 py-4 mt-8 font-semibold text-pink-600 transition transform bg-white rounded-full shadow-lg hover:scale-105 hover:shadow-2xl"
-        >
-          🚀 Book a Free Demo
-        </button>
-      </div>
+      
     </section>
   );
 }
