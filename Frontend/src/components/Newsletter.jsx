@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import NewsletterBG from "../assets/images/new.jpg"; // adjust the path
+import NewsletterBG from "../assets/images/new.jpg"; // Adjust path if needed
 
 export default function NewsletterCTA() {
   const [email, setEmail] = useState("");
@@ -9,8 +9,10 @@ export default function NewsletterCTA() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email) {
-      setResponseMsg({ type: "error", text: "Email is required!" });
+
+    // Basic validation
+    if (!email.trim()) {
+      setResponseMsg({ type: "error", text: "Please enter a valid email address." });
       return;
     }
 
@@ -18,11 +20,26 @@ export default function NewsletterCTA() {
     setResponseMsg(null);
 
     try {
-      const res = await axios.post("https://readytech-websites.onrender.com/api/contact/subscribe", { email });
-      setResponseMsg({ type: "success", text: res.data.msg });
+      const res = await axios.post(
+        "https://readytech-websites.onrender.com/api/contact/subscribe",
+        { email },
+        {
+          headers: { "Content-Type": "application/json" },
+          timeout: 10000, // safety timeout (10s)
+        }
+      );
+
+      // Assuming backend returns { msg: "Subscribed successfully" }
+      setResponseMsg({ type: "success", text: res.data.msg || "Subscription successful!" });
       setEmail("");
     } catch (err) {
-      setResponseMsg({ type: "error", text: err.response?.data?.msg || "Subscription failed" });
+      console.error("Subscription Error:", err);
+      let message =
+        err.response?.data?.msg ||
+        (err.response?.status === 500
+          ? "Server error — please try again later."
+          : "Subscription failed. Please check your connection.");
+      setResponseMsg({ type: "error", text: message });
     } finally {
       setLoading(false);
     }
@@ -30,28 +47,30 @@ export default function NewsletterCTA() {
 
   return (
     <div
-      className="py-12 text-center bg-center bg-no-repeat rounded-3xl"
+      className="relative py-16 text-center bg-center bg-cover rounded-3xl"
       style={{ backgroundImage: `url(${NewsletterBG})` }}
     >
-      {/* Overlay for better text visibility */}
-      <div className="px-6 py-12 rounded-3xl ">
+      {/* Dark overlay for readability */}
+      <div className="absolute inset-0 bg-black/60 rounded-3xl -z-10"></div>
+
+      <div className="relative px-6 sm:px-10">
         {/* Section Title */}
-        <h3 className="mb-1 font-semibold tracking-widest text-yellow-400 uppercase">
-          New Settler
+        <h3 className="mb-2 font-semibold tracking-widest text-yellow-400 uppercase">
+          Newsletter
         </h3>
 
-        {/* Main Heading */}
+        {/* Heading */}
         <h2 className="text-2xl font-extrabold text-white sm:text-3xl">
           Let’s Build Your Next Digital Success Story 🚀
         </h2>
 
-        {/* Subtitle */}
+        {/* Description */}
         <p className="max-w-2xl mx-auto mt-2 text-gray-200">
           Join our community of growing brands — get insights, updates, and strategies
-          that help you lead in the digital world.
+          to help you lead in the digital world.
         </p>
 
-        {/* Subscribe Form */}
+        {/* Form */}
         <form
           onSubmit={handleSubmit}
           className="flex flex-col items-center justify-center gap-2 mt-6 sm:flex-row sm:gap-3"
@@ -76,7 +95,7 @@ export default function NewsletterCTA() {
         {/* Response Message */}
         {responseMsg && (
           <p
-            className={`mt-3 font-semibold text-sm ${
+            className={`mt-3 text-sm font-semibold transition-all ${
               responseMsg.type === "success" ? "text-green-400" : "text-red-400"
             }`}
           >
@@ -84,7 +103,7 @@ export default function NewsletterCTA() {
           </p>
         )}
 
-        {/* Small Footer CTA */}
+        {/* Footer CTA */}
         <div className="mt-6">
           <a
             href="/contact"
