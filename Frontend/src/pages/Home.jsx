@@ -1,19 +1,32 @@
 import { useState } from "react";
 import Navbar from "../components/Navbar";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import heroImg from "../assets/images/il1.jpg";
+import {
+  FaCloud,
+  FaCode,
+  FaLaptopCode,
+  FaChartLine,
+  FaDatabase,
+  FaLock,
+  FaReact,
+  FaRobot,
+  FaGlobe,
+} from "react-icons/fa";
+
+// 🖼️ Local floating images (tech-style)
+import BgVision from "../assets/images/bg-vision.jpg";
+import BgHero from "../assets/images/bg-hero.jpg";
 import Img1 from "../assets/images/image1.png";
 import Img2 from "../assets/images/image2.png";
 import Img3 from "../assets/images/image3.png";
-import { FaCloud, FaCode, FaLaptopCode, FaChartLine, FaDatabase, FaLock } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const [template, setTemplate] = useState("A");
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden text-white font-poppins bg-gray-950">
+    <div className="relative min-h-screen overflow-hidden text-white font-poppins bg-gray-950">
       <Navbar />
 
       <Helmet>
@@ -22,129 +35,48 @@ export default function Home() {
           name="description"
           content="Ready Tech Solutions provides expert IT solutions to help businesses grow and succeed in the digital world."
         />
-        <meta
-          name="keywords"
-          content="Ready Tech, IT Solutions, Web Development, Software, Cloud, Training"
-        />
       </Helmet>
 
-      {/* -------------------- Floating Background Bubbles -------------------- */}
-      <div className="absolute inset-0 -z-20">
-        {[...Array(15)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full bg-indigo-500/20"
-            style={{
-              width: `${20 + Math.random() * 80}px`,
-              height: `${20 + Math.random() * 80}px`,
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              filter: `blur(${10 + Math.random() * 30}px)`,
-            }}
-            animate={{
-              y: [0, -50 + Math.random() * 100, 0],
-              x: [0, -50 + Math.random() * 100, 0],
-              opacity: [0.3, 0.6, 0.3],
-            }}
-            transition={{
-              duration: 20 + Math.random() * 30,
-              repeat: Infinity,
-              repeatType: "mirror",
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-      </div>
+{/* -------------------- Hero Section -------------------- */}
+<section className="relative flex flex-col items-center justify-center min-h-screen px-6 text-center sm:px-16 bg-hero">
+  {/* Gradient overlay */}
+  <div className="absolute inset-0 bg-gradient-overlay -z-5"></div>
 
-      {/* -------------------- Hero Section -------------------- */}
-      <section className="relative flex flex-col justify-center min-h-screen px-6 overflow-hidden bg-gradient-to-br from-gray-900 via-gray-950 to-black sm:px-16 md:flex-row md:items-center">
-        <motion.div
-          className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_center,_rgba(109,40,217,0.3),_transparent_70%)]"
-          animate={{ backgroundPosition: ["0% 0%", "100% 100%"] }}
-          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-        />
+  {/* Hero Content */}
+  <motion.div
+    initial={{ opacity: 0, y: 40 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 1.2 }}
+    className="z-10 max-w-3xl"
+  >
+    <h1 className="text-4xl font-extrabold leading-tight sm:text-5xl md:text-6xl text-gradient">
+      Transforming Ideas Into Digital Excellence
+    </h1>
+    <p className="mt-6 text-lg leading-relaxed text-gray-300 sm:text-xl">
+      At <span className="font-semibold text-indigo-400">Ready Tech Solutions</span>, we craft intelligent, scalable, and secure platforms — blending <span className="font-semibold text-pink-400">AI innovation</span> and <span className="font-semibold text-yellow-300">cloud architecture</span>.
+    </p>
 
-        {[FaCloud, FaCode, FaChartLine, FaDatabase, FaLaptopCode, FaLock].map((Icon, i) => (
-          <motion.div
-            key={i}
-            className="absolute text-indigo-400/40"
-            style={{
-              top: `${20 + Math.random() * 60}%`,
-              left: `${10 + Math.random() * 80}%`,
-            }}
-            animate={{
-              y: [0, -10, 0],
-              opacity: [0.5, 1, 0.5],
-              rotate: [0, 15, -15, 0],
-            }}
-            transition={{
-              duration: 6 + Math.random() * 3,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          >
-            <Icon size={28} />
-          </motion.div>
-        ))}
+    <div className="flex flex-col items-center justify-center gap-6 mt-12 sm:flex-row">
+      <motion.a
+        href="/services"
+        whileHover={{ scale: 1.08 }}
+        className="inline-block px-10 py-4 text-lg font-semibold text-gray-900 transition-all duration-300 bg-yellow-300 rounded-full shadow-lg hover:bg-yellow-400"
+      >
+        Explore Services
+      </motion.a>
+      <motion.a
+        href="/contact"
+        whileHover={{ scale: 1.08 }}
+        className="inline-block px-10 py-4 text-lg font-semibold text-white transition-all duration-300 rounded-full shadow-lg bg-gradient-to-r from-indigo-500 to-pink-500 hover:from-indigo-600 hover:to-pink-600"
+      >
+        Contact Us
+      </motion.a>
+    </div>
+  </motion.div>
+</section>
 
-        {/* Left Content */}
-        <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1.2 }}
-          className="relative z-10 w-full md:w-1/2"
-        >
-          <h1 className="text-2xl font-bold leading-snug text-indigo-400 sm:text-3xl md:text-4xl">
-            Ready Tech <span className="text-yellow-400">Solutions</span>
-          </h1>
-          <p className="mt-6 text-lg leading-relaxed text-gray-300 sm:text-xl">
-            Empowering businesses through{" "}
-            <span className="font-semibold text-pink-400">
-              scalable software
-            </span>{" "}
-            and{" "}
-            <span className="font-semibold text-yellow-300">
-              digital transformation
-            </span>.
-          </p>
 
-          <div className="flex flex-col items-center gap-5 mt-10 sm:flex-row">
-            <motion.a
-              href="/services"
-              whileHover={{ scale: 1.08 }}
-              className="inline-block px-10 py-4 text-lg font-semibold text-gray-900 transition-all duration-300 bg-yellow-300 rounded-full shadow-lg hover:bg-yellow-400"
-            >
-              Explore Services
-            </motion.a>
 
-            <motion.a
-              href="/contact"
-              whileHover={{ scale: 1.08 }}
-              className="inline-block px-10 py-4 text-lg font-semibold text-white transition-all duration-300 rounded-full shadow-lg bg-gradient-to-r from-indigo-500 to-pink-500 hover:from-indigo-600 hover:to-pink-600"
-            >
-              Contact Us
-            </motion.a>
-          </div>
-        </motion.div>
-
-        {/* Right Illustration */}
-        <motion.div
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1.5 }}
-          className="relative z-10 w-full mt-10 md:w-1/2 md:mt-0"
-        >
-          <div className="flex justify-center">
-            <motion.img
-              src={heroImg}
-              alt="Tech Illustration"
-              className="w-[90%] max-w-lg rounded-2xl drop-shadow-[0_0_30px_rgba(168,85,247,0.5)]"
-              whileHover={{ scale: 1.05, rotate: 1 }}
-              transition={{ type: "spring", stiffness: 150 }}
-            />
-          </div>
-        </motion.div>
-      </section>
 
       {/* -------------------- Vision & Mission -------------------- */}
       <VisionMissionSection />
@@ -155,38 +87,181 @@ export default function Home() {
   );
 }
 
+/* -------------------- Animated Background Component -------------------- */
+function AnimatedBackground() {
+  const icons = [
+    <FaReact />,
+    <FaRobot />,
+    <FaLock />,
+    <FaLaptopCode />,
+    <FaCloud />,
+    <FaGlobe />,
+    <FaChartLine />,
+    <FaDatabase />,
+    <FaCode />,
+  ];
+
+  const images = [Img1, Img2, Img3];
+
+  return (
+    <div className="absolute inset-0 overflow-hidden -z-30">
+      {/* Moving Grid */}
+      <motion.div
+        className="absolute inset-0 opacity-25 bg-[linear-gradient(90deg,rgba(255,255,255,0.07)_1px,transparent_1px),linear-gradient(rgba(255,255,255,0.07)_1px,transparent_1px)] bg-[size:70px_70px]"
+        animate={{
+          backgroundPosition: ["0px 0px", "70px 70px"],
+        }}
+        transition={{
+          duration: 30,
+          repeat: Infinity,
+          ease: "linear",
+        }}
+      />
+
+      {/* Gradient Glow Layers */}
+      <div className="absolute inset-0 bg-gradient-to-b from-indigo-900/40 via-transparent to-black" />
+      <motion.div
+        className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(168,85,247,0.25),_transparent_70%)]"
+        animate={{ opacity: [0.2, 0.4, 0.2] }}
+        transition={{ duration: 8, repeat: Infinity }}
+      />
+
+      {/* Floating Icons */}
+      {[...Array(20)].map((_, i) => {
+        const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+        const size = 25 + Math.random() * 50;
+        const top = Math.random() * 100;
+        const left = Math.random() * 100;
+        const duration = 15 + Math.random() * 30;
+        const blur = 4 + Math.random() * 8;
+
+        return (
+          <motion.div
+            key={`icon-${i}`}
+            className="absolute text-indigo-400/25"
+            style={{
+              top: `${top}%`,
+              left: `${left}%`,
+              fontSize: `${size}px`,
+              filter: `blur(${blur}px)`,
+            }}
+            animate={{
+              y: [0, -80 + Math.random() * 120, 0],
+              x: [0, -50 + Math.random() * 100, 0],
+              rotate: [0, 360, 0],
+              opacity: [0.2, 0.6, 0.2],
+            }}
+            transition={{
+              duration,
+              repeat: Infinity,
+              repeatType: "mirror",
+              ease: "easeInOut",
+            }}
+          >
+            {randomIcon}
+          </motion.div>
+        );
+      })}
+
+      {/* Floating Local Images */}
+      {images.map((img, i) => {
+        const size = 100 + Math.random() * 150;
+        const top = Math.random() * 100;
+        const left = Math.random() * 100;
+        const duration = 20 + Math.random() * 25;
+
+        return (
+          <motion.img
+            key={`img-${i}`}
+            src={img}
+            alt="Floating tech element"
+            className="absolute opacity-20"
+            style={{
+              top: `${top}%`,
+              left: `${left}%`,
+              width: `${size}px`,
+              height: `${size}px`,
+              objectFit: "contain",
+            }}
+            animate={{
+              y: [0, -60 + Math.random() * 120, 0],
+              x: [0, -40 + Math.random() * 80, 0],
+              rotate: [0, 20, -20, 0],
+              opacity: [0.15, 0.3, 0.15],
+            }}
+            transition={{
+              duration,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
 /* -------------------- Vision & Mission Section -------------------- */
 function VisionMissionSection() {
   return (
-    <section className="relative py-20 bg-gradient-to-b from-gray-950 via-black to-gray-900">
-      <div className="max-w-6xl px-6 mx-auto text-center">
-        <h2 className="text-4xl font-extrabold tracking-tight text-transparent sm:text-5xl bg-clip-text bg-gradient-to-r from-indigo-400 via-pink-500 to-yellow-400">
-          Our Vision & Mission
-        </h2>
-        <p className="max-w-3xl mx-auto mt-6 text-lg leading-relaxed text-gray-400">
-          At <span className="font-semibold text-indigo-400">ReadyTech Solutions</span>, we believe technology should not just solve today’s problems, but also unlock tomorrow’s opportunities.
-        </p>
+    
 
-        {/* Cards */}
-        <div className="grid gap-10 mt-16 md:grid-cols-2">
-          <motion.div whileHover={{ scale: 1.05 }} className="relative p-8 overflow-hidden text-left transition-all duration-300 border shadow-lg rounded-2xl bg-white/5 backdrop-blur-xl border-white/10">
-            <div className="absolute top-0 left-0 w-40 h-40 rounded-full opacity-20 bg-gradient-to-tr from-indigo-600 to-cyan-400 blur-3xl"></div>
-            <h3 className="flex items-center gap-3 text-2xl font-bold text-indigo-400">🌐 Our Vision</h3>
-            <p className="mt-4 text-gray-300">
-              To become a <span className="font-semibold text-yellow-400">global leader in AI-powered solutions</span>, where innovation meets sustainability.
-            </p>
-          </motion.div>
+ <section className="relative py-20 overflow-hidden">
+  {/* Background Image */}
+  <div
+    className="absolute inset-0 bg-center bg-cover -z-10"
+    style={{ backgroundImage: "url(/images/bg5-hero.jpg)" }}
+  ></div>
 
-          <motion.div whileHover={{ scale: 1.05 }} className="relative p-8 overflow-hidden text-left transition-all duration-300 border shadow-lg rounded-2xl bg-white/5 backdrop-blur-xl border-white/10">
-            <div className="absolute bottom-0 right-0 w-40 h-40 rounded-full opacity-20 bg-gradient-to-bl from-purple-600 to-pink-400 blur-3xl"></div>
-            <h3 className="flex items-center gap-3 text-2xl font-bold text-pink-400">🚀 Our Mission</h3>
-            <p className="mt-4 text-gray-300">
-              To deliver <span className="font-semibold text-indigo-400">cutting-edge, service-based digital solutions</span> focusing on AI, cloud, and scalable architectures.
-            </p>
-          </motion.div>
-        </div>
-      </div>
-    </section>
+  {/* Gradient Overlay */}
+  <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-gray-950 -z-5"></div>
+
+  <div className="relative z-10 max-w-6xl px-6 mx-auto text-center">
+    <motion.h2
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
+      viewport={{ once: true }}
+      className="text-4xl font-extrabold tracking-tight text-transparent sm:text-5xl bg-clip-text bg-gradient-to-r from-indigo-400 via-pink-500 to-yellow-400"
+    >
+      Our Vision & Mission
+    </motion.h2>
+
+    <p className="max-w-3xl mx-auto mt-6 text-lg leading-relaxed text-gray-300">
+      We envision a world where technology empowers creativity — blending{" "}
+      <span className="font-semibold text-indigo-400">AI</span>,{" "}
+      <span className="font-semibold text-pink-400">cloud systems</span>, and{" "}
+      <span className="font-semibold text-yellow-400">secure solutions</span>{" "}
+      to help businesses grow intelligently.
+    </p>
+
+    <div className="grid gap-10 mt-16 md:grid-cols-2">
+      {[{
+        title: "🌐 Our Vision",
+        desc: "To lead global innovation through sustainable, AI-driven digital transformation.",
+        color: "from-indigo-600 to-cyan-400",
+      },{
+        title: "🚀 Our Mission",
+        desc: "To design intelligent, scalable, and secure platforms that empower industries worldwide.",
+        color: "from-pink-500 to-purple-500",
+      }].map((card, i) => (
+        <motion.div
+          key={i}
+          whileHover={{ scale: 1.05 }}
+          className="relative p-8 overflow-hidden text-left transition-all duration-300 border shadow-lg rounded-2xl bg-white/5 backdrop-blur-xl border-white/10"
+        >
+          <div
+            className={`absolute inset-0 opacity-20 blur-3xl bg-gradient-to-tr ${card.color}`}
+          ></div>
+          <h3 className="mb-3 text-2xl font-bold text-white">{card.title}</h3>
+          <p className="text-gray-300">{card.desc}</p>
+        </motion.div>
+      ))}
+    </div>
+  </div>
+</section>
+
+
   );
 }
 

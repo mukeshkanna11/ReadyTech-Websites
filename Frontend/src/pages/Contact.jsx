@@ -115,9 +115,36 @@ export default function Contact() {
               </p>
             )}
             <form className="space-y-4" onSubmit={handleContactSubmit}>
-              <input type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} className="w-full px-4 py-3 text-gray-100 bg-gray-900 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400 hover:shadow-md"/>
-              <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} className="w-full px-4 py-3 text-gray-100 bg-gray-900 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400 hover:shadow-md"/>
-              <input type="tel" name="phone" placeholder="Phone" value={formData.phone} onChange={handleChange} className="w-full px-4 py-3 text-gray-100 bg-gray-900 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400 hover:shadow-md"/>
+             <input
+  type="text"
+  name="name"
+  placeholder="Full Name"
+  value={formData.name}
+  onChange={handleChange}
+  required
+  className="w-full px-4 py-3 text-gray-100 bg-gray-900 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400 hover:shadow-md"
+/>
+
+<input
+  type="email"
+  name="email"
+  placeholder="Email"
+  value={formData.email}
+  onChange={handleChange}
+  required
+  className="w-full px-4 py-3 text-gray-100 bg-gray-900 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400 hover:shadow-md"
+/>
+
+<input
+  type="tel"
+  name="phone"
+  placeholder="Phone"
+  value={formData.phone}
+  onChange={handleChange}
+  required
+  className="w-full px-4 py-3 text-gray-100 bg-gray-900 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400 hover:shadow-md"
+/>
+
               <select name="subject" value={formData.subject} onChange={handleChange} className="w-full px-4 py-3 text-gray-100 bg-gray-900 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400 hover:shadow-md">
                 <option>General Inquiry</option>
                 <option>Technical Support</option>
