@@ -51,21 +51,26 @@ const connectDB = async () => {
     const conn = await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      serverSelectionTimeoutMS: 15000, // 15s timeout for better visibility
+      serverSelectionTimeoutMS: 20000, // 20s timeout for Render cold start
     });
 
     console.log(`✅ MongoDB connected: ${conn.connection.host}`);
   } catch (err) {
     console.error("❌ MongoDB connection error:", err.message);
 
-    // Detailed debugging info
+    // Detailed debug
     if (err.reason) console.error("📋 Reason:", err.reason);
 
-    // Friendly output for Render logs
     console.error(`
+================= MONGO CONNECTION FAILED =================
+💡 Tips:
+1️⃣ Make sure MONGO_URI in Render Environment Variables is correct
+2️⃣ Password is URL-encoded if it contains special characters (@, /, etc.)
+3️⃣ MongoDB Atlas → Network Access includes 0.0.0.0/0 or Render's outbound IPs
+===========================================================
     `);
 
-    // Don't kill the process — keep server running to respond with an error
+    // Keep server running so it can return structured error responses
   }
 };
 
@@ -81,7 +86,6 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   console.error("💥 GLOBAL ERROR HANDLER:", err.stack || err);
 
-  // Always send structured JSON for frontend clarity
   res.status(500).json({
     msg: "Internal Server Error",
     error: err.message,
