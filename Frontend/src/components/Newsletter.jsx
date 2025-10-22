@@ -10,15 +10,15 @@ export default function NewsletterCTA() {
   // Automatically switch between dev and prod
   const getApiUrl = () => {
     if (import.meta.env.MODE === "development") {
-      return "http://localhost:5000/api/contact/subscribe";
+      return "http://localhost:5000/api/subscribe";
     }
-    return "https://readytech-websites.onrender.com/api/contact/subscribe";
+    return "https://readytech-websites.onrender.com/api/subscribe";
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate email format
+    // Validate email
     if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setResponseMsg({ type: "error", text: "Please enter a valid email address." });
       return;
@@ -33,7 +33,7 @@ export default function NewsletterCTA() {
         { email },
         {
           headers: { "Content-Type": "application/json" },
-          timeout: 60000, // 60s timeout for slow Render backend
+          timeout: 60000, // 60s timeout for Render
         }
       );
 
@@ -41,12 +41,11 @@ export default function NewsletterCTA() {
         type: "success",
         text: res.data.msg || "🎉 Subscription successful!",
       });
-      setEmail(""); // clear input
+      setEmail(""); // Clear input
     } catch (err) {
       console.error("Subscription Error:", err);
 
       let message = "Subscription failed. Please try again later.";
-
       if (err.code === "ECONNABORTED") {
         message = "Request timed out. Please try again.";
       } else if (err.response?.data?.msg) {
