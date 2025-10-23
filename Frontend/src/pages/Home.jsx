@@ -203,106 +203,170 @@ function AnimatedBackground() {
 
 /* -------------------- Vision & Mission Section -------------------- */
 function VisionMissionSection() {
+  // Container variants for staggered animation
+  const containerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { type: "spring", stiffness: 120, damping: 14 },
+    },
+  };
+
   return (
-    
+    <section className="relative py-24 overflow-hidden bg-gradient-to-tr from-gray-950 via-indigo-950 to-black">
+      {/* ---------- Background Image ---------- */}
+      <div
+        className="absolute inset-0 bg-center bg-cover -z-20 opacity-40"
+        style={{ backgroundImage: "url(/images/bg5-hero.jpg)" }}
+      ></div>
 
- <section className="relative py-20 overflow-hidden">
-  {/* Background Image */}
-  <div
-    className="absolute inset-0 bg-center bg-cover -z-10"
-    style={{ backgroundImage: "url(/images/bg5-hero.jpg)" }}
-  ></div>
+      {/* ---------- Gradient Overlay ---------- */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-gray-950/90 via-indigo-900/80 to-black/90 -z-10"></div>
 
-  {/* Gradient Overlay */}
-  <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-gray-950 -z-5"></div>
+      {/* ---------- Animated Grid ---------- */}
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[length:60px_60px] animate-grid"></div>
 
-  <div className="relative z-10 max-w-6xl px-6 mx-auto text-center">
-    <motion.h2
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8 }}
-      viewport={{ once: true }}
-      className="text-4xl font-extrabold tracking-tight text-transparent sm:text-5xl bg-clip-text bg-gradient-to-r from-indigo-400 via-pink-500 to-yellow-400"
-    >
-      Our Vision & Mission
-    </motion.h2>
-
-    <p className="max-w-3xl mx-auto mt-6 text-lg leading-relaxed text-gray-300">
-      We envision a world where technology empowers creativity — blending{" "}
-      <span className="font-semibold text-indigo-400">AI</span>,{" "}
-      <span className="font-semibold text-pink-400">cloud systems</span>, and{" "}
-      <span className="font-semibold text-yellow-400">secure solutions</span>{" "}
-      to help businesses grow intelligently.
-    </p>
-
-    <div className="grid gap-10 mt-16 md:grid-cols-2">
-      {[{
-        title: "🌐 Our Vision",
-        desc: "To lead global innovation through sustainable, AI-driven digital transformation.",
-        color: "from-indigo-600 to-cyan-400",
-      },{
-        title: "🚀 Our Mission",
-        desc: "To design intelligent, scalable, and secure platforms that empower industries worldwide.",
-        color: "from-pink-500 to-purple-500",
-      }].map((card, i) => (
-        <motion.div
-          key={i}
-          whileHover={{ scale: 1.05 }}
-          className="relative p-8 overflow-hidden text-left transition-all duration-300 border shadow-lg rounded-2xl bg-white/5 backdrop-blur-xl border-white/10"
-        >
+      {/* ---------- Floating Bubbles ---------- */}
+      <div className="absolute inset-0 overflow-hidden -z-10">
+        {[...Array(15)].map((_, i) => (
           <div
-            className={`absolute inset-0 opacity-20 blur-3xl bg-gradient-to-tr ${card.color}`}
+            key={i}
+            className={`bubble ${
+              i % 3 === 0
+                ? "bg-indigo-500"
+                : i % 3 === 1
+                ? "bg-pink-500"
+                : "bg-cyan-400"
+            }`}
+            style={{
+              width: `${20 + Math.random() * 60}px`,
+              height: `${20 + Math.random() * 60}px`,
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              animationDuration: `${10 + Math.random() * 10}s`,
+              animationDelay: `${Math.random() * 5}s`,
+            }}
           ></div>
-          <h3 className="mb-3 text-2xl font-bold text-white">{card.title}</h3>
-          <p className="text-gray-300">{card.desc}</p>
+        ))}
+      </div>
+
+      {/* ---------- Content ---------- */}
+      <motion.div
+        className="relative z-10 max-w-6xl px-6 mx-auto text-center"
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+      >
+        <motion.h2
+          variants={itemVariants}
+          className="mb-6 text-4xl font-extrabold tracking-tight text-transparent sm:text-5xl bg-clip-text bg-gradient-to-r from-indigo-400 via-pink-500 to-yellow-400"
+        >
+          Our Vision & Mission
+        </motion.h2>
+
+        <motion.p
+          variants={itemVariants}
+          className="max-w-3xl mx-auto mb-12 text-lg leading-relaxed text-gray-300"
+        >
+          We envision a world where technology empowers creativity — blending{" "}
+          <span className="font-semibold text-indigo-400">AI</span>,{" "}
+          <span className="font-semibold text-pink-400">cloud systems</span>, and{" "}
+          <span className="font-semibold text-yellow-400">secure solutions</span>{" "}
+          to help businesses grow intelligently.
+        </motion.p>
+
+        <motion.div
+          variants={containerVariants}
+          className="grid gap-10 md:grid-cols-2"
+        >
+          {[
+            {
+              title: "🌐 Our Vision",
+              desc: "To lead global innovation through sustainable, AI-driven digital transformation.",
+              color: "from-indigo-600 to-cyan-400",
+            },
+            {
+              title: "🚀 Our Mission",
+              desc: "To design intelligent, scalable, and secure platforms that empower industries worldwide.",
+              color: "from-pink-500 to-purple-500",
+            },
+          ].map((card, i) => (
+            <motion.div
+              key={i}
+              variants={itemVariants}
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: "spring", stiffness: 200, damping: 12 }}
+              className="relative p-8 overflow-hidden text-left transition-all duration-300 border shadow-lg rounded-2xl bg-white/5 backdrop-blur-xl border-white/10"
+            >
+              <div
+                className={`absolute inset-0 opacity-25 blur-3xl bg-gradient-to-tr ${card.color}`}
+              ></div>
+              <h3 className="mb-3 text-2xl font-bold text-white">{card.title}</h3>
+              <p className="text-gray-300">{card.desc}</p>
+            </motion.div>
+          ))}
         </motion.div>
-      ))}
-    </div>
-  </div>
-</section>
-
-
+      </motion.div>
+    </section>
   );
 }
 
 /* -------------------- Template Switcher -------------------- */
 function TemplateSwitcher({ template, setTemplate }) {
   return (
-    <section className="relative py-20 bg-gradient-to-b from-gray-900 via-black to-gray-950">
-      <div className="max-w-6xl px-6 mx-auto text-center">
-        <h2 className="mb-12 text-4xl font-extrabold tracking-tight text-transparent sm:text-5xl bg-clip-text bg-gradient-to-r from-pink-400 via-indigo-400 to-yellow-400">
-          Explore Our Templates
-        </h2>
+    <section
+  className="relative py-20 overflow-hidden bg-center bg-cover opacity-60"
+  style={{ backgroundImage: "url(/images/bg2-hero.jpg)" }}
+>
+  {/* Optional dark overlay for readability */}
+  <div className="absolute 0"></div>
 
-        <div className="flex justify-center gap-3 mb-12">
-          {["A", "B", "C"].map((t) => (
-            <button
-              key={t}
-              onClick={() => setTemplate(t)}
-              className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                template === t
-                  ? "bg-indigo-600 text-white shadow-lg scale-105"
-                  : "bg-white/10 text-gray-300 hover:bg-indigo-500/20 hover:text-indigo-300"
-              }`}
-            >
-              {t === "A" ? "Corporate" : t === "B" ? "Creative" : "Developer"}
-            </button>
-          ))}
-        </div>
+  <div className="relative z-10 max-w-6xl px-6 mx-auto text-center">
+    <h2 className="mb-12 text-4xl font-extrabold tracking-tight text-transparent sm:text-5xl bg-clip-text bg-gradient-to-r from-pink-400 via-indigo-400 to-yellow-400">
+      Explore Our Templates
+    </h2>
 
-        <motion.main
-          key={template}
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="space-y-12"
+    <div className="flex justify-center gap-3 mb-12">
+      {["A", "B", "C"].map((t) => (
+        <button
+          key={t}
+          onClick={() => setTemplate(t)}
+          className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+            template === t
+              ? "bg-indigo-600 text-white shadow-lg scale-105"
+              : "bg-white/10 text-gray-300 hover:bg-indigo-500/20 hover:text-indigo-300"
+          }`}
         >
-          {template === "A" && <TemplateA />}
-          {template === "B" && <TemplateB />}
-          {template === "C" && <TemplateC />}
-        </motion.main>
-      </div>
-    </section>
+          {t === "A" ? "Corporate" : t === "B" ? "Creative" : "Developer"}
+        </button>
+      ))}
+    </div>
+
+    <motion.main
+      key={template}
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
+      className="space-y-12"
+    >
+      {template === "A" && <TemplateA />}
+      {template === "B" && <TemplateB />}
+      {template === "C" && <TemplateC />}
+    </motion.main>
+  </div>
+</section>
+
   );
 }
 
@@ -312,14 +376,34 @@ function TemplateSwitcher({ template, setTemplate }) {
 /* ---------------------- TemplateA Modern Dark UI ---------------------- */
 function TemplateA() {
   return (
-    <section className="relative overflow-hidden text-white bg-gray-900">
+    <section className="relative overflow-hidden text-white font-poppins">
 
-      {/* Animated Gradient Blobs */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-0 bg-purple-500 rounded-full left-1/3 w-96 h-96 mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
-        <div className="absolute bottom-0 bg-pink-500 rounded-full right-1/3 w-96 h-96 mix-blend-multiply filter blur-3xl opacity-30 animate-bounce"></div>
-        <div className="absolute bg-indigo-500 rounded-full top-1/2 left-1/4 w-80 h-80 mix-blend-multiply filter blur-3xl opacity-30 animate-spin-slow"></div>
-      </div>
+      {/* Floating Gradient Blobs */}
+  {/* Floating Gradient Bubbles Background */}
+<div className="absolute inset-0 overflow-hidden -z-10">
+  {[...Array(15)].map((_, i) => (
+    <div
+      key={i}
+      className={`bubble ${
+        i % 3 === 0
+          ? "bg-pink-500"
+          : i % 3 === 1
+          ? "bg-indigo-500"
+          : "bg-purple-500"
+      }`}
+      style={{
+        width: `${20 + Math.random() * 60}px`,
+        height: `${20 + Math.random() * 60}px`,
+        top: `${Math.random() * 100}%`,
+        left: `${Math.random() * 100}%`,
+        animationDuration: `${10 + Math.random() * 10}s`,
+        animationDelay: `${Math.random() * 5}s`,
+      }}
+    ></div>
+  ))}
+</div>
+
+
 
       {/* Hero Intro */}
       <div className="px-6 py-20 lg:px-16">
@@ -357,8 +441,8 @@ function TemplateA() {
   </p>
 
   {/* Gradient overlays for soft fade edges */}
-  <div className="absolute top-0 left-0 w-24 h-full pointer-events-none bg-gradient-to-r from-gray-900 to-transparent"></div>
-  <div className="absolute top-0 right-0 w-24 h-full pointer-events-none bg-gradient-to-l from-gray-900 to-transparent"></div>
+  {/* <div className="absolute top-0 left-0 w-24 h-full pointer-events-none bg-gradient-to-r from-gray-900 to-transparent"></div>
+  <div className="absolute top-0 right-0 w-24 h-full pointer-events-none bg-gradient-to-l from-gray-900 to-transparent"></div> */}
 
   {/* Scrolling Logo Carousel */}
   <div className="relative mt-10 overflow-hidden">
@@ -447,7 +531,7 @@ function TemplateA() {
 /* ---------------------- TemplateB Modern Dark UI ---------------------- */
 function TemplateB() {
   return (
-    <section className="overflow-hidden text-gray-100 bg-gradient-to-b from-gray-900 via-gray-950 to-black rounded-xl">
+    <section className="overflow-hidden text-gray-100 rounded-xl">
       {/* Company Introduction */}
       <div className="px-6 py-16 mx-auto max-w-7xl md:flex md:items-start md:gap-16">
         <div className="space-y-6 md:w-1/2">
@@ -511,7 +595,7 @@ function TemplateB() {
       </div>
 
       {/* Industries Served */}
-      <div className="py-16 bg-gradient-to-r from-gray-950 to-black">
+      <div className="py-16 ">
         <div className="px-6 mx-auto text-center max-w-7xl">
           <h2 className="mb-8 text-3xl font-bold text-pink-400">Industries We Serve</h2>
           <p className="mb-12 text-gray-300">
@@ -558,7 +642,7 @@ function TemplateB() {
       </div>
 
       {/* Why Choose Us */}
-      <div className="py-16 bg-gradient-to-r from-gray-950 to-black">
+      <div className="py-16 ">
         <div className="px-6 mx-auto space-y-8 text-center max-w-7xl">
           <h2 className="mb-8 text-3xl font-bold text-pink-400">Why Choose ReadyTech Solutions?</h2>
           <p className="max-w-3xl mx-auto text-gray-300">
@@ -604,7 +688,7 @@ function TemplateC() {
   };
 
   return (
-    <section className="overflow-hidden text-gray-100 bg-gradient-to-b from-gray-900 via-gray-950 to-black">
+    <section className="overflow-hidden text-gray-100 ">
 
       {/* Intro Section */}
       <div className="px-6 py-16 md:flex md:items-center md:gap-12">
@@ -649,7 +733,7 @@ function TemplateC() {
       </div>
 
       {/* Mission Section */}
-      <div className="px-6 py-16 bg-gray-900 md:px-12">
+      <div className="px-6 py-16 md:px-12">
         <h2 className="text-3xl font-bold text-center text-pink-400">Our Mission</h2>
         <p className="max-w-3xl mx-auto mt-4 text-center text-gray-300">
           Empower businesses with reliable, scalable, and user-centric digital products. Bridging innovation and practicality to drive measurable growth.
@@ -657,7 +741,7 @@ function TemplateC() {
       </div>
 
       {/* Core Values Section */}
-      <div className="px-6 py-16 bg-gray-950 md:px-12">
+      <div className="px-6 py-16 md:px-12">
         <h2 className="text-3xl font-bold text-center text-purple-400">Our Core Values</h2>
         <div className="grid gap-8 mt-10 md:grid-cols-3">
           {[
@@ -674,7 +758,7 @@ function TemplateC() {
       </div>
 
       {/* Client Success Stories */}
-      <div className="px-6 py-16 bg-gray-900 md:px-12">
+      <div className="px-6 py-16 md:px-12">
         <h2 className="text-3xl font-bold text-center text-purple-400">Client Success Stories</h2>
         <div className="grid gap-8 mt-10 md:grid-cols-3">
           {[
@@ -691,7 +775,7 @@ function TemplateC() {
       </div>
 
       {/* Tech Stack */}
-      <div className="px-6 py-16 bg-gray-950 md:px-12">
+      <div className="px-6 py-16 0 md:px-12">
         <h2 className="text-3xl font-bold text-center text-pink-400">Our Technology Stack</h2>
         <p className="max-w-3xl mx-auto mt-4 text-center text-gray-300">
           Modern frameworks, cloud tools, and enterprise-grade security to ensure every project is robust and scalable.

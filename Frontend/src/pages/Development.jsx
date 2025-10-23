@@ -5,36 +5,63 @@ import {Helmet} from  "react-helmet-async";
 export default function Development() {
   const navigate = useNavigate();
 
-  return (
-    <div className="min-h-screen text-white bg-gray-950 font-poppins">
+   return (
+    <div className="relative min-h-screen text-white font-poppins">
 
-      <Helmet>  
-        <title>Development | Ready Tech Solutions</title>        
-        <meta name="description" content="Ready Tech Solutions provides expert development services to help businesses grow and succeed in the digital world." />        
-        <meta name="keywords" content="Ready Tech, Development, IT Solutions, Training, Coimbatore, Bangalore" />
+      <Helmet>
+        <title>Development | Ready Tech Solutions</title>
+        <meta
+          name="description"
+          content="Ready Tech Solutions provides expert development services to help businesses grow and succeed in the digital world."
+        />
+        <meta
+          name="keywords"
+          content="Ready Tech, Development, IT Solutions, Training, Coimbatore, Bangalore"
+        />
       </Helmet>
+
+      {/* ---------- Background Image ---------- */}
+      <div
+        className="absolute inset-0 bg-center bg-cover -z-20 "
+        style={{ backgroundImage: "url(/images/bg5-hero.jpg)" }}
+      />
+
+      {/* ---------- Optional Gradient Overlay for readability ---------- */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-indigo-900/70 via-gray-800/60 to-gray-900/70" />
+
       {/* Banner */}
-      <section className="relative flex items-center justify-center h-[500px] overflow-hidden">
-  {/* Floating Lines Background */}
+<section className="relative flex items-center justify-center h-[500px] overflow-hidden">
+  {/* Smooth Horizontal Lines Background */}
   <motion.div
     className="absolute inset-0"
+    style={{
+      backgroundImage: `
+        repeating-linear-gradient(
+          to right,
+          rgba(255, 255, 255, 0.1) 0px,
+          rgba(255, 255, 255, 0.1) 1px,
+          transparent 1px,
+          transparent 20px
+        ),
+        repeating-linear-gradient(
+          to bottom,
+          rgba(255, 255, 255, 0.05) 0px,
+          rgba(255, 255, 255, 0.05) 1px,
+          transparent 1px,
+          transparent 20px
+        )
+      `,
+      backgroundSize: "200% 200%",
+      filter: "blur(0.5px)",
+    }}
     animate={{ backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"] }}
-    transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-  style={{
-  backgroundImage: `
-    linear-gradient(90deg, rgba(0, 200, 255, 0.6) 2px, transparent 2px),
-    linear-gradient(180deg, rgba(255, 100, 255, 0.6) 2px, transparent 2px)
-  `,
-  backgroundSize: "60px 60px",
-}}
-
-
+    transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
   />
-  
-  {/* Soft Overlay to keep contrast balanced */}
-  <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/95 via-gray-800/85 to-gray-900/95" />
 
-  {/* Content */}
+  {/* Optional Overlay */}
+  <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/80 via-gray-800/60 to-gray-900/80 -z-10" />
+
+  {/* Banner Content */}
   <div className="relative z-10 px-6 text-center">
     <h1 className="text-4xl font-extrabold md:text-5xl drop-shadow-lg">
       Empowering Development with{" "}
@@ -47,10 +74,11 @@ export default function Development() {
 </section>
 
 
+
       {/* Intro Section */}
       <section className="max-w-6xl px-6 py-16 mx-auto text-center">
-        <h2 className="text-3xl font-bold text-indigo-400">What We Do</h2>
-        <p className="max-w-3xl mx-auto mt-4 leading-relaxed text-gray-400">
+        <h2 className="text-3xl font-bold text-white">What We Do</h2>
+        <p className="max-w-3xl mx-auto mt-4 leading-relaxed text-grey-300 md:text-lg">
           Ready Tech Solutions develops, creates, and modifies applications to
           meet the demands of today’s businesses. From mobile apps to enterprise
           systems, we follow best practices and deliver scalable, reliable
@@ -60,7 +88,7 @@ export default function Development() {
 
       {/* Core Areas */}
       <section className="max-w-6xl px-6 py-16 mx-auto">
-        <h2 className="text-3xl font-bold text-center text-indigo-400">
+        <h2 className="text-3xl font-bold text-center text-white">
           Our Core Areas
         </h2>
         <div className="grid gap-8 mt-10 md:grid-cols-3">
@@ -75,7 +103,7 @@ export default function Development() {
             description="Full-stack web apps with responsive UI and scalable backends."
           />
           <GlowCard
-            image="https://cdn-icons-png.flaticon.com/512/2906/2906274.png"
+           image="https://cdn-icons-png.flaticon.com/512/2906/2906274.png"
             title="Custom Projects"
             description="Enterprise systems, IoT apps, and next-gen technology solutions."
           />
@@ -84,18 +112,18 @@ export default function Development() {
 
       {/* Detailed Services */}
       <section className="max-w-6xl px-6 py-16 mx-auto">
-        <h2 className="text-3xl font-bold text-center text-indigo-400">
+        <h2 className="text-3xl font-bold text-center text-white">
           Development Services
         </h2>
         <div className="grid gap-8 mt-10 md:grid-cols-2">
           <ServiceCard
-            image="https://cdn-icons-png.flaticon.com/512/732/732212.png"
+           image="https://cdn-icons-png.flaticon.com/512/732/732212.png"
             title="Web Development"
             description="Scalable web applications with modern frameworks & API integration."
             onClick={() => navigate("/services/web-development")}
           />
           <ServiceCard
-            image="https://cdn-icons-png.flaticon.com/512/919/919830.png"
+           image="https://cdn-icons-png.flaticon.com/512/919/919830.png"
             title="PHP Development"
             description="Dynamic PHP-based apps, optimized for speed & functionality."
             onClick={() => navigate("/services/php-development")}
@@ -107,7 +135,7 @@ export default function Development() {
             onClick={() => navigate("/services/cms-development")}
           />
           <ServiceCard
-            image="https://cdn-icons-png.flaticon.com/512/2972/2972185.png"
+           image="https://cdn-icons-png.flaticon.com/512/2972/2972185.png"
             title="Ecommerce Development"
             description="Feature-rich eCommerce solutions with secure payment gateways."
             onClick={() => navigate("/services/ecommerce-development")}

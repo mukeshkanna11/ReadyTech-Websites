@@ -106,22 +106,29 @@ export default function Services() {
     </motion.div>
   );
 
-  return (
-    <div className="min-h-screen bg-gray-900">
+ return (
+    <div className="relative min-h-screen overflow-hidden">
       <Helmet>
         <title>Services | Ready Tech Solutions</title>
       </Helmet>
-      {/* Services Banner with Animated Bubbles */}
-      <section className="relative flex flex-col items-center justify-center w-full min-h-[80vh] overflow-hidden text-white bg-gradient-to-r from-black via-gray-900 to-black">
+
+      {/* ---------- Background Image ---------- */}
+      <div
+        className="absolute inset-0 bg-center bg-cover opacity-50 -z-20"
+        style={{ backgroundImage: "url(/images/service3.jpg" }}
+      ></div>
+
+      {/* ---------- Services Banner with Animated Bubbles ---------- */}
+      <section className="relative flex flex-col items-center justify-center w-full min-h-[80vh] overflow-hidden text-white">
         {[...Array(60)].map((_, i) => (
           <motion.div
             key={i}
             className="absolute rounded-full"
             style={{
               backgroundColor: [
-                "rgba(168,85,247,0.4)", 
-                "rgba(236,72,153,0.4)", 
-                "rgba(250,204,21,0.3)"
+                "rgba(168,85,247,0.4)",
+                "rgba(236,72,153,0.4)",
+                "rgba(250,204,21,0.3)",
               ][Math.floor(Math.random() * 3)],
               width: Math.random() * 35 + 20 + "px",
               height: Math.random() * 35 + 20 + "px",
@@ -159,7 +166,7 @@ export default function Services() {
         </div>
       </section>
 
-      {/* Services Grid */}
+      {/* ---------- Services Grid ---------- */}
       <section className="px-6 py-20 mx-auto max-w-7xl">
         <h2 className="text-3xl font-bold text-center text-white">Our Services</h2>
         <p className="max-w-3xl mx-auto mt-4 text-center text-gray-300">
@@ -172,8 +179,6 @@ export default function Services() {
           ))}
         </div>
       </section>
-
-    
     </div>
   );
 }

@@ -1,52 +1,141 @@
-/* -------------------- Tailwind Base -------------------- */
+/* =========================================================
+   🌑 TAILWIND BASE IMPORTS
+   ========================================================= */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* -------------------- Global Body -------------------- */
+/* =========================================================
+   🌍 GLOBAL BODY STYLING
+   ========================================================= */
 body {
-  @apply text-gray-200 bg-gradient-to-b from-black to-gray-900 font-poppins;
+  @apply antialiased text-gray-200 bg-gradient-to-b from-black to-gray-900 font-poppins;
 }
 
-/* -------------------- Hero Background -------------------- */
+/* =========================================================
+   🖼️ GLOBAL BACKGROUND UTILITIES
+   ========================================================= */
+
+/* ---------- Generic Hero Section BG ---------- */
 .bg-hero {
-  background-image: url('/images/bg4-hero.jpg'); /* Place bg-hero.jpg in public/images/ */
+  background-image: url("/images/bg4-hero.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
 
-/* -------------------- Vision & Mission Background -------------------- */
+/* ---------- Vision & Mission Section BG ---------- */
 .bg-vision {
-  background-image: url('/images/bg-vision.jpg'); /* Place bg-vision.jpg in public/images/ */
+  background-image: url("/images/bg-vision.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 }
 
-/* Gradient overlay helper */
-.bg-gradient-overlay {
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.6), #1a1a1a);
+/* ---------- Templates Section BG ---------- */
+.bg-templates {
+  background-image: url("/images/templates-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-/* -------------------- Floating Animations -------------------- */
+/* ---------- Gradient Overlay Helper ---------- */
+.bg-gradient-overlay {
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.75),
+    rgba(0, 0, 0, 0.6),
+    #0a0a0a
+  );
+}
+
+/* =========================================================
+   💠 ANIMATED GRID BACKGROUND
+   ========================================================= */
+@keyframes moveGrid {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 60px 60px;
+  }
+}
+
+.animate-grid {
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.05) 1px,
+    transparent 1px
+  );
+  background-size: 60px 60px;
+  animation: moveGrid 25s linear infinite;
+}
+
+/* =========================================================
+   🫧 FLOATING & BUBBLE ANIMATIONS
+   ========================================================= */
+
+/* Base bubble appearance */
+.bubble {
+  @apply absolute rounded-full opacity-25 mix-blend-screen filter blur-3xl;
+  will-change: transform, opacity;
+}
+
+/* Smooth floating motion (vertical) */
 @keyframes float {
   0% {
     transform: translateY(0) scale(1);
+    opacity: 0.25;
   }
   50% {
-    transform: translateY(-30px) scale(1.05);
+    transform: translateY(-40px) scale(1.05);
+    opacity: 0.4;
   }
   100% {
     transform: translateY(0) scale(1);
+    opacity: 0.25;
   }
 }
-
 .animate-float {
-  animation: float 12s ease-in-out infinite;
+  animation: float 14s ease-in-out infinite;
 }
 
-/* -------------------- Scrolling Logos/Backgrounds -------------------- */
+/* Side drifting variation */
+@keyframes float-slow {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(30px, -25px) scale(1.05);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
+.animate-float-slow {
+  animation: float-slow 20s ease-in-out infinite;
+}
+
+/* Gentle pulsing blob (used for glowing blur blobs) */
+@keyframes blob-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.2;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.35;
+  }
+}
+.animate-blob-pulse {
+  animation: blob-pulse 12s ease-in-out infinite;
+}
+
+/* =========================================================
+   🚀 SCROLLING ANIMATIONS (Logos / Backgrounds)
+   ========================================================= */
 @keyframes scroll-fast {
   0% {
     transform: translateX(0);
@@ -55,14 +144,85 @@ body {
     transform: translateX(-50%);
   }
 }
-
 .animate-scroll-fast {
   animation: scroll-fast 25s linear infinite;
 }
 
-/* -------------------- Optional Text Gradient -------------------- */
+/* =========================================================
+   🎨 TEXT GRADIENT UTILITY
+   ========================================================= */
 .text-gradient {
   background: linear-gradient(90deg, #6366f1, #ec4899, #facc15);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+/* =========================================================
+   🌫️ SMOOTH TRANSITION UTILITIES
+   ========================================================= */
+.smooth-transition {
+  @apply transition-all duration-500 ease-in-out;
+}
+
+/* =========================================================
+   💎 EXTRAS — PREMIUM EFFECTS
+   ========================================================= */
+
+/* Glowing subtle border animation (for cards/buttons) */
+@keyframes glow-border {
+  0% {
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(236, 72, 153, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+  }
+}
+.animate-glow-border {
+  animation: glow-border 6s ease-in-out infinite;
+}
+
+/* Smooth scrolling for navigation */
+html {
+  scroll-behavior: smooth;
+}
+
+/* -------------------- Floating Bubbles -------------------- */
+.bubble {
+  @apply absolute rounded-full mix-blend-screen opacity-30 filter blur-sm;
+  animation-name: floatBubble;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  will-change: transform, opacity;
+}
+
+/* Floating up-down with slight horizontal drift */
+@keyframes floatBubble {
+  0% { transform: translate(0,0) scale(1); opacity: 0.2; }
+  50% { transform: translate(15px,-30px) scale(1.05); opacity: 0.35; }
+  100% { transform: translate(0,0) scale(1); opacity: 0.2; }
+}
+
+/* Floating motion for cards */
+@keyframes floatCard {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float-card {
+  animation: floatCard 6s ease-in-out infinite;
+}
+
+/* Animated grid background */
+@keyframes gridMove {
+  0% { background-position: 0 0; }
+  100% { background-position: 60px 60px; }
+}
+.animate-grid {
+  animation: gridMove 30s linear infinite;
+}
+
+/* -------------------- END OF EXTRAS -------------------- */
