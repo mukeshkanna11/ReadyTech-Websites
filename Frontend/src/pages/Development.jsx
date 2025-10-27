@@ -1,96 +1,89 @@
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import {Helmet} from  "react-helmet-async"; 
+import { Helmet } from "react-helmet-async";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
+import DevImg1 from "../assets/images/bg5-hero.jpg"; // background 1
+import DevImg2 from "../assets/images/bg6-hero.jpg"; // background 2
+
 export default function Development() {
   const navigate = useNavigate();
 
-   return (
-    <div className="relative min-h-screen text-white font-poppins">
+  useEffect(() => {
+    AOS.init({ duration: 1000, once: true });
+  }, []);
 
+  return (
+    <div className="relative min-h-screen overflow-hidden text-white font-poppins">
       <Helmet>
         <title>Development | Ready Tech Solutions</title>
         <meta
           name="description"
           content="Ready Tech Solutions provides expert development services to help businesses grow and succeed in the digital world."
         />
-        <meta
-          name="keywords"
-          content="Ready Tech, Development, IT Solutions, Training, Coimbatore, Bangalore"
-        />
       </Helmet>
 
-      {/* ---------- Background Image ---------- */}
-      <div
-        className="absolute inset-0 bg-center bg-cover -z-20 "
-        style={{ backgroundImage: "url(/images/bg5-hero.jpg)" }}
-      />
+      {/* ===== Floating Background (dual-layer like About page) ===== */}
+      <div className="absolute inset-0 overflow-hidden -z-10">
+        <div
+          className="absolute inset-0 bg-center bg-cover opacity-70 animate-bgShift"
+          style={{
+            backgroundImage: `url(${DevImg1})`,
+            backgroundAttachment: "fixed",
+          }}
+        />
+        <div
+          className="absolute inset-0 bg-center bg-cover mix-blend-overlay "
+          style={{
+            backgroundImage: `url(${DevImg2})`,
+            backgroundAttachment: "fixed",
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black/90"></div>
+      </div>
 
-      {/* ---------- Optional Gradient Overlay for readability ---------- */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-indigo-900/70 via-gray-800/60 to-gray-900/70" />
+      {/* ===== Banner Section ===== */}
+      <section className="relative flex items-center justify-center h-[500px] overflow-hidden">
+        <div className="relative z-10 px-6 text-center" data-aos="zoom-in">
+          <h1 className="text-4xl font-extrabold md:text-5xl drop-shadow-lg">
+            Empowering Development with{" "}
+            <span className="text-cyan-400">Ready Tech Solutions</span>
+          </h1>
+          <p
+            className="max-w-3xl mx-auto mt-4 text-lg text-gray-200/90 md:text-xl"
+            data-aos="fade-up"
+            data-aos-delay="200"
+          >
+            Software & hardware innovations crafted to optimize operations and
+            accelerate growth.
+          </p>
+        </div>
+      </section>
 
-      {/* Banner */}
-<section className="relative flex items-center justify-center h-[500px] overflow-hidden">
-  {/* Smooth Horizontal Lines Background */}
-  <motion.div
-    className="absolute inset-0"
-    style={{
-      backgroundImage: `
-        repeating-linear-gradient(
-          to right,
-          rgba(255, 255, 255, 0.1) 0px,
-          rgba(255, 255, 255, 0.1) 1px,
-          transparent 1px,
-          transparent 20px
-        ),
-        repeating-linear-gradient(
-          to bottom,
-          rgba(255, 255, 255, 0.05) 0px,
-          rgba(255, 255, 255, 0.05) 1px,
-          transparent 1px,
-          transparent 20px
-        )
-      `,
-      backgroundSize: "200% 200%",
-      filter: "blur(0.5px)",
-    }}
-    animate={{ backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"] }}
-    transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-  />
-
-  {/* Optional Overlay */}
-  <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/80 via-gray-800/60 to-gray-900/80 -z-10" />
-
-  {/* Banner Content */}
-  <div className="relative z-10 px-6 text-center">
-    <h1 className="text-4xl font-extrabold md:text-5xl drop-shadow-lg">
-      Empowering Development with{" "}
-      <span className="text-indigo-400">Ready Tech Solutions</span>
-    </h1>
-    <p className="max-w-3xl mx-auto mt-4 text-lg text-gray-300 md:text-xl">
-      Software & hardware innovations crafted to optimize operations and accelerate growth.
-    </p>
-  </div>
-</section>
-
-
-
-      {/* Intro Section */}
-      <section className="max-w-6xl px-6 py-16 mx-auto text-center">
-        <h2 className="text-3xl font-bold text-white">What We Do</h2>
-        <p className="max-w-3xl mx-auto mt-4 leading-relaxed text-grey-300 md:text-lg">
+      {/* ===== Intro Section ===== */}
+      <section className="relative z-10 max-w-6xl px-6 py-16 mx-auto mb-12 text-center">
+        <h2 className="text-3xl font-bold text-white" data-aos="fade-up">
+          What We Do
+        </h2>
+        <p
+          className="max-w-3xl mx-auto mt-4 leading-relaxed text-gray-300 md:text-lg"
+          data-aos="fade-up"
+          data-aos-delay="150"
+        >
           Ready Tech Solutions develops, creates, and modifies applications to
           meet the demands of today’s businesses. From mobile apps to enterprise
-          systems, we follow best practices and deliver scalable, reliable
-          solutions.
+          systems, we deliver scalable, reliable, and futuristic solutions.
         </p>
       </section>
 
-      {/* Core Areas */}
-      <section className="max-w-6xl px-6 py-16 mx-auto">
-        <h2 className="text-3xl font-bold text-center text-white">
+      {/* ===== Core Areas ===== */}
+      <section className="relative z-10 max-w-6xl px-6 py-20 mx-auto border-t border-gray-800 bg-black/30 backdrop-blur-sm">
+        <h2 className="mb-12 text-3xl font-bold text-center text-white" data-aos="fade-up">
           Our Core Areas
         </h2>
-        <div className="grid gap-8 mt-10 md:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-3">
           <GlowCard
             image="https://cdn-icons-png.flaticon.com/512/4727/4727424.png"
             title="Mobile Development"
@@ -102,27 +95,27 @@ export default function Development() {
             description="Full-stack web apps with responsive UI and scalable backends."
           />
           <GlowCard
-           image="https://cdn-icons-png.flaticon.com/512/2906/2906274.png"
+            image="https://cdn-icons-png.flaticon.com/512/2906/2906274.png"
             title="Custom Projects"
             description="Enterprise systems, IoT apps, and next-gen technology solutions."
           />
         </div>
       </section>
 
-      {/* Detailed Services */}
-      <section className="max-w-6xl px-6 py-16 mx-auto">
-        <h2 className="text-3xl font-bold text-center text-white">
+      {/* ===== Services ===== */}
+      <section className="relative z-10 max-w-6xl px-6 py-20 mx-auto">
+        <h2 className="mb-12 text-3xl font-bold text-center text-white" data-aos="fade-up">
           Development Services
         </h2>
-        <div className="grid gap-8 mt-10 md:grid-cols-2">
+        <div className="grid gap-8 md:grid-cols-2">
           <ServiceCard
-           image="https://cdn-icons-png.flaticon.com/512/732/732212.png"
+            image="https://cdn-icons-png.flaticon.com/512/732/732212.png"
             title="Web Development"
             description="Scalable web applications with modern frameworks & API integration."
             onClick={() => navigate("/services/web-development")}
           />
           <ServiceCard
-           image="https://cdn-icons-png.flaticon.com/512/919/919830.png"
+            image="https://cdn-icons-png.flaticon.com/512/919/919830.png"
             title="PHP Development"
             description="Dynamic PHP-based apps, optimized for speed & functionality."
             onClick={() => navigate("/services/php-development")}
@@ -134,7 +127,7 @@ export default function Development() {
             onClick={() => navigate("/services/cms-development")}
           />
           <ServiceCard
-           image="https://cdn-icons-png.flaticon.com/512/2972/2972185.png"
+            image="https://cdn-icons-png.flaticon.com/512/2972/2972185.png"
             title="Ecommerce Development"
             description="Feature-rich eCommerce solutions with secure payment gateways."
             onClick={() => navigate("/services/ecommerce-development")}
@@ -153,29 +146,53 @@ export default function Development() {
           />
         </div>
       </section>
+
+      {/* ===== Animations ===== */}
+      <style>
+        {`
+        @keyframes bgShift {
+          0% { transform: scale(1) translateY(0px); opacity: 0.65; }
+          50% { transform: scale(1.05) translateY(-15px); opacity: 0.75; }
+          100% { transform: scale(1) translateY(0px); opacity: 0.65; }
+        }
+        @keyframes bgShiftReverse {
+          0% { transform: scale(1) translateY(0px); opacity: 0.55; }
+          50% { transform: scale(1.07) translateY(15px); opacity: 0.65; }
+          100% { transform: scale(1) translateY(0px); opacity: 0.55; }
+        }
+        .animate-bgShift { animation: bgShift 20s ease-in-out infinite; }
+        .animate-bgShiftReverse { animation: bgShiftReverse 22s ease-in-out infinite; }
+
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
+        }
+        .animate-float { animation: float 4s ease-in-out infinite; }
+        `}
+      </style>
     </div>
   );
 }
 
-// Glowing Core Area Cards
+/* ====== Reusable Cards ====== */
 function GlowCard({ image, title, description }) {
   return (
     <motion.div
-      className="relative p-6 text-center bg-gray-900 border border-gray-800 shadow-xl rounded-xl"
+      className="relative p-6 text-center transition-all duration-300 border shadow-lg bg-gradient-to-br from-gray-800 via-gray-900 to-black border-cyan-500/20 rounded-xl hover:shadow-cyan-500/40 hover:-translate-y-1"
       whileHover={{ scale: 1.05 }}
+      data-aos="zoom-in"
     >
-      {/* Soft glowing background */}
       <motion.div
-        className="absolute inset-0 rounded-xl bg-gradient-to-r from-indigo-500/20 via-purple-500/20 to-pink-500/20 blur-2xl"
+        className="absolute inset-0 rounded-xl bg-gradient-to-r from-cyan-400/10 via-blue-400/10 to-purple-500/10 blur-2xl"
         animate={{ opacity: [0.2, 0.5, 0.2] }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
       />
       <img
         src={image}
         alt={title}
-        className="relative z-10 object-contain w-20 h-20 mx-auto"
+        className="relative z-10 object-contain w-20 h-20 mx-auto animate-float"
       />
-      <h3 className="relative z-10 mt-4 text-lg font-semibold text-indigo-300">
+      <h3 className="relative z-10 mt-4 text-lg font-semibold text-cyan-300">
         {title}
       </h3>
       <p className="relative z-10 mt-2 text-sm text-gray-400">{description}</p>
@@ -183,21 +200,24 @@ function GlowCard({ image, title, description }) {
   );
 }
 
-// Service Card with Glow Button
 function ServiceCard({ image, title, description, onClick }) {
   return (
     <motion.div
-      className="flex flex-col items-center gap-6 p-6 bg-gray-900 border border-gray-800 shadow-xl rounded-xl md:flex-row"
+      className="flex flex-col items-center gap-6 p-6 transition-all duration-300 border shadow-lg bg-gradient-to-br from-gray-800 via-gray-900 to-black border-cyan-500/20 rounded-xl hover:shadow-cyan-500/40 md:flex-row"
       whileHover={{ scale: 1.03 }}
+      data-aos="fade-up"
     >
-      <img src={image} alt={title} className="object-contain w-20 h-20" />
+      <img src={image} alt={title} className="object-contain w-20 h-20 animate-float" />
       <div>
-        <h4 className="text-xl font-semibold text-indigo-300">{title}</h4>
+        <h4 className="text-xl font-semibold text-cyan-300">{title}</h4>
         <p className="mt-2 text-sm text-gray-400">{description}</p>
         <motion.button
           onClick={onClick}
-          whileHover={{ scale: 1.1, boxShadow: "0px 0px 15px rgba(129,140,248,0.6)" }}
-          className="px-4 py-2 mt-4 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-500"
+          whileHover={{
+            scale: 1.1,
+            boxShadow: "0px 0px 15px rgba(34,211,238,0.6)",
+          }}
+          className="px-4 py-2 mt-4 text-sm font-medium text-white rounded-md bg-cyan-600 hover:bg-cyan-500"
         >
           Learn More →
         </motion.button>

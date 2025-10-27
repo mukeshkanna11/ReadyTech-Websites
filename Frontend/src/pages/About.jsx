@@ -12,7 +12,7 @@ import {
 } from "react-icons/fa";
 import { Helmet } from "react-helmet-async";
 import InnovationImg from "../assets/images/C1.jpg";
-import AIImg from "../assets/images/C2.jpg";
+import AIImg from "../assets/images/unnamed.webp";
 
 export default function AboutReadyTech() {
   useEffect(() => {
