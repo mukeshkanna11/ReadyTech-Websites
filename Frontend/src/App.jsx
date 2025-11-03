@@ -2,13 +2,13 @@
 import React from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 
-// Components
+// 🧩 Components
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import Newsletter from "./components/Newsletter";
 
-// Pages
+// 🏠 Pages
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Services from "./pages/Services";
@@ -19,12 +19,12 @@ import Register from "./pages/Register";
 import PaymentSection from "./pages/PaymentSection";
 import Login from "./pages/Login";
 
-// Dashboards
+// 📊 Dashboards
 import Dashboard from "./pages/Dashboard";
 import EmployeeDashboard from "./pages/EmployeeDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 
-// Service Detail Pages
+// 🧠 Service Detail Pages
 import WebsiteMaintenance from "./pages/WebsiteMaintenance";
 import DigitalMarketing from "./pages/DigitalMarketing";
 import GraphicDesign from "./pages/GraphicDesign";
@@ -34,7 +34,7 @@ import Hosting from "./pages/Hosting";
 import Bpo from "./pages/Bpo";
 import IoTSolutions from "./pages/IoTSolutions";
 
-// Development Service Pages
+// 💻 Development Services
 import Nodejs from "./pages/services/Nodejs";
 import Reactjs from "./pages/services/Reactjs";
 import CMSDevelopment from "./pages/services/CMSDevelopment";
@@ -43,17 +43,17 @@ import EcommerceDevelopment from "./pages/services/EcommerceDevelopment";
 import WebDevelopment from "./pages/services/WebDevelopment";
 import Angular from "./pages/services/Angular";
 
-/* -------------------- Private Route -------------------- */
+/* -------------------- 🔐 Private Route -------------------- */
 const PrivateRoute = ({ children, allowedRole }) => {
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
 
-  // 🚫 No user or no token — redirect to login
+  // ⛔ No login — redirect to login page
   if (!token || !user) {
     return <Navigate to="/login" replace />;
   }
 
-  // 🚫 Role not allowed
+  // ⛔ Role not authorized
   if (allowedRole && user.role !== allowedRole) {
     return <Navigate to="/dashboard" replace />;
   }
@@ -61,13 +61,12 @@ const PrivateRoute = ({ children, allowedRole }) => {
   return children;
 };
 
-/* -------------------- Main App -------------------- */
+/* -------------------- 🌐 Main App -------------------- */
 export default function App() {
   const location = useLocation();
-  const token = localStorage.getItem("token");
-  const user = JSON.parse(localStorage.getItem("user"));
 
-  // Hide Navbar/Footer for specific routes
+  // 🧾 Hide Navbar/Footer on specific routes
+  const hideNavbarRoutes = ["/register", "/payment", "/login"];
   const hideFooterRoutes = [
     "/dashboard",
     "/register",
@@ -77,10 +76,13 @@ export default function App() {
     "/login",
     "/newsletter",
   ];
-  const hideNavbarRoutes = ["/register", "/payment", "/login"];
 
-  const hideFooter = hideFooterRoutes.includes(location.pathname);
   const hideNavbar = hideNavbarRoutes.includes(location.pathname);
+  const hideFooter = hideFooterRoutes.includes(location.pathname);
+
+  // ✅ Token & User from storage
+  const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user"));
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -89,15 +91,15 @@ export default function App() {
 
       <main className={`flex-1 ${!hideNavbar ? "pt-20" : "pt-0"}`}>
         <Routes>
-          {/* 🌐 Public Pages */}
+          {/* 🌍 Public Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/services" element={<Services />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/development" element={<Development />} />
           <Route path="/demo" element={<Demo />} />
-          <Route path="/payment" element={<PaymentSection />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/payment" element={<PaymentSection />} />
           <Route path="/login" element={<Login />} />
           <Route path="/newsletter" element={<Newsletter />} />
 
@@ -137,7 +139,7 @@ export default function App() {
             }
           />
 
-          {/* 🧩 Service Detail Pages */}
+          {/* 🧩 Service Details */}
           <Route path="/services/website-maintenance" element={<WebsiteMaintenance />} />
           <Route path="/services/digital-marketing" element={<DigitalMarketing />} />
           <Route path="/services/graphic-design" element={<GraphicDesign />} />
@@ -161,7 +163,7 @@ export default function App() {
         </Routes>
       </main>
 
-      {/* 📨 Newsletter & Footer (only if visible) */}
+      {/* 📩 Newsletter + Footer */}
       {!hideFooter && <Newsletter />}
       {!hideFooter && <Footer />}
     </div>

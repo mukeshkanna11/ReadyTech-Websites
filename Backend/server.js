@@ -1,5 +1,5 @@
 // ========================================================
-// ReadyTech Backend Server 🚀 (Render-Optimized)
+// ReadyTech Backend Server 🚀 (Full Version with Work Routes)
 // ========================================================
 
 import express from "express";
@@ -11,7 +11,9 @@ import dotenv from "dotenv";
 import authRoutes from "./routes/auth.js";
 import protectedRoutes from "./routes/protected.js";
 import subscribeRoutes from "./routes/subscribe.js";
-import contactRoutes from "./routes/contact.js"; // already done
+import contactRoutes from "./routes/contact.js";
+import workRoutes from "./routes/workRoutes.js";
+
 
 // ---------------------- Config ----------------------
 dotenv.config();
@@ -42,14 +44,17 @@ app.use(
 
 // ---------------------- Health Check ----------------------
 app.get("/", (req, res) => {
-  res.status(200).send("✅ ReadyTech Backend is running and healthy on Render!");
+  res
+    .status(200)
+    .send("✅ ReadyTech Backend is running and healthy on Render!");
 });
 
-// ---------------------- Routes ----------------------
+// ---------------------- API Routes ----------------------
 app.use("/api/auth", authRoutes);
 app.use("/api/protected", protectedRoutes);
 app.use("/api/subscribe", subscribeRoutes);
 app.use("/api/contact", contactRoutes);
+app.use("/api/work", workRoutes); // ✅ Added Work Management route
 
 // ---------------------- MongoDB Connection ----------------------
 const connectDB = async () => {
