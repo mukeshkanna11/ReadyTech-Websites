@@ -14,15 +14,14 @@ const TaskSchema = new mongoose.Schema(
     employee: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true, // important: must be set!
+      required: true,
     },
     status: {
       type: String,
-      enum: ["pending", "in-progress", "completed"], // ✅ add 'pending'
-      default: "pending",
-    },
-    dueDate: {
-      type: Date,
+      enum: ["Pending", "In Progress", "Completed"], // Capital letters
+      default: "Pending",
+      set: (v) =>
+        v.charAt(0).toUpperCase() + v.slice(1).toLowerCase(), // Normalize values
     },
   },
   { timestamps: true }

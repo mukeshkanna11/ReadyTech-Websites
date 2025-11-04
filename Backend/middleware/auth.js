@@ -1,16 +1,12 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
-// ✅ Middleware to verify JWT token
+// ✅ Middleware to verify token
 export const protect = async (req, res, next) => {
   try {
     let token;
 
-    // Check for Bearer token in headers
-    if (
-      req.headers.authorization &&
-      req.headers.authorization.startsWith("Bearer")
-    ) {
+    if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
       token = req.headers.authorization.split(" ")[1];
     }
 
@@ -18,8 +14,10 @@ export const protect = async (req, res, next) => {
       return res.status(401).json({ msg: "No token, authorization denied" });
     }
 
-    // Verify token
+    // ✅ Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    // ✅ Find user from decoded id
     req.user = await User.findById(decoded.id).select("-password");
 
     if (!req.user) {
@@ -28,12 +26,12 @@ export const protect = async (req, res, next) => {
 
     next();
   } catch (err) {
-    console.error("AUTH ERROR:", err.message);
+    console.error("AUTH ERROR:", err);
     res.status(401).json({ msg: "Token is not valid" });
   }
 };
 
-// ✅ Middleware to allow only admin users
+// ✅ Middleware for admin only access
 export const adminOnly = (req, res, next) => {
   if (req.user && req.user.role === "admin") {
     next();
