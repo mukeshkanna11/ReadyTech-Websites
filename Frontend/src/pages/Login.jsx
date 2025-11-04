@@ -5,8 +5,8 @@ import { motion } from "framer-motion";
 import { FaUserShield, FaUserTie } from "react-icons/fa";
 
 // 🖼 Role-based Backgrounds
-import AdminBg from "../assets/images/landing.jpg"; // upload a premium office / control room style image
-import EmployeeBg from "../assets/images/p3.png"; // upload a teamwork / workspace image
+import AdminBg from "../assets/images/landing.jpg"; // premium office / control room
+import EmployeeBg from "../assets/images/p3.png"; // teamwork / workspace
 
 export default function Login() {
   const navigate = useNavigate();
@@ -26,6 +26,11 @@ export default function Login() {
     }
   }, [navigate]);
 
+  // 🌐 Backend base URL (auto switch for dev/prod)
+  const API_BASE =
+    import.meta.env.VITE_API_URL ||
+    "https://readytech-websites.onrender.com"; // fallback to Render backend
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
@@ -36,29 +41,43 @@ export default function Login() {
     }
 
     try {
-      const response = await fetch(
-        "https://readytech-websites.onrender.com/api/auth/login",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password, employeeId }),
+      const response = await fetch(`${API_BASE}/api/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password, employeeId }),
+        credentials: "include", // ✅ enables cookies / tokens via CORS
+        mode: "cors", // ✅ explicitly enable CORS mode
+      });
+
+      // Check if backend unreachable (CORS/network)
+      if (!response.ok) {
+        if (response.status === 0) {
+          throw new Error(
+            "Network or CORS error: Unable to connect to backend. Please check server CORS setup."
+          );
         }
-      );
+        const data = await response.json();
+        throw new Error(data.msg || "Login failed. Please try again.");
+      }
 
       const data = await response.json();
-      if (!response.ok) throw new Error(data.msg || "Login failed");
+      const userRole = data.user?.role?.toLowerCase();
 
-      const userRole = data.user.role?.toLowerCase();
       if (userRole !== "admin" && userRole !== "employee") {
         setError("Invalid role assigned.");
         return;
       }
 
+      // Save token + user info
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
+      // Redirect by role
       navigate(userRole === "admin" ? "/admin-dashboard" : "/employee-dashboard");
     } catch (err) {
+      console.error("Login error:", err);
       setError(err.message);
     }
   };
@@ -68,7 +87,6 @@ export default function Login() {
   // 🎨 Dynamic Theme by Role
   const isAdmin = role === "admin";
   const bgImage = isAdmin ? AdminBg : EmployeeBg;
-  const accentColor = isAdmin ? "yellow" : "blue";
   const accentClasses = isAdmin
     ? "bg-yellow-400 text-black hover:bg-yellow-500"
     : "bg-blue-400 text-black hover:bg-blue-500";
