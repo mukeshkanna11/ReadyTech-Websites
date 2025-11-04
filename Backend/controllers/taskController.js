@@ -1,7 +1,9 @@
 import Task from "../models/Task.js";
 import User from "../models/User.js";
 
-// ✅ Admin: Add a new task for an employee
+/**
+ * 🧩 Admin: Add a new task for an employee
+ */
 export const addTask = async (req, res) => {
   try {
     const { title, description, employee } = req.body;
@@ -10,78 +12,126 @@ export const addTask = async (req, res) => {
       return res.status(400).json({ msg: "Title and Employee ID are required" });
     }
 
-    // ✅ Check if the employee exists
+    // 🔍 Check if employee exists
     const assignedEmployee = await User.findById(employee);
     if (!assignedEmployee) {
       return res.status(404).json({ msg: "Employee not found" });
     }
 
-    // ✅ Create new task
+    // 🆕 Create task
     const task = await Task.create({
-      title,
-      description,
+      title: title.trim(),
+      description: description?.trim(),
       employee,
-      status: "pending", // 👈 must match schema enum (lowercase)
+      status: "Pending", // ✅ Matches schema enum
     });
 
-    res.status(201).json({ msg: "Task created successfully", task });
+    res.status(201).json({
+      msg: "Task created successfully",
+      task,
+    });
   } catch (err) {
     console.error("ADD TASK ERROR:", err);
-    res.status(500).json({ msg: "Internal Server Error", error: err.message });
+    res.status(500).json({
+      msg: "Internal Server Error",
+      error: err.message,
+    });
   }
 };
 
-// ✅ Employee: Get their own tasks
+/**
+ * 👤 Employee: Get their assigned tasks
+ */
 export const getMyTasks = async (req, res) => {
   try {
     const tasks = await Task.find({ employee: req.user.id })
-      .populate("employee", "name email employeeId");
-    res.status(200).json(tasks);
+      .populate("employee", "name email role");
+
+    res.status(200).json({
+      msg: "My tasks fetched successfully",
+      count: tasks.length,
+      tasks,
+    });
   } catch (err) {
     console.error("GET MY TASKS ERROR:", err);
-    res.status(500).json({ msg: "Internal Server Error", error: err.message });
+    res.status(500).json({
+      msg: "Internal Server Error",
+      error: err.message,
+    });
   }
 };
 
-// ✅ Admin: Get all tasks for dashboard
+/**
+ * 🧑‍💼 Admin: Get all tasks
+ */
 export const getAllTasks = async (req, res) => {
   try {
     const tasks = await Task.find()
-      .populate("employee", "name email employeeId role");
-    res.status(200).json(tasks);
+      .populate("employee", "name email role");
+
+    res.status(200).json({
+      msg: "All tasks fetched successfully",
+      count: tasks.length,
+      tasks,
+    });
   } catch (err) {
     console.error("GET ALL TASKS ERROR:", err);
-    res.status(500).json({ msg: "Internal Server Error", error: err.message });
+    res.status(500).json({
+      msg: "Internal Server Error",
+      error: err.message,
+    });
   }
 };
 
-// ✅ Update Task Status (Admin or Employee if allowed)
+/**
+ * 🔄 Update Task Status (Admin or Assigned Employee)
+ */
 export const updateTaskStatus = async (req, res) => {
   try {
+    const { id } = req.params;
     const { status } = req.body;
 
-    // 🔍 Validate input
+    // 🔍 Validate status input
     if (!status) {
       return res.status(400).json({ msg: "Status is required" });
     }
 
-    const task = await Task.findById(req.params.id);
+    const validStatuses = ["Pending", "In Progress", "Completed"];
+    const formattedStatus =
+      status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
+
+    if (!validStatuses.includes(formattedStatus)) {
+      return res.status(400).json({
+        msg: `Invalid status. Use one of: ${validStatuses.join(", ")}`,
+      });
+    }
+
+    const task = await Task.findById(id);
     if (!task) {
       return res.status(404).json({ msg: "Task not found" });
     }
 
-    // ✅ Optional: restrict employees to update only their own tasks
-    if (req.user.role === "employee" && task.employee.toString() !== req.user.id) {
+    // 🔐 Authorization: Admins or Task Owner
+    if (
+      req.user.role !== "admin" &&
+      task.employee.toString() !== req.user.id
+    ) {
       return res.status(403).json({ msg: "Not authorized to update this task" });
     }
 
-    // ✅ Update status
-    task.status = status.toLowerCase();
+    // ✅ Update
+    task.status = formattedStatus;
     await task.save();
 
-    res.status(200).json({ msg: "Task status updated successfully", task });
+    res.status(200).json({
+      msg: "Task status updated successfully",
+      task,
+    });
   } catch (err) {
     console.error("UPDATE TASK ERROR:", err);
-    res.status(500).json({ msg: "Internal Server Error", error: err.message });
+    res.status(500).json({
+      msg: "Internal Server Error",
+      error: err.message,
+    });
   }
 };

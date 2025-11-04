@@ -1,13 +1,13 @@
 // ========================================================
-// ReadyTech Backend Server 🚀 (Full Version with Work Routes)
+// 🚀 ReadyTech Backend Server — Production Version
 // ========================================================
 
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
-import errorHandler from "./middleware/errorHandler.js";
-// ---------------------- Routes ----------------------
+
+// ---------------------- Import Routes ----------------------
 import authRoutes from "./routes/auth.js";
 import protectedRoutes from "./routes/protected.js";
 import subscribeRoutes from "./routes/subscribe.js";
@@ -16,27 +16,29 @@ import employeeRoutes from "./routes/employees.js";
 import taskRoutes from "./routes/tasks.js";
 import attendanceRoutes from "./routes/attendance.js";
 
-
-
 // ---------------------- Config ----------------------
 dotenv.config();
 const app = express();
 
-// ---------------------- Middleware ----------------------
+// ========================================================
+// 🧩 MIDDLEWARE SETUP
+// ========================================================
+
+// ✅ Parse JSON
 app.use(express.json());
 
-// ---------------------- CORS Setup ----------------------
+// ✅ CORS (Allow specific frontends)
 const allowedOrigins = [
-  "http://localhost:5173", // Vite dev
+  "http://localhost:5173", // Local dev (Vite)
   "http://localhost:5174",
   "https://readytech-site.netlify.app", // Production frontend
-  process.env.FRONTEND_URL, // Optional extra for Render env vars
+  process.env.FRONTEND_URL, // Optional (Render env)
 ];
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin) return callback(null, true); // Allow Postman / Render health checks
+      if (!origin) return callback(null, true); // Allow Postman / internal
       if (allowedOrigins.includes(origin)) return callback(null, true);
       console.warn(`🚫 CORS blocked request from: ${origin}`);
       return callback(new Error("Not allowed by CORS"));
@@ -45,50 +47,56 @@ app.use(
   })
 );
 
-// ---------------------- Health Check ----------------------
+// ========================================================
+// 🩺 HEALTH CHECK
+// ========================================================
 app.get("/", (req, res) => {
-  res
-    .status(200)
-    .send("✅ ReadyTech Backend is running and healthy on Render!");
+  res.status(200).send("✅ ReadyTech Backend is running successfully on Render!");
 });
 
-// ---------------------- API Routes ----------------------
+// ========================================================
+// 📦 API ROUTES
+// ========================================================
 app.use("/api/auth", authRoutes);
 app.use("/api/protected", protectedRoutes);
 app.use("/api/subscribe", subscribeRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/employees", employeeRoutes);
 app.use("/api/tasks", taskRoutes);
-app.use("/api/attendance", attendanceRoutes); // ✅ Added Work Management route
+app.use("/api/attendance", attendanceRoutes);
 
-// ---------------------- MongoDB Connection ----------------------
+// ========================================================
+// 💾 DATABASE CONNECTION (MongoDB)
+// ========================================================
 const connectDB = async () => {
   console.log("⏳ Connecting to MongoDB...");
-
   try {
     const conn = await mongoose.connect(process.env.MONGO_URI, {
-      serverSelectionTimeoutMS: 60000, // 60s timeout
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 60000,
     });
     console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
   } catch (err) {
-    console.error("❌ MongoDB connection error:", err.message);
+    console.error("❌ MongoDB Connection Error:", err.message);
     console.error(`
 ================= MONGO CONNECTION FAILED =================
 💡 Tips:
 1️⃣ Check MONGO_URI in Render Environment Variables
-2️⃣ Password must be URL-encoded if it includes @ or /
-3️⃣ MongoDB Atlas → Network Access → allow 0.0.0.0/0
+2️⃣ Encode special chars in password (@ → %40, / → %2F)
+3️⃣ In MongoDB Atlas → Network Access → allow 0.0.0.0/0
 ===========================================================
     `);
     process.exit(1);
   }
 };
-
 connectDB();
 
-// ---------------------- Global Error Handler ----------------------
+// ========================================================
+// ⚙️ GLOBAL ERROR HANDLER
+// ========================================================
 app.use((err, req, res, next) => {
-  console.error("💥 GLOBAL ERROR HANDLER:", err.stack || err);
+  console.error("💥 GLOBAL ERROR:", err.stack || err);
   res.status(500).json({
     msg: "Internal Server Error",
     error: err.message,
@@ -96,12 +104,13 @@ app.use((err, req, res, next) => {
   });
 });
 
-// ---------------------- Server Listener ----------------------
+// ========================================================
+// 🚀 SERVER LISTENER
+// ========================================================
 const PORT = process.env.PORT || 5000;
 
-// For Render health check compatibility
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`🚀 Server running at: http://localhost:${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
 
 export default app;

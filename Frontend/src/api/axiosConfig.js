@@ -1,16 +1,15 @@
+// src/api/axiosConfig.js
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api", // ✅ Your backend base URL
+  baseURL: "https://readytech-websites.onrender.com/api", // ✅ your backend base URL
 });
 
-// ✅ Add token automatically to headers
-API.interceptors.request.use((config) => {
+// Automatically attach token from localStorage if available
+API.interceptors.request.use((req) => {
   const token = localStorage.getItem("token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
+  if (token) req.headers.Authorization = `Bearer ${token}`;
+  return req;
 });
 
 export default API;
