@@ -1,19 +1,28 @@
-// models/Task.js
 import mongoose from "mongoose";
 
 const TaskSchema = new mongoose.Schema(
   {
-    title: { type: String, required: true },
-    description: { type: String },
-    status: {
+    title: {
       type: String,
-      enum: ["Pending", "In Progress", "Completed"],
-      default: "Pending",
+      required: true,
+      trim: true,
+    },
+    description: {
+      type: String,
+      trim: true,
     },
     employee: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Employee",
-      required: true,
+      ref: "User",
+      required: true, // important: must be set!
+    },
+    status: {
+      type: String,
+      enum: ["pending", "in-progress", "completed"], // ✅ add 'pending'
+      default: "pending",
+    },
+    dueDate: {
+      type: Date,
     },
   },
   { timestamps: true }
