@@ -6,13 +6,16 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
-
+import errorHandler from "./middleware/errorHandler.js";
 // ---------------------- Routes ----------------------
 import authRoutes from "./routes/auth.js";
 import protectedRoutes from "./routes/protected.js";
 import subscribeRoutes from "./routes/subscribe.js";
 import contactRoutes from "./routes/contact.js";
-import workRoutes from "./routes/workRoutes.js";
+import employeeRoutes from "./routes/employees.js";
+import taskRoutes from "./routes/tasks.js";
+import attendanceRoutes from "./routes/attendance.js";
+
 
 
 // ---------------------- Config ----------------------
@@ -54,7 +57,9 @@ app.use("/api/auth", authRoutes);
 app.use("/api/protected", protectedRoutes);
 app.use("/api/subscribe", subscribeRoutes);
 app.use("/api/contact", contactRoutes);
-app.use("/api/work", workRoutes); // ✅ Added Work Management route
+app.use("/api/employees", employeeRoutes);
+app.use("/api/tasks", taskRoutes);
+app.use("/api/attendance", attendanceRoutes); // ✅ Added Work Management route
 
 // ---------------------- MongoDB Connection ----------------------
 const connectDB = async () => {
