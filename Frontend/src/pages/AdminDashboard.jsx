@@ -10,21 +10,13 @@ import {
   Legend,
 } from "recharts";
 
-/**
- * AdminDashboard.jsx
- * Fully-upgraded admin dashboard component.
- *
- * Notes:
- * - Expects backend endpoints:
- *   GET  ${API_BASE}/all           -> { works: [...] }
- *   POST ${API_BASE}/add           -> create work
- *   PATCH ${API_BASE}/update/:id   -> { success: true, work: {...} }
- *
- * - Use env var REACT_APP_API_BASE to avoid hardcoding.
- */
+// ============================================
+// 🧩 Admin Dashboard — ReadyTech Solutions
+// ============================================
 
-// Constants
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api/work";
+// Backend base URL
+const API_BASE =
+  import.meta.env.VITE_API_BASE_URL || "https://readytech-backend.onrender.com";
 
 const PAGE_SIZE_OPTIONS = [5, 10, 20];
 const STATUS_COLORS = {
@@ -33,7 +25,7 @@ const STATUS_COLORS = {
   Completed: { bg: "bg-green-100", text: "text-green-600" },
 };
 
-// Small utility: export CSV
+// CSV Export Utility
 const exportToCSV = (rows, filename = "work-export.csv") => {
   if (!rows || rows.length === 0) {
     toast.error("No data to export");
@@ -44,11 +36,7 @@ const exportToCSV = (rows, filename = "work-export.csv") => {
     headers.join(","),
     ...rows.map((r) =>
       headers
-        .map((h) => {
-          const val = r[h] ?? "";
-          // escape quotes
-          return `"${String(val).replace(/"/g, '""')}"`;
-        })
+        .map((h) => `"${String(r[h] ?? "").replace(/"/g, '""')}"`)
         .join(",")
     ),
   ].join("\n");
@@ -56,16 +44,13 @@ const exportToCSV = (rows, filename = "work-export.csv") => {
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
   const link = document.createElement("a");
   const url = URL.createObjectURL(blob);
-  link.setAttribute("href", url);
-  link.setAttribute("download", filename);
-  link.style.visibility = "hidden";
-  document.body.appendChild(link);
+  link.href = url;
+  link.download = filename;
   link.click();
-  document.body.removeChild(link);
   URL.revokeObjectURL(url);
 };
 
-// Simple modal component (self-contained)
+// Modal Component
 function Modal({ open, onClose, children, title }) {
   if (!open) return null;
   return (
@@ -88,7 +73,7 @@ function Modal({ open, onClose, children, title }) {
             Close
           </button>
         </div>
-        <div>{children}</div>
+        {children}
       </div>
     </div>
   );
@@ -97,37 +82,16 @@ function Modal({ open, onClose, children, title }) {
 export default function AdminDashboard() {
   const navigate = useNavigate();
 
-  // Auth guard: ensure admin only
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    const userRaw = localStorage.getItem("user");
-    let user = null;
-    try {
-      user = userRaw ? JSON.parse(userRaw) : null;
-    } catch (err) {
-      user = null;
-    }
-    if (!token || user?.role !== "admin") {
-      toast.error("Unauthorized — please login as admin");
-      setTimeout(() => navigate("/login"), 900);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const [workList, setWorkList] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // UI state
   const [darkMode, setDarkMode] = useState(false);
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [openAddModal, setOpenAddModal] = useState(false);
-
-  // Pagination
   const [pageSize, setPageSize] = useState(10);
   const [page, setPage] = useState(1);
+  const [submitting, setSubmitting] = useState(false);
 
-  // Add form state
   const initialForm = {
     employeeId: "",
     taskTitle: "",
@@ -136,9 +100,29 @@ export default function AdminDashboard() {
     deadline: "",
   };
   const [form, setForm] = useState(initialForm);
-  const [submitting, setSubmitting] = useState(false);
 
-  // Fetch all works
+  // -----------------------------------
+  // 🧠 Auth Guard — Only Admin Allowed
+  // -----------------------------------
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const userRaw = localStorage.getItem("user");
+    let user = null;
+    try {
+      user = userRaw ? JSON.parse(userRaw) : null;
+    } catch {
+      user = null;
+    }
+
+    if (!token || user?.role !== "admin") {
+      toast.error("Unauthorized — please login as admin");
+      setTimeout(() => navigate("/login"), 900);
+    }
+  }, [navigate]);
+
+  // -----------------------------------
+  // 📡 Fetch All Work Data
+  // -----------------------------------
   const fetchAllWorks = async () => {
     try {
       setLoading(true);
@@ -146,14 +130,14 @@ export default function AdminDashboard() {
         headers: { "Content-Type": "application/json" },
       });
       if (!res.ok) {
-        const text = await res.text();
-        throw new Error(text || `HTTP ${res.status}`);
+        throw new Error(`Backend error: ${res.status}`);
       }
       const data = await res.json();
       setWorkList(Array.isArray(data.works) ? data.works : []);
     } catch (err) {
       console.error("fetchAllWorks error:", err);
-      toast.error("Failed to fetch works");
+      toast.error("❌ Unable to connect to backend. Check if server is running.");
+      setWorkList([]);
     } finally {
       setLoading(false);
     }
@@ -161,20 +145,22 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     fetchAllWorks();
-    // load dark mode preference
     const pref = localStorage.getItem("rt_dark") === "1";
     setDarkMode(pref);
   }, []);
 
-  // Apply dark mode class to <html>
+  // -----------------------------------
+  // 🌗 Dark Mode Handler
+  // -----------------------------------
   useEffect(() => {
-    const root = window.document.documentElement;
-    if (darkMode) root.classList.add("dark");
-    else root.classList.remove("dark");
+    const root = document.documentElement;
+    root.classList.toggle("dark", darkMode);
     localStorage.setItem("rt_dark", darkMode ? "1" : "0");
   }, [darkMode]);
 
-  // Derived data: filtered/sorted list
+  // -----------------------------------
+  // 🔍 Filtered & Paginated Data
+  // -----------------------------------
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     let data = [...workList];
@@ -185,32 +171,25 @@ export default function AdminDashboard() {
     if (q) {
       data = data.filter(
         (w) =>
-          String(w.employeeId || "").toLowerCase().includes(q) ||
-          String(w.taskTitle || "").toLowerCase().includes(q) ||
-          String(w.description || "").toLowerCase().includes(q)
+          w.employeeId?.toLowerCase().includes(q) ||
+          w.taskTitle?.toLowerCase().includes(q) ||
+          w.description?.toLowerCase().includes(q)
       );
     }
-    // sort by createdAt (descending) if present else by title
-    data.sort((a, b) => {
-      if (a.createdAt && b.createdAt) {
-        return new Date(b.createdAt) - new Date(a.createdAt);
-      }
-      return (a.taskTitle || "").localeCompare(b.taskTitle || "");
-    });
+
+    data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     return data;
   }, [workList, query, statusFilter]);
 
   const pageCount = Math.max(1, Math.ceil(filtered.length / pageSize));
-  useEffect(() => {
-    if (page > pageCount) setPage(pageCount);
-  }, [pageCount, page]);
-
   const visible = useMemo(() => {
     const start = (page - 1) * pageSize;
     return filtered.slice(start, start + pageSize);
   }, [filtered, page, pageSize]);
 
-  // Counts for dashboard cards & chart
+  // -----------------------------------
+  // 📊 Dashboard Stats & Chart Data
+  // -----------------------------------
   const total = workList.length;
   const cPending = workList.filter((w) => w.status === "Pending").length;
   const cProgress = workList.filter((w) => w.status === "In Progress").length;
@@ -223,12 +202,13 @@ export default function AdminDashboard() {
   ];
   const chartColors = ["#f59e0b", "#3b82f6", "#16a34a"];
 
-  // Add work handler (modal form)
+  // -----------------------------------
+  // ➕ Add Work Handler
+  // -----------------------------------
   const handleAddWork = async (e) => {
-    e?.preventDefault();
-    // basic validation
+    e.preventDefault();
     if (!form.employeeId || !form.taskTitle || !form.deadline) {
-      toast.error("Please fill required fields");
+      toast.error("Please fill all required fields");
       return;
     }
     try {
@@ -240,12 +220,12 @@ export default function AdminDashboard() {
       });
       const data = await res.json();
       if (res.ok) {
-        toast.success("Work added");
+        toast.success("✅ Work added successfully");
         setForm(initialForm);
         setOpenAddModal(false);
-        await fetchAllWorks();
+        fetchAllWorks();
       } else {
-        toast.error(data?.message || "Failed to add work");
+        toast.error(data.message || "Failed to add work");
       }
     } catch (err) {
       console.error("addWork error:", err);
@@ -255,9 +235,10 @@ export default function AdminDashboard() {
     }
   };
 
-  // Update status inline
+  // -----------------------------------
+  // 🔄 Update Work Status
+  // -----------------------------------
   const handleUpdateStatus = async (workId, newStatus) => {
-    // Optimistic update
     const previous = [...workList];
     setWorkList((wl) =>
       wl.map((w) => (w._id === workId ? { ...w, status: newStatus } : w))
@@ -270,52 +251,46 @@ export default function AdminDashboard() {
         body: JSON.stringify({ status: newStatus }),
       });
       const data = await res.json();
-      if (!res.ok || !data?.success) {
-        throw new Error(data?.message || "Update failed");
-      }
-      toast.success("Status updated");
+      if (!res.ok || !data.success) throw new Error("Update failed");
+      toast.success("✅ Status updated");
     } catch (err) {
       console.error("handleUpdateStatus error:", err);
-      toast.error("Failed to update status — reverting");
+      toast.error("Failed to update status — reverted");
       setWorkList(previous);
     }
   };
 
-  // Logout
+  // -----------------------------------
+  // 🚪 Logout Handler
+  // -----------------------------------
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     toast.success("Logged out");
-    setTimeout(() => navigate("/dashboard"), 700);
+    setTimeout(() => navigate("/login"), 700);
   };
 
+  // -----------------------------------
+  // 🧱 Render UI
+  // -----------------------------------
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Toaster position="top-right" />
-
       {/* Header */}
       <header className="flex flex-col items-start justify-between p-6 text-white shadow-md bg-gradient-to-r from-indigo-600 to-indigo-500 md:flex-row md:items-center">
         <div>
           <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-          <p className="text-sm text-indigo-100">
-            ReadyTech Solutions — Work Management
-          </p>
+          <p className="text-sm text-indigo-100">ReadyTech Solutions — Work Management</p>
         </div>
 
         <div className="flex items-center gap-3 mt-4 md:mt-0">
-          <div className="flex items-center gap-2 p-2 rounded-md bg-white/10">
-            <button
-              onClick={() => setDarkMode(!darkMode)}
-              className="px-3 py-1 text-sm rounded-md hover:bg-white/20"
-            >
-              {darkMode ? "☀️ Light" : "🌙 Dark"}
-            </button>
-          </div>
-
-          <div className="hidden text-sm text-indigo-100 md:block">
-            Total Works: <b className="ml-2">{total}</b>
-          </div>
-
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            className="px-3 py-1 text-sm rounded-md bg-white/10 hover:bg-white/20"
+          >
+            {darkMode ? "☀️ Light" : "🌙 Dark"}
+          </button>
+          <span className="hidden text-sm md:block">Total Works: <b>{total}</b></span>
           <button
             onClick={handleLogout}
             className="px-4 py-2 text-sm font-medium bg-red-500 rounded hover:bg-red-600"
@@ -326,7 +301,7 @@ export default function AdminDashboard() {
       </header>
 
       <main className="max-w-6xl p-6 mx-auto">
-        {/* Top controls */}
+        {/* Search + Controls */}
         <section className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
           <div className="flex items-center w-full gap-3">
             <input
@@ -339,28 +314,25 @@ export default function AdminDashboard() {
               }}
               className="w-full p-2 border rounded-md bg-white/90 dark:bg-gray-800 dark:border-gray-700"
             />
-
             <select
               value={statusFilter}
               onChange={(e) => {
                 setStatusFilter(e.target.value);
                 setPage(1);
               }}
-              className="p-2 text-sm border rounded-md bg-white/90 dark:bg-gray-800 dark:border-gray-700"
+              className="p-2 text-sm border rounded-md bg-white/90 dark:bg-gray-800"
             >
               <option value="All">All Statuses</option>
               <option value="Pending">Pending</option>
               <option value="In Progress">In Progress</option>
               <option value="Completed">Completed</option>
             </select>
-
             <button
               onClick={() => setOpenAddModal(true)}
               className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700"
             >
               + Add Work
             </button>
-
             <button
               onClick={() =>
                 exportToCSV(
@@ -376,20 +348,17 @@ export default function AdminDashboard() {
                   "works.csv"
                 )
               }
-              className="px-3 py-2 text-sm bg-gray-200 rounded hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600"
+              className="px-3 py-2 text-sm bg-gray-200 rounded hover:bg-gray-300 dark:bg-gray-700"
             >
               Export CSV
             </button>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <label className="text-sm">Rows</label>
             <select
               value={pageSize}
-              onChange={(e) => {
-                setPageSize(Number(e.target.value));
-                setPage(1);
-              }}
+              onChange={(e) => setPageSize(Number(e.target.value))}
               className="p-2 text-sm border rounded-md bg-white/90 dark:bg-gray-800"
             >
               {PAGE_SIZE_OPTIONS.map((s) => (
@@ -401,57 +370,53 @@ export default function AdminDashboard() {
           </div>
         </section>
 
-        {/* Dashboard cards + chart */}
+        {/* Stats Cards & Chart */}
         <section className="grid grid-cols-1 gap-4 mt-6 md:grid-cols-3">
+          {/* Cards */}
           <div className="p-4 bg-white shadow-sm rounded-xl dark:bg-gray-800">
             <h3 className="text-sm text-gray-500">Total Tasks</h3>
             <p className="text-3xl font-bold text-indigo-600">{total}</p>
-            <p className="mt-2 text-sm text-gray-500">All tasks in system</p>
           </div>
 
           <div className="p-4 bg-white shadow-sm rounded-xl dark:bg-gray-800">
-            <h3 className="text-sm text-gray-500">Status Overview</h3>
-            <div className="flex items-center gap-4 mt-3">
-              <div>
-                <p className="text-lg font-semibold text-yellow-600">{cPending}</p>
-                <p className="text-xs text-gray-500">Pending</p>
-              </div>
-              <div>
-                <p className="text-lg font-semibold text-blue-600">{cProgress}</p>
-                <p className="text-xs text-gray-500">In Progress</p>
-              </div>
-              <div>
-                <p className="text-lg font-semibold text-green-600">{cCompleted}</p>
-                <p className="text-xs text-gray-500">Completed</p>
-              </div>
+            <h3 className="text-sm text-gray-500">Status Summary</h3>
+            <div className="flex justify-around mt-3">
+              <span className="text-yellow-600">{cPending} Pending</span>
+              <span className="text-blue-600">{cProgress} In Progress</span>
+              <span className="text-green-600">{cCompleted} Completed</span>
             </div>
           </div>
 
+          {/* Chart */}
           <div className="p-4 bg-white shadow-sm rounded-xl dark:bg-gray-800">
             <h3 className="text-sm text-gray-500">Status Chart</h3>
-            <div className="w-full h-40 mt-2">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={chartData}
-                    dataKey="value"
-                    nameKey="name"
-                    innerRadius={30}
-                    outerRadius={60}
-                    paddingAngle={2}
-                    label
-                  >
-                    {chartData.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={chartColors[index % chartColors.length]}
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend verticalAlign="bottom" height={36} />
-                </PieChart>
-              </ResponsiveContainer>
+            <div className="w-full mt-2 h-44">
+              {total === 0 ? (
+                <p className="mt-10 text-center text-gray-400">No data to display</p>
+              ) : (
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={chartData}
+                      dataKey="value"
+                      nameKey="name"
+                      innerRadius={30}
+                      outerRadius={60}
+                      paddingAngle={3}
+                      label
+                    >
+                      {chartData.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={chartColors[index % chartColors.length]}
+                        />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend verticalAlign="bottom" height={36} />
+                  </PieChart>
+                </ResponsiveContainer>
+              )}
             </div>
           </div>
         </section>
