@@ -62,47 +62,72 @@ const EmployeeDashboard = () => {
     }
   };
 
-  // ATTENDANCE FUNCTIONS
-  const fetchAttendance = async () => {
-    try {
-      setLoading(true);
-      const res = await fetch(`${BASE_URL}/attendance`);
-      const data = await res.json();
-      if (data.success && Array.isArray(data.attendance)) {
-        setAttendance(
-          data.attendance.filter((a) => a.employeeId === employee.employeeId)
-        );
-      } else {
-        setAttendance([]);
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // ============================
+// 🕒 ATTENDANCE FUNCTIONS
+// ============================
+const fetchAttendance = async () => {
+  try {
+    setLoading(true);
+    // 🔹 fetch only this employee's attendance using query param
+    const res = await fetch(`${BASE_URL}/attendance?employeeId=${employee.employeeId}`);
+    const data = await res.json();
 
-  const markAttendance = async () => {
-    if (!attendanceForm.date) return alert("Select a valid date first.");
-    try {
-      const res = await fetch(`${BASE_URL}/attendance`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(attendanceForm),
+    if (data.success && Array.isArray(data.attendance)) {
+      setAttendance(data.attendance);
+    } else {
+      setAttendance([]);
+    }
+  } catch (err) {
+    console.error("fetchAttendance error:", err);
+    setAttendance([]);
+  } finally {
+    setLoading(false);
+  }
+};
+
+const markAttendance = async () => {
+  if (!attendanceForm.date) return alert("Select a valid date first.");
+
+  try {
+    // 🔹 ensure employeeId is always set for backend
+    const payload = {
+      ...attendanceForm,
+      employeeId: employee.employeeId,
+    };
+
+    const res = await fetch(`${BASE_URL}/attendance`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      alert("✅ Attendance marked successfully!");
+      // 🔹 reset form date to today
+      setAttendanceForm({
+        employeeId: employee.employeeId,
+        date: new Date().toISOString().split("T")[0],
+        status: "Present",
+        notes: "",
       });
-      const data = await res.json();
-      if (data.success) {
-        alert("✅ Attendance marked successfully!");
-        fetchAttendance();
-      }
-    } catch (err) {
-      console.error(err);
+      fetchAttendance();
+    } else {
+      alert(data.message);
     }
-  };
+  } catch (err) {
+    console.error("markAttendance error:", err);
+  }
+};
 
-  useEffect(() => {
-    tab === "work" ? fetchWork() : fetchAttendance();
-  }, [tab]);
+// ============================
+// 📦 INITIAL LOAD
+// ============================
+useEffect(() => {
+  tab === "work" ? fetchWork() : fetchAttendance();
+}, [tab]);
+
 
   return (
     <div className="min-h-screen p-6 bg-gradient-to-br from-indigo-50 to-white">
