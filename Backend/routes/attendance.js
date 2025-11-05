@@ -1,169 +1,62 @@
-// ========================================================
-// 🕒 Attendance Routes — Full CRUD for Employee Attendance
-// ========================================================
-
+// routes/attendance.js
 import express from "express";
-import Attendance from "../models/Attendance.js"; // ✅ make sure this model exists
+import Attendance from "../models/Attendance.js";
 
 const router = express.Router();
 
-/**
- * ✅ POST /api/attendance/mark
- * Mark attendance for an employee
- */
-router.post("/mark", async (req, res) => {
+// Get all attendance
+router.get("/", async (req, res) => {
+  try {
+    const attendance = await Attendance.find().sort({ createdAt: -1 });
+    res.status(200).json({ success: true, attendance });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Internal Server Error", error: err.message });
+  }
+});
+
+// Mark attendance
+router.post("/", async (req, res) => {
   try {
     const { employeeId, date, status, notes } = req.body;
-
-    if (!employeeId || !date || !status) {
-      return res.status(400).json({
-        success: false,
-        message: "Employee ID, Date, and Status are required.",
-      });
+    if (!employeeId || !date) {
+      return res.status(400).json({ success: false, message: "Employee ID and Date required" });
     }
 
-    // Check for duplicate entry (same employee, same date)
-    const existing = await Attendance.findOne({ employeeId, date });
-    if (existing) {
-      return res.status(400).json({
-        success: false,
-        message: "Attendance for this date already exists.",
-      });
-    }
+    const newAttendance = new Attendance({ employeeId, date, status, notes });
+    await newAttendance.save();
 
-    const attendance = new Attendance({
-      employeeId,
-      date,
-      status,
-      notes,
-    });
-
-    const saved = await attendance.save();
-
-    res.status(201).json({
-      success: true,
-      message: "Attendance marked successfully",
-      attendance: saved,
-    });
+    res.status(201).json({ success: true, message: "Attendance marked successfully" });
   } catch (err) {
-    console.error("❌ POST /api/attendance/mark error:", err);
-    res.status(500).json({
-      success: false,
-      message: "Internal Server Error",
-      error: err.message,
-    });
+    res.status(500).json({ success: false, message: "Internal Server Error", error: err.message });
   }
 });
 
-/**
- * ✅ GET /api/attendance/all
- * Fetch all attendance records
- */
-router.get("/all", async (req, res) => {
-  try {
-    const records = await Attendance.find().sort({ date: -1 });
-    res.status(200).json({
-      success: true,
-      count: records.length,
-      records,
-    });
-  } catch (err) {
-    console.error("❌ GET /api/attendance/all error:", err);
-    res.status(500).json({
-      success: false,
-      message: "Internal Server Error",
-      error: err.message,
-    });
-  }
-});
-
-/**
- * ✅ GET /api/attendance/employee/:employeeId
- * Fetch attendance records for a specific employee
- */
-router.get("/employee/:employeeId", async (req, res) => {
-  try {
-    const { employeeId } = req.params;
-    const records = await Attendance.find({ employeeId }).sort({ date: -1 });
-
-    res.status(200).json({
-      success: true,
-      count: records.length,
-      records,
-    });
-  } catch (err) {
-    console.error("❌ GET /api/attendance/employee/:employeeId error:", err);
-    res.status(500).json({
-      success: false,
-      message: "Internal Server Error",
-      error: err.message,
-    });
-  }
-});
-
-/**
- * ✅ PATCH /api/attendance/update/:id
- * Update an attendance record
- */
-router.patch("/update/:id", async (req, res) => {
+// Update attendance
+router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const { status, notes } = req.body;
-
     const updated = await Attendance.findByIdAndUpdate(
       id,
       { status, notes, updatedAt: new Date() },
       { new: true }
     );
-
-    if (!updated) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Attendance record not found" });
-    }
-
-    res.status(200).json({
-      success: true,
-      message: "Attendance updated successfully",
-      attendance: updated,
-    });
+    if (!updated) return res.status(404).json({ success: false, message: "Attendance not found" });
+    res.status(200).json({ success: true, message: "Attendance updated", attendance: updated });
   } catch (err) {
-    console.error("❌ PATCH /api/attendance/update/:id error:", err);
-    res.status(500).json({
-      success: false,
-      message: "Internal Server Error",
-      error: err.message,
-    });
+    res.status(500).json({ success: false, message: "Internal Server Error", error: err.message });
   }
 });
 
-/**
- * ✅ DELETE /api/attendance/delete/:id
- * Delete an attendance record
- */
-router.delete("/delete/:id", async (req, res) => {
+// Delete attendance
+router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const deleted = await Attendance.findByIdAndDelete(id);
-
-    if (!deleted) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Attendance record not found" });
-    }
-
-    res.status(200).json({
-      success: true,
-      message: "Attendance deleted successfully",
-      attendance: deleted,
-    });
+    if (!deleted) return res.status(404).json({ success: false, message: "Attendance not found" });
+    res.status(200).json({ success: true, message: "Attendance deleted", attendance: deleted });
   } catch (err) {
-    console.error("❌ DELETE /api/attendance/delete/:id error:", err);
-    res.status(500).json({
-      success: false,
-      message: "Internal Server Error",
-      error: err.message,
-    });
+    res.status(500).json({ success: false, message: "Internal Server Error", error: err.message });
   }
 });
 
