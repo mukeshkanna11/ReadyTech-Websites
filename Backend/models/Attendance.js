@@ -1,21 +1,28 @@
-// models/Attendance.js
 import mongoose from "mongoose";
 
-const AttendanceSchema = new mongoose.Schema(
+const attendanceSchema = new mongoose.Schema(
   {
-    employee: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Employee",
-      required: true,
+    employeeId: {
+      type: String,
+      required: [true, "Employee ID is required"],
+      trim: true,
     },
-    date: { type: Date, default: Date.now },
+    date: {
+      type: String, // could also be Date, but String (YYYY-MM-DD) is simpler for filtering
+      required: [true, "Date is required"],
+    },
     status: {
       type: String,
-      enum: ["Present", "Absent", "Leave"],
+      enum: ["Present", "Absent", "Leave", "Half Day"],
+      required: [true, "Status is required"],
       default: "Present",
+    },
+    notes: {
+      type: String,
+      trim: true,
     },
   },
   { timestamps: true }
 );
 
-export default mongoose.model("Attendance", AttendanceSchema);
+export default mongoose.model("Attendance", attendanceSchema);

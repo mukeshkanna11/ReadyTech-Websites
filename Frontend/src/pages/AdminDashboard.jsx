@@ -16,7 +16,7 @@ import {
 
 // Backend base URL
 const API_BASE =
-  import.meta.env.VITE_API_BASE_URL || "https://readytech-backend.onrender.com";
+  import.meta.env.VITE_API_BASE_URL || "https://readytech-websites.onrender.com/api/work";
 
 const PAGE_SIZE_OPTIONS = [5, 10, 20];
 const STATUS_COLORS = {
