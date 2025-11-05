@@ -11,7 +11,7 @@ const EmployeeDashboard = () => {
   const navigate = useNavigate();
   const employee = JSON.parse(localStorage.getItem("employee")) || {
     name: "Employee",
-    employeeId: "EMP001",
+    employeeId: "RTS112",
   };
 
   const [works, setWorks] = useState([]);
@@ -40,9 +40,15 @@ const EmployeeDashboard = () => {
   const fetchWork = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`${BASE_URL}/work/employee/${employee.employeeId}`);
+      const res = await fetch(
+        `${BASE_URL}/work/employee/${employee.employeeId}`
+      );
       const data = await res.json();
-      if (data.success) setWorks(data.works);
+      if (data.success) {
+        setWorks(data.works);
+      } else {
+        setWorks([]);
+      }
     } catch (err) {
       console.error("fetchWork error:", err);
     } finally {
@@ -59,9 +65,11 @@ const EmployeeDashboard = () => {
       });
       const data = await res.json();
       if (data.success) {
-        alert("✅ Task marked as Completed!");
         fetchWork();
-      } else alert(data.message);
+        alert("✅ Task marked as Completed!");
+      } else {
+        alert(data.message || "Failed to update task");
+      }
     } catch (err) {
       console.error("markWorkCompleted error:", err);
     }
@@ -75,11 +83,13 @@ const EmployeeDashboard = () => {
       setLoading(true);
       const res = await fetch(`${BASE_URL}/attendance`);
       const data = await res.json();
-      if (data.success) {
-        const empRecords = data.attendance.filter(
+      if (data.success && Array.isArray(data.attendance)) {
+        const filtered = data.attendance.filter(
           (a) => a.employeeId === employee.employeeId
         );
-        setAttendance(empRecords);
+        setAttendance(filtered);
+      } else {
+        setAttendance([]);
       }
     } catch (err) {
       console.error("fetchAttendance error:", err);
@@ -89,6 +99,7 @@ const EmployeeDashboard = () => {
   };
 
   const markAttendance = async () => {
+    if (!attendanceForm.date) return alert("Select a valid date first.");
     try {
       const res = await fetch(`${BASE_URL}/attendance`, {
         method: "POST",
@@ -99,7 +110,9 @@ const EmployeeDashboard = () => {
       if (data.success) {
         alert("✅ Attendance marked successfully!");
         fetchAttendance();
-      } else alert(data.message);
+      } else {
+        alert(data.message || "Unable to mark attendance");
+      }
     } catch (err) {
       console.error("markAttendance error:", err);
     }
@@ -117,22 +130,22 @@ const EmployeeDashboard = () => {
   // 🎨 UI SECTION
   // ===============================
   return (
-    <div className="min-h-screen p-6 bg-gray-50">
+    <div className="min-h-screen p-6 bg-gradient-to-br from-indigo-50 to-white">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-indigo-600">
+      <div className="flex flex-col items-center justify-between mb-6 sm:flex-row">
+        <h1 className="text-3xl font-bold text-indigo-700">
           ReadyTech Employee Dashboard
         </h1>
         <button
           onClick={handleLogout}
-          className="px-4 py-2 text-white bg-red-600 rounded hover:bg-red-700"
+          className="px-4 py-2 mt-4 text-white bg-red-600 rounded sm:mt-0 hover:bg-red-700"
         >
           Logout
         </button>
       </div>
 
       {/* Employee Info */}
-      <div className="p-4 mb-6 bg-white rounded shadow">
+      <div className="p-4 mb-6 bg-white rounded shadow-md">
         <p className="text-lg font-semibold text-gray-700">
           👋 Welcome,{" "}
           <span className="text-indigo-600">{employee.name || "Employee"}</span>
@@ -145,16 +158,20 @@ const EmployeeDashboard = () => {
       {/* Tabs */}
       <div className="flex justify-center mb-8">
         <button
-          className={`px-6 py-2 rounded-l-lg ${
-            tab === "work" ? "bg-indigo-600 text-white" : "bg-gray-200"
+          className={`px-6 py-2 font-medium rounded-l-lg transition-all duration-200 ${
+            tab === "work"
+              ? "bg-indigo-600 text-white shadow"
+              : "bg-gray-200 hover:bg-indigo-100"
           }`}
           onClick={() => setTab("work")}
         >
           My Tasks
         </button>
         <button
-          className={`px-6 py-2 rounded-r-lg ${
-            tab === "attendance" ? "bg-indigo-600 text-white" : "bg-gray-200"
+          className={`px-6 py-2 font-medium rounded-r-lg transition-all duration-200 ${
+            tab === "attendance"
+              ? "bg-indigo-600 text-white shadow"
+              : "bg-gray-200 hover:bg-indigo-100"
           }`}
           onClick={() => setTab("attendance")}
         >
@@ -166,56 +183,62 @@ const EmployeeDashboard = () => {
           🧱 WORK SECTION
       ============================ */}
       {tab === "work" && (
-        <div className="p-4 bg-white rounded shadow">
+        <div className="p-4 bg-white rounded-lg shadow">
           <h2 className="mb-4 text-xl font-semibold text-indigo-700">
             📋 My Assigned Tasks
           </h2>
+
           {loading ? (
-            <p>Loading...</p>
+            <p className="text-gray-500">Loading tasks...</p>
           ) : works.length > 0 ? (
-            <table className="w-full border border-gray-300">
-              <thead className="bg-indigo-100">
-                <tr>
-                  <th className="p-2 border">Task Title</th>
-                  <th className="p-2 border">Description</th>
-                  <th className="p-2 border">Status</th>
-                  <th className="p-2 border">Deadline</th>
-                  <th className="p-2 border">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {works.map((work) => (
-                  <tr key={work._id}>
-                    <td className="p-2 border">{work.taskTitle}</td>
-                    <td className="p-2 border">{work.description}</td>
-                    <td
-                      className={`p-2 border font-semibold ${
-                        work.status === "Completed"
-                          ? "text-green-600"
-                          : "text-yellow-600"
-                      }`}
-                    >
-                      {work.status}
-                    </td>
-                    <td className="p-2 border">
-                      {work.deadline?.split("T")[0] || "-"}
-                    </td>
-                    <td className="p-2 text-center border">
-                      {work.status !== "Completed" && (
-                        <button
-                          onClick={() => markWorkCompleted(work._id)}
-                          className="px-3 py-1 text-sm text-white bg-green-600 rounded hover:bg-green-700"
-                        >
-                          Mark Completed
-                        </button>
-                      )}
-                    </td>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm border border-gray-300">
+                <thead className="text-indigo-800 bg-indigo-100">
+                  <tr>
+                    <th className="p-2 border">Task Title</th>
+                    <th className="p-2 border">Description</th>
+                    <th className="p-2 border">Status</th>
+                    <th className="p-2 border">Deadline</th>
+                    <th className="p-2 border">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {works.map((work) => (
+                    <tr
+                      key={work._id}
+                      className="transition hover:bg-gray-50"
+                    >
+                      <td className="p-2 border">{work.taskTitle}</td>
+                      <td className="p-2 border">{work.description}</td>
+                      <td
+                        className={`p-2 border font-semibold ${
+                          work.status === "Completed"
+                            ? "text-green-600"
+                            : "text-yellow-600"
+                        }`}
+                      >
+                        {work.status}
+                      </td>
+                      <td className="p-2 border">
+                        {work.deadline?.split("T")[0] || "-"}
+                      </td>
+                      <td className="p-2 text-center border">
+                        {work.status !== "Completed" && (
+                          <button
+                            onClick={() => markWorkCompleted(work._id)}
+                            className="px-3 py-1 text-xs font-medium text-white bg-green-600 rounded hover:bg-green-700"
+                          >
+                            Mark Completed
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           ) : (
-            <p>No tasks assigned yet.</p>
+            <p className="text-gray-500">No tasks assigned yet.</p>
           )}
         </div>
       )}
@@ -225,7 +248,7 @@ const EmployeeDashboard = () => {
       ============================ */}
       {tab === "attendance" && (
         <>
-          <div className="p-4 mb-6 bg-white rounded shadow">
+          <div className="p-4 mb-6 bg-white rounded-lg shadow">
             <h2 className="mb-4 text-xl font-semibold text-indigo-700">
               🕒 Mark Attendance
             </h2>
@@ -267,43 +290,45 @@ const EmployeeDashboard = () => {
             </div>
           </div>
 
-          <div className="p-4 bg-white rounded shadow">
+          <div className="p-4 bg-white rounded-lg shadow">
             <h2 className="mb-4 text-xl font-semibold text-indigo-700">
               📅 My Attendance Records
             </h2>
             {loading ? (
-              <p>Loading...</p>
+              <p className="text-gray-500">Loading attendance...</p>
             ) : attendance.length > 0 ? (
-              <table className="w-full border border-gray-300">
-                <thead className="bg-indigo-100">
-                  <tr>
-                    <th className="p-2 border">Date</th>
-                    <th className="p-2 border">Status</th>
-                    <th className="p-2 border">Notes</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {attendance.map((a) => (
-                    <tr key={a._id}>
-                      <td className="p-2 border">{a.date}</td>
-                      <td
-                        className={`p-2 border font-semibold ${
-                          a.status === "Present"
-                            ? "text-green-600"
-                            : a.status === "Leave"
-                            ? "text-yellow-600"
-                            : "text-red-600"
-                        }`}
-                      >
-                        {a.status}
-                      </td>
-                      <td className="p-2 border">{a.notes || "-"}</td>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm border border-gray-300">
+                  <thead className="text-indigo-800 bg-indigo-100">
+                    <tr>
+                      <th className="p-2 border">Date</th>
+                      <th className="p-2 border">Status</th>
+                      <th className="p-2 border">Notes</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {attendance.map((a) => (
+                      <tr key={a._id} className="transition hover:bg-gray-50">
+                        <td className="p-2 border">{a.date}</td>
+                        <td
+                          className={`p-2 border font-semibold ${
+                            a.status === "Present"
+                              ? "text-green-600"
+                              : a.status === "Leave"
+                              ? "text-yellow-600"
+                              : "text-red-600"
+                          }`}
+                        >
+                          {a.status}
+                        </td>
+                        <td className="p-2 border">{a.notes || "-"}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             ) : (
-              <p>No attendance records yet.</p>
+              <p className="text-gray-500">No attendance records yet.</p>
             )}
           </div>
         </>
