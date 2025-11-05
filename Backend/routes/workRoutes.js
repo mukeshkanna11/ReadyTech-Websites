@@ -148,27 +148,13 @@ router.patch("/update/:id", async (req, res) => {
 router.delete("/delete/:id", async (req, res) => {
   try {
     const { id } = req.params;
-
     const deleted = await Work.findByIdAndDelete(id);
-    if (!deleted) {
-      return res.status(404).json({
-        success: false,
-        message: "Work not found",
-      });
-    }
-
-    res.status(200).json({
-      success: true,
-      message: "Work deleted successfully",
-      work: deleted,
-    });
+    if (!deleted)
+      return res.status(404).json({ success: false, message: "Work not found" });
+    res.status(200).json({ success: true, message: "Work deleted successfully", work: deleted });
   } catch (err) {
-    console.error("❌ DELETE /api/work/delete/:id error:", err);
-    res.status(500).json({
-      success: false,
-      message: "Internal Server Error",
-      error: err.message,
-    });
+    res.status(500).json({ success: false, message: "Internal Server Error", error: err.message });
   }
 });
+
 export default router;
