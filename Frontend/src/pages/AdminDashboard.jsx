@@ -137,22 +137,30 @@ const AdminDashboard = () => {
   };
 
   const markAttendance = async () => {
-    try {
-      const res = await fetch(`${BASE_URL}/attendance`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(attendanceForm),
-      });
-      const data = await res.json();
-      if (data.success) {
-        alert("✅ Attendance marked!");
-        setAttendanceForm({ employeeId: "", date: "", status: "Present", notes: "" });
-        fetchAttendance();
-      } else alert(data.message);
-    } catch (err) {
-      console.error("markAttendance error:", err);
+  if (!attendanceForm.employeeId || !attendanceForm.date) {
+    return alert("Employee and Date are required.");
+  }
+
+  try {
+    const res = await fetch(`${BASE_URL}/attendance`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(attendanceForm),
+    });
+    const data = await res.json();
+    if (data.success) {
+      alert(`✅ Attendance for ${attendanceForm.employeeId} marked!`);
+      // Reset form if needed
+      setAttendanceForm({ employeeId: "", date: "", status: "Present", notes: "" });
+      fetchAttendance(); // Refresh the list
+    } else {
+      alert(data.message);
     }
-  };
+  } catch (err) {
+    console.error("markAttendance error:", err);
+  }
+};
+
 
   const updateAttendance = async (id, status) => {
     try {
