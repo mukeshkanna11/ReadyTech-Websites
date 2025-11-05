@@ -1,145 +1,315 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const API_BASE = "http://localhost:5000/api/work";
+// ✅ Auto-detect local or deployed backend
+const BASE_URL =
+  import.meta.env.MODE === "development"
+    ? "http://localhost:5000/api"
+    : "https://readytech-websites.onrender.com/api";
 
-export default function EmployeeDashboard() {
-  const [employeeId, setEmployeeId] = useState("RTS112");
-  const [works, setWorks] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+const EmployeeDashboard = () => {
   const navigate = useNavigate();
+  const employee = JSON.parse(localStorage.getItem("employee")) || {
+    name: "Employee",
+    employeeId: "EMP001",
+  };
 
-  // ✅ Fetch work for the logged-in employee
-  const fetchEmployeeWork = async () => {
+  const [works, setWorks] = useState([]);
+  const [attendance, setAttendance] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [tab, setTab] = useState("work");
+  const [attendanceForm, setAttendanceForm] = useState({
+    employeeId: employee.employeeId,
+    date: new Date().toISOString().split("T")[0],
+    status: "Present",
+    notes: "",
+  });
+
+  // ===============================
+  // 🔐 Logout
+  // ===============================
+  const handleLogout = () => {
+    localStorage.removeItem("employee");
+    localStorage.removeItem("token");
+    navigate("/dashboard");
+  };
+
+  // ===============================
+  // 📋 WORK FUNCTIONS
+  // ===============================
+  const fetchWork = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`${API_BASE}/employee/${employeeId}`);
-      if (!res.ok) throw new Error("Failed to fetch employee work");
+      const res = await fetch(`${BASE_URL}/work/employee/${employee.employeeId}`);
       const data = await res.json();
-      // handle array or object response
-      setWorks(Array.isArray(data) ? data : data.works || []);
+      if (data.success) setWorks(data.works);
     } catch (err) {
-      console.error("fetchEmployeeWork error:", err);
-      setMessage("Error fetching work updates.");
+      console.error("fetchWork error:", err);
     } finally {
       setLoading(false);
     }
   };
 
-  // ✅ Update work status
-  const updateWorkStatus = async (workId, newStatus) => {
+  const markWorkCompleted = async (id) => {
     try {
-      const res = await fetch(`${API_BASE}/update/${workId}`, {
+      const res = await fetch(`${BASE_URL}/work/update/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: newStatus }),
+        body: JSON.stringify({ status: "Completed" }),
       });
-
-      const json = await res.json();
-      if (json.success) {
-        setMessage("✅ Status updated successfully!");
-        fetchEmployeeWork();
-      } else {
-        setMessage("⚠️ Failed to update status.");
-      }
+      const data = await res.json();
+      if (data.success) {
+        alert("✅ Task marked as Completed!");
+        fetchWork();
+      } else alert(data.message);
     } catch (err) {
-      console.error("updateWorkStatus error:", err);
-      setMessage("Error updating status.");
+      console.error("markWorkCompleted error:", err);
     }
   };
 
+  // ===============================
+  // 🕒 ATTENDANCE FUNCTIONS
+  // ===============================
+  const fetchAttendance = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch(`${BASE_URL}/attendance`);
+      const data = await res.json();
+      if (data.success) {
+        const empRecords = data.attendance.filter(
+          (a) => a.employeeId === employee.employeeId
+        );
+        setAttendance(empRecords);
+      }
+    } catch (err) {
+      console.error("fetchAttendance error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const markAttendance = async () => {
+    try {
+      const res = await fetch(`${BASE_URL}/attendance`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(attendanceForm),
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert("✅ Attendance marked successfully!");
+        fetchAttendance();
+      } else alert(data.message);
+    } catch (err) {
+      console.error("markAttendance error:", err);
+    }
+  };
+
+  // ===============================
+  // ⏱ INITIAL LOAD
+  // ===============================
   useEffect(() => {
-    fetchEmployeeWork();
-  }, [employeeId]);
+    if (tab === "work") fetchWork();
+    else fetchAttendance();
+  }, [tab]);
 
+  // ===============================
+  // 🎨 UI SECTION
+  // ===============================
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen p-6 bg-gray-50">
       {/* Header */}
-      <header className="flex items-center justify-between p-6 text-white bg-indigo-700 shadow-md">
-        <h1 className="text-xl font-bold">Employee Dashboard</h1>
-        <div>
-          <p className="text-sm">
-            Employee ID: <b>{employeeId}</b>
-          </p>
-          <button
-  onClick={() => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    localStorage.removeItem("employeeId");
-    navigate("/dashboard"); // ✅ Will go to role-selection / login
-  }}
-  className="px-3 py-1 mt-2 text-sm bg-red-500 rounded hover:bg-red-600"
->
-  Logout
-</button>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-3xl font-bold text-indigo-600">
+          ReadyTech Employee Dashboard
+        </h1>
+        <button
+          onClick={handleLogout}
+          className="px-4 py-2 text-white bg-red-600 rounded hover:bg-red-700"
+        >
+          Logout
+        </button>
+      </div>
 
+      {/* Employee Info */}
+      <div className="p-4 mb-6 bg-white rounded shadow">
+        <p className="text-lg font-semibold text-gray-700">
+          👋 Welcome,{" "}
+          <span className="text-indigo-600">{employee.name || "Employee"}</span>
+        </p>
+        <p className="text-sm text-gray-500">
+          Employee ID: {employee.employeeId}
+        </p>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex justify-center mb-8">
+        <button
+          className={`px-6 py-2 rounded-l-lg ${
+            tab === "work" ? "bg-indigo-600 text-white" : "bg-gray-200"
+          }`}
+          onClick={() => setTab("work")}
+        >
+          My Tasks
+        </button>
+        <button
+          className={`px-6 py-2 rounded-r-lg ${
+            tab === "attendance" ? "bg-indigo-600 text-white" : "bg-gray-200"
+          }`}
+          onClick={() => setTab("attendance")}
+        >
+          My Attendance
+        </button>
+      </div>
+
+      {/* ============================
+          🧱 WORK SECTION
+      ============================ */}
+      {tab === "work" && (
+        <div className="p-4 bg-white rounded shadow">
+          <h2 className="mb-4 text-xl font-semibold text-indigo-700">
+            📋 My Assigned Tasks
+          </h2>
+          {loading ? (
+            <p>Loading...</p>
+          ) : works.length > 0 ? (
+            <table className="w-full border border-gray-300">
+              <thead className="bg-indigo-100">
+                <tr>
+                  <th className="p-2 border">Task Title</th>
+                  <th className="p-2 border">Description</th>
+                  <th className="p-2 border">Status</th>
+                  <th className="p-2 border">Deadline</th>
+                  <th className="p-2 border">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {works.map((work) => (
+                  <tr key={work._id}>
+                    <td className="p-2 border">{work.taskTitle}</td>
+                    <td className="p-2 border">{work.description}</td>
+                    <td
+                      className={`p-2 border font-semibold ${
+                        work.status === "Completed"
+                          ? "text-green-600"
+                          : "text-yellow-600"
+                      }`}
+                    >
+                      {work.status}
+                    </td>
+                    <td className="p-2 border">
+                      {work.deadline?.split("T")[0] || "-"}
+                    </td>
+                    <td className="p-2 text-center border">
+                      {work.status !== "Completed" && (
+                        <button
+                          onClick={() => markWorkCompleted(work._id)}
+                          className="px-3 py-1 text-sm text-white bg-green-600 rounded hover:bg-green-700"
+                        >
+                          Mark Completed
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p>No tasks assigned yet.</p>
+          )}
         </div>
-      </header>
+      )}
 
-      <main className="max-w-5xl p-6 mx-auto">
-        <h2 className="mb-4 text-2xl font-semibold text-gray-700">
-          Your Assigned Work
-        </h2>
-
-        {loading ? (
-          <p className="text-gray-600">Loading work details...</p>
-        ) : works.length > 0 ? (
-          <div className="space-y-4">
-            {works.map((work) => (
-              <div
-                key={work._id}
-                className="p-4 bg-white border border-gray-200 shadow-sm rounded-xl"
+      {/* ============================
+          🕒 ATTENDANCE SECTION
+      ============================ */}
+      {tab === "attendance" && (
+        <>
+          <div className="p-4 mb-6 bg-white rounded shadow">
+            <h2 className="mb-4 text-xl font-semibold text-indigo-700">
+              🕒 Mark Attendance
+            </h2>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
+              <input
+                type="date"
+                value={attendanceForm.date}
+                onChange={(e) =>
+                  setAttendanceForm({ ...attendanceForm, date: e.target.value })
+                }
+                className="p-2 border rounded"
+              />
+              <select
+                value={attendanceForm.status}
+                onChange={(e) =>
+                  setAttendanceForm({ ...attendanceForm, status: e.target.value })
+                }
+                className="p-2 border rounded"
               >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="text-lg font-bold text-indigo-600">
-                      {work.taskTitle}
-                    </h3>
-                    <p className="text-sm text-gray-600">
-                      {work.description || "No description provided"}
-                    </p>
-                    <p className="mt-1 text-xs text-gray-500">
-                      Deadline: {work.deadline || "N/A"}
-                    </p>
-                    <p className="mt-1 text-sm">
-                      Status:{" "}
-                      <span
-                        className={`font-semibold ${
-                          work.status === "Completed"
+                <option>Present</option>
+                <option>Absent</option>
+                <option>Leave</option>
+              </select>
+              <input
+                type="text"
+                placeholder="Notes (optional)"
+                value={attendanceForm.notes}
+                onChange={(e) =>
+                  setAttendanceForm({ ...attendanceForm, notes: e.target.value })
+                }
+                className="p-2 border rounded sm:col-span-2"
+              />
+              <button
+                onClick={markAttendance}
+                className="px-4 py-2 text-white bg-indigo-600 rounded hover:bg-indigo-700"
+              >
+                Mark Attendance
+              </button>
+            </div>
+          </div>
+
+          <div className="p-4 bg-white rounded shadow">
+            <h2 className="mb-4 text-xl font-semibold text-indigo-700">
+              📅 My Attendance Records
+            </h2>
+            {loading ? (
+              <p>Loading...</p>
+            ) : attendance.length > 0 ? (
+              <table className="w-full border border-gray-300">
+                <thead className="bg-indigo-100">
+                  <tr>
+                    <th className="p-2 border">Date</th>
+                    <th className="p-2 border">Status</th>
+                    <th className="p-2 border">Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {attendance.map((a) => (
+                    <tr key={a._id}>
+                      <td className="p-2 border">{a.date}</td>
+                      <td
+                        className={`p-2 border font-semibold ${
+                          a.status === "Present"
                             ? "text-green-600"
-                            : work.status === "Pending"
+                            : a.status === "Leave"
                             ? "text-yellow-600"
-                            : "text-blue-600"
+                            : "text-red-600"
                         }`}
                       >
-                        {work.status}
-                      </span>
-                    </p>
-                  </div>
-
-                  {work.status !== "Completed" && (
-                    <button
-                      onClick={() => updateWorkStatus(work._id, "Completed")}
-                      className="px-4 py-2 text-white bg-green-600 rounded-lg hover:bg-green-700"
-                    >
-                      Mark Completed
-                    </button>
-                  )}
-                </div>
-              </div>
-            ))}
+                        {a.status}
+                      </td>
+                      <td className="p-2 border">{a.notes || "-"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <p>No attendance records yet.</p>
+            )}
           </div>
-        ) : (
-          <p className="text-gray-600">No assigned work yet.</p>
-        )}
-
-        {message && (
-          <div className="p-3 mt-4 text-sm text-center text-white bg-indigo-600 rounded-lg">
-            {message}
-          </div>
-        )}
-      </main>
+        </>
+      )}
     </div>
   );
-}
+};
+
+export default EmployeeDashboard;
