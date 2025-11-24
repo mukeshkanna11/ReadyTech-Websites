@@ -8,16 +8,20 @@ import {
 
 const router = express.Router();
 
-// Create new ticket
+/* ---------------------------------------------
+   HELP DESK ROUTES (AI SMART SUPPORT SYSTEM)
+   --------------------------------------------- */
+
+// ✅ Create a new ticket (customer first message)
 router.post("/create-ticket", createTicket);
 
-// Add user or admin response
+// ✅ Add message to a ticket (user or bot or admin)
 router.post("/add-response/:ticketId", addResponse);
 
-// Get ticket using email
+// ✅ Get all tickets by user email (optional usage)
 router.get("/by-email/:email", getTicketByEmail);
 
-// Get ticket using token / ID
+// ✅ Get full ticket conversation by ticket ID / tokenId
 router.get("/:ticketId", getTicketById);
 
 export default router;
