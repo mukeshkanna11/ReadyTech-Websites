@@ -1,3 +1,4 @@
+// src/pages/Contact.jsx
 import React, { useState } from "react";
 import {
   FaPhoneAlt,
@@ -11,6 +12,9 @@ import { Helmet } from "react-helmet-async";
 import axios from "axios";
 import { motion } from "framer-motion";
 import ContactBG from "../assets/images/contact.jpg"; // main animated layer
+
+// Helpdesk chat widget (floating)
+import HelpdeskChat from "../components/HelpdeskChat";
 
 export default function Contact() {
   const contactInfo = [
@@ -85,8 +89,9 @@ export default function Contact() {
     }
 
     try {
+      // Use environment-backed base URL in future; currently uses localhost for dev
       const res = await axios.post("http://localhost:5000/api/contact", formData);
-      setContactResp({ type: "success", text: res.data.msg });
+      setContactResp({ type: "success", text: res.data.msg || "Message sent." });
       setFormData({
         name: "",
         email: "",
@@ -111,7 +116,6 @@ export default function Contact() {
 
   return (
     <div className="relative min-h-screen overflow-hidden text-gray-100">
-
       <Helmet>
         <title>Contact Us | Ready Tech Solutions</title>
         <meta
@@ -120,19 +124,19 @@ export default function Contact() {
         />
       </Helmet>
 
-      {/* 🌌 Floating Dual Backgrounds (like About page) */}
+      {/* 🌌 Floating Dual Backgrounds */}
       <div className="absolute inset-0 overflow-hidden -z-10">
         <div
           className="absolute inset-0 bg-center bg-cover opacity-60 animate-bgShift"
           style={{
-            backgroundImage: `url(/images/contact1.jpg)`, // from public folder
+            backgroundImage: `url(/images/contact1.jpg)`,
             backgroundAttachment: "fixed",
           }}
         ></div>
         <div
           className="absolute inset-0 bg-center bg-cover opacity-50 mix-blend-overlay animate-bgShiftReverse"
           style={{
-            backgroundImage: `url(${ContactBG})`, // from src/assets
+            backgroundImage: `url(${ContactBG})`,
             backgroundAttachment: "fixed",
           }}
         ></div>
@@ -156,14 +160,10 @@ export default function Contact() {
 
         <h2 className="mb-6 text-3xl font-bold text-white">Why Choose Us</h2>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-          {[
+          {[ 
             { icon: <FaAward />, title: "6+ Years", desc: "Of Excellence" },
             { icon: <FaUsers />, title: "200+ Experts", desc: "Across India" },
-            {
-              icon: <FaHandshake />,
-              title: "150+ Projects",
-              desc: "Successfully Delivered",
-            },
+            { icon: <FaHandshake />, title: "150+ Projects", desc: "Successfully Delivered" }
           ].map((item, i) => (
             <motion.div
               whileHover={{ scale: 1.05 }}
@@ -233,9 +233,7 @@ export default function Contact() {
             {contactResp && (
               <p
                 className={`mb-4 font-semibold text-center ${
-                  contactResp.type === "success"
-                    ? "text-green-400"
-                    : "text-red-400"
+                  contactResp.type === "success" ? "text-green-400" : "text-red-400"
                 }`}
               >
                 {contactResp.text}
@@ -268,7 +266,6 @@ export default function Contact() {
                 placeholder="Phone"
                 value={formData.phone}
                 onChange={handleChange}
-                required
                 className="w-full px-4 py-3 text-gray-100 bg-gray-900 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400 hover:shadow-md"
               />
 
@@ -345,6 +342,9 @@ export default function Contact() {
           ))}
         </div>
       </motion.section>
+
+      {/* ================= Helpdesk Chat (floating) ================= */}
+      <HelpdeskChat />
 
       {/* ================= Testimonials ================= */}
       <motion.section

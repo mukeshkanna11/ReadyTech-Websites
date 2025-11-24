@@ -7,8 +7,9 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import Newsletter from "./components/Newsletter";
+import HelpdeskChat from "./components/HelpdeskChat";
 
-// 🏠 Pages
+// 🏠 Public Pages
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Services from "./pages/Services";
@@ -19,7 +20,7 @@ import Register from "./pages/Register";
 import PaymentSection from "./pages/PaymentSection";
 import Login from "./pages/Login";
 
-// 📊 Dashboards
+// 📊 Dashboard Pages
 import Dashboard from "./pages/Dashboard";
 import EmployeeDashboard from "./pages/EmployeeDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -34,7 +35,7 @@ import Hosting from "./pages/Hosting";
 import Bpo from "./pages/Bpo";
 import IoTSolutions from "./pages/IoTSolutions";
 
-// 💻 Development Services
+// 💻 Development Service Pages
 import Nodejs from "./pages/services/Nodejs";
 import Reactjs from "./pages/services/Reactjs";
 import CMSDevelopment from "./pages/services/CMSDevelopment";
@@ -43,29 +44,28 @@ import EcommerceDevelopment from "./pages/services/EcommerceDevelopment";
 import WebDevelopment from "./pages/services/WebDevelopment";
 import Angular from "./pages/services/Angular";
 
-/* -------------------- 🔐 Private Route -------------------- */
+/* -----------------------------------------------------------
+ 🔐 PROTECTED ROUTE
+----------------------------------------------------------- */
 const PrivateRoute = ({ children, allowedRole }) => {
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
 
-  // ⛔ No login — redirect to login page
-  if (!token || !user) {
-    return <Navigate to="/login" replace />;
-  }
+  if (!token || !user) return <Navigate to="/login" replace />;
 
-  // ⛔ Role not authorized
-  if (allowedRole && user.role !== allowedRole) {
+  if (allowedRole && user.role !== allowedRole)
     return <Navigate to="/dashboard" replace />;
-  }
 
   return children;
 };
 
-/* -------------------- 🌐 Main App -------------------- */
+/* -----------------------------------------------------------
+ 🌐 MAIN APPLICATION ROOT
+----------------------------------------------------------- */
 export default function App() {
   const location = useLocation();
 
-  // 🧾 Hide Navbar/Footer on specific routes
+  /* Hide Navbar / Footer / Chat on specific pages */
   const hideNavbarRoutes = ["/register", "/payment", "/login"];
   const hideFooterRoutes = [
     "/dashboard",
@@ -77,10 +77,19 @@ export default function App() {
     "/newsletter",
   ];
 
+  const hideChatRoutes = [
+    "/login",
+    "/register",
+    "/payment",
+    "/dashboard",
+    "/employee-dashboard",
+    "/admin-dashboard",
+  ];
+
   const hideNavbar = hideNavbarRoutes.includes(location.pathname);
   const hideFooter = hideFooterRoutes.includes(location.pathname);
+  const hideChat = hideChatRoutes.includes(location.pathname);
 
-  // ✅ Token & User from storage
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -91,7 +100,7 @@ export default function App() {
 
       <main className={`flex-1 ${!hideNavbar ? "pt-20" : "pt-0"}`}>
         <Routes>
-          {/* 🌍 Public Routes */}
+          {/* PUBLIC ROUTES */}
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/services" element={<Services />} />
@@ -103,7 +112,7 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/newsletter" element={<Newsletter />} />
 
-          {/* 🧭 Dashboard Redirect Logic */}
+          {/* SMART DASHBOARD REDIRECT */}
           <Route
             path="/dashboard"
             element={
@@ -119,7 +128,7 @@ export default function App() {
             }
           />
 
-          {/* 👩‍💼 Employee Dashboard */}
+          {/* EMPLOYEE DASHBOARD */}
           <Route
             path="/employee-dashboard"
             element={
@@ -129,7 +138,7 @@ export default function App() {
             }
           />
 
-          {/* 👨‍💼 Admin Dashboard */}
+          {/* ADMIN DASHBOARD */}
           <Route
             path="/admin-dashboard"
             element={
@@ -139,7 +148,7 @@ export default function App() {
             }
           />
 
-          {/* 🧩 Service Details */}
+          {/* SERVICE DETAIL PAGES */}
           <Route path="/services/website-maintenance" element={<WebsiteMaintenance />} />
           <Route path="/services/digital-marketing" element={<DigitalMarketing />} />
           <Route path="/services/graphic-design" element={<GraphicDesign />} />
@@ -149,7 +158,7 @@ export default function App() {
           <Route path="/services/domain-hosting" element={<Hosting />} />
           <Route path="/services/bpo-solutions" element={<Bpo />} />
 
-          {/* 💻 Development Pages */}
+          {/* DEVELOPMENT PAGES */}
           <Route path="/services/nodejs" element={<Nodejs />} />
           <Route path="/services/reactjs" element={<Reactjs />} />
           <Route path="/services/cms-development" element={<CMSDevelopment />} />
@@ -158,14 +167,17 @@ export default function App() {
           <Route path="/services/angular" element={<Angular />} />
           <Route path="/services/php-development" element={<Php />} />
 
-          {/* 🚦 Catch-All Redirect */}
+          {/* 404 → HOME */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
 
-      {/* 📩 Newsletter + Footer */}
+      {/* FOOTER */}
       {!hideFooter && <Newsletter />}
       {!hideFooter && <Footer />}
+
+      {/* 💬 HELP DESK CHAT (Visible on Public Pages Only) */}
+      {!hideChat && <HelpdeskChat />}
     </div>
   );
 }
