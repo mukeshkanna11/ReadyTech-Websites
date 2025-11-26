@@ -116,9 +116,6 @@ export const addResponse = async (req, res) => {
   }
 };
 
-// Admin replies to a ticket
-// controllers/supportController.js
-import Ticket from "../models/Ticket.js";
 
 /**
  * Admin replies to a ticket
