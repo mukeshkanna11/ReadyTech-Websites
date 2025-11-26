@@ -1,21 +1,73 @@
 import mongoose from "mongoose";
 
-const TicketSchema = new mongoose.Schema(
+const responseSchema = new mongoose.Schema(
   {
-    tokenId: { type: String, required: true, unique: true },
-    email: { type: String, required: true },
-    message: { type: String, required: true },
-    status: { type: String, default: "Open" },
+    from: {
+      type: String,
+      enum: ["employee", "admin"],
+      required: true,
+    },
+    text: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    }
+  },
+  { _id: false }
+);
 
-    responses: [
-      {
-        from: { type: String },
-        text: { type: String },
-        createdAt: { type: Date, default: Date.now },
-      },
-    ],
+const ticketSchema = new mongoose.Schema(
+  {
+    tokenId: {
+      type: String,
+      required: true,
+      unique: true,
+      index: true,
+    },
+    subject: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    description: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      lowercase: true,
+      trim: true,
+    },
+    employeeId: {
+      type: String,
+      default: null,
+      trim: true,
+    },
+    status: {
+      type: String,
+      enum: ["open", "in-progress", "closed"],
+      default: "open",
+    },
+    responses: [responseSchema],
   },
   { timestamps: true }
 );
 
-export default mongoose.model("Ticket", TicketSchema);
+/** 🔥 Permanent Fix: Auto-lowercase ANY incorrect old values */
+ticketSchema.pre("save", function (next) {
+  if (this.responses && this.responses.length > 0) {
+    this.responses = this.responses.map((r) => ({
+      ...r,
+      from: r.from.toLowerCase(), // auto-fix Admin → admin
+    }));
+  }
+  next();
+});
+
+export default mongoose.model("Ticket", ticketSchema);

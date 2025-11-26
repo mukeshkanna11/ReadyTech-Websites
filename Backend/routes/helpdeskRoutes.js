@@ -1,27 +1,52 @@
-import express from "express";
-import {
-  createTicket,
-  addResponse,
-  getTicketByEmail,
-  getTicketById
-} from "../controllers/helpdeskController.js";
+// import express from "express";
+// import {
+//   createTicket,
+//   addResponse,
+//   getTicketByEmail,
+//   getTicketById,
+//   getAllTickets
+// } from "../controllers/helpdeskController.js";
+// import authMiddleware from "../middleware/authMiddleware.js";
 
-const router = express.Router();
+// const router = express.Router();
 
-/* ---------------------------------------------
-   HELP DESK ROUTES (AI SMART SUPPORT SYSTEM)
-   --------------------------------------------- */
+// /* ---------------------------------------------
+//    HELP DESK ROUTES (AI SMART SUPPORT SYSTEM)
+//    --------------------------------------------- */
 
-// ✅ Create a new ticket (customer first message)
-router.post("/create-ticket", createTicket);
+// /**
+//  * @route   POST /api/support/create-ticket
+//  * @desc    Create a new support ticket (initial employee message)
+//  * @access  Private (authenticated user)
+//  */
+// router.post("/create-ticket", authMiddleware, createTicket);
 
-// ✅ Add message to a ticket (user or bot or admin)
-router.post("/add-response/:ticketId", addResponse);
+// /**
+//  * @route   POST /api/support/add-response/:ticketId
+//  * @desc    Add a response to a ticket (employee, admin, or bot)
+//  * @access  Private (authenticated)
+//  */
+// router.post("/add-response/:ticketId", authMiddleware, addResponse);
 
-// ✅ Get all tickets by user email (optional usage)
-router.get("/by-email/:email", getTicketByEmail);
+// /**
+//  * @route   GET /api/support/by-email/:email
+//  * @desc    Get all tickets for a specific employee by email
+//  * @access  Private (authenticated)
+//  */
+// router.get("/by-email/:email", authMiddleware, getTicketByEmail);
 
-// ✅ Get full ticket conversation by ticket ID / tokenId
-router.get("/:ticketId", getTicketById);
+// /**
+//  * @route   GET /api/support/:ticketId
+//  * @desc    Get full conversation of a ticket by ID
+//  * @access  Private (authenticated)
+//  */
+// router.get("/:ticketId", authMiddleware, getTicketById);
 
-export default router;
+// /**
+//  * @route   GET /api/support/all
+//  * @desc    Get all tickets (for admin overview)
+//  * @access  Private (Admin only)
+//  */
+// router.get("/all", authMiddleware, getAllTickets);
+
+// export default router;

@@ -1,4 +1,4 @@
-// server.js — ReadyTech Backend (Final Updated Version)
+// server.js — ReadyTech Backend (Final Updated Clean Version)
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
@@ -19,7 +19,8 @@ import employeeRoutes from "./routes/employees.js";
 import taskRoutes from "./routes/tasks.js";
 import attendanceRoutes from "./routes/attendance.js";
 import workRoutes from "./routes/workRoutes.js";
-import ticketsRoutes from "./routes/ticketRoutes.js";  // ✅ Helpdesk Ticket Creation: /api/tickets
+import ticketsRoutes from "./routes/ticketRoutes.js";  
+import supportRoutes from "./routes/supportRoutes.js"; // ADMIN + EMPLOYEE SUPPORT CHAT
 
 // =============================================================
 // Environment Setup
@@ -27,7 +28,7 @@ import ticketsRoutes from "./routes/ticketRoutes.js";  // ✅ Helpdesk Ticket Cr
 dotenv.config();
 const app = express();
 
-// For ES Module dirname fix
+// dirname fix for ES module
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -61,8 +62,9 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin) return callback(null, true); // mobile/postman
+      if (!origin) return callback(null, true); 
       if (allowedOrigins.includes(origin)) return callback(null, true);
+
       console.log("❌ CORS Blocked:", origin);
       return callback(new Error("Not allowed by CORS"));
     },
@@ -72,7 +74,7 @@ app.use(
   })
 );
 
-// Extra headers for Postman / Mobile etc.
+// Extra CORS headers (Important for Postman / Mobile)
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", req.headers.origin || "*");
   res.header(
@@ -96,7 +98,7 @@ app.get("/", (req, res) =>
 );
 
 // =============================================================
-// API Routes Set
+// API Routes
 // =============================================================
 app.use("/api/auth", authRoutes);
 app.use("/api/protected", protectedRoutes);
@@ -106,12 +108,13 @@ app.use("/api/employees", employeeRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/attendance", attendanceRoutes);
 app.use("/api/work", workRoutes);
-app.use("/api/tickets", ticketsRoutes);
 
-// ===================== HELP DESK / TICKETS ====================
-// Ticket Creation (Chatbot)
-// POST /api/tickets/create-ticket
+// ===================== SUPPORT / HELP DESK ====================
+// Employee creates ticket (chatbot)
 app.use("/api/tickets", ticketLimiter, ticketsRoutes);
+
+// Admin + Employee support chat
+app.use("/api/support", supportRoutes);
 
 // =============================================================
 // 404 Handler

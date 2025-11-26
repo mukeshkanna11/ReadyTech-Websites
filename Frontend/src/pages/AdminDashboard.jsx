@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const BASE_URL =
@@ -6,23 +6,26 @@ const BASE_URL =
     ? "http://localhost:5000/api"
     : "https://readytech-websites.onrender.com/api";
 
-const AdminDashboard = () => {
+export default function AdminDashboard() {
   const navigate = useNavigate();
 
-  // 🧑‍💼 Admin info (from localStorage)
   const admin = JSON.parse(localStorage.getItem("admin")) || {
     name: "Admin User",
     adminId: "RTS-ADMIN",
   };
 
-  const [activeTab, setActiveTab] = useState("work");
-  const [works, setWorks] = useState([]);
-  const [attendance, setAttendance] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [serverStatus, setServerStatus] = useState("idle");
+  const token = localStorage.getItem("token");
 
-  // 🧱 Work form
-  const [form, setForm] = useState({
+  // ===============================
+  // UI STATES
+  // ===============================
+  const [activeTab, setActiveTab] = useState("work");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // WORK
+  const [works, setWorks] = useState([]);
+  const [workForm, setWorkForm] = useState({
     employeeId: "",
     taskTitle: "",
     description: "",
@@ -30,7 +33,8 @@ const AdminDashboard = () => {
     deadline: "",
   });
 
-  // 🕒 Attendance form
+  // ATTENDANCE
+  const [attendance, setAttendance] = useState([]);
   const [attendanceForm, setAttendanceForm] = useState({
     employeeId: "",
     date: "",
@@ -38,720 +42,540 @@ const AdminDashboard = () => {
     notes: "",
   });
 
-  // ============================
-  // 🔐 Logout
-  // ============================
-  const handleLogout = () => {
+  // SUPPORT
+  const [tickets, setTickets] = useState([]);
+  const [replyMessage, setReplyMessage] = useState("");
+  const [selectedTicketId, setSelectedTicketId] = useState(null);
+
+
+  // ======================================================
+  // PARSE RESPONSE + AUTH CHECK
+  // ======================================================
+  async function parseJsonResponse(res) {
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      throw new Error(data?.message || `Error ${res.status}`);
+    }
+    return data;
+  }
+
+  // ======================================================
+  // LOGOUT
+  // ======================================================
+  function handleLogout() {
     localStorage.removeItem("token");
     localStorage.removeItem("admin");
-    navigate("/dashboard");
-  };
+    navigate("/admin-login");
+  }
 
-  // ============================
-  // 📁 WORK MANAGEMENT
-  // ============================
-  const fetchAllWorks = async () => {
+  // ======================================================
+  // WORK API
+  // ======================================================
+  async function fetchAllWorks() {
     try {
       setLoading(true);
-      setServerStatus("Connecting to server...");
-      const res = await fetch(`${BASE_URL}/work/all`);
-      const data = await res.json();
-      if (data.success) {
-        setWorks(data.works);
-        setServerStatus("connected");
-      } else setServerStatus("failed");
+      const res = await fetch(`${BASE_URL}/work/all`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await parseJsonResponse(res);
+      setWorks(data.works || []);
     } catch (err) {
-      console.error("fetchAllWorks error:", err);
-      setServerStatus("Server waking up... please wait (Render cold start)");
+      setError(err.message);
     } finally {
       setLoading(false);
     }
-  };
+  }
 
-  const addWork = async () => {
+  async function addWork() {
+    if (!workForm.employeeId || !workForm.taskTitle) {
+      alert("Employee ID & Task Title required");
+      return;
+    }
     try {
+      setLoading(true);
       const res = await fetch(`${BASE_URL}/work/add`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify(workForm),
       });
-      const data = await res.json();
-      if (data.success) {
-        alert("✅ Work added successfully!");
-        setForm({
-          employeeId: "",
-          taskTitle: "",
-          description: "",
-          status: "In Progress",
-          deadline: "",
-        });
-        fetchAllWorks();
-      } else alert(data.message);
-    } catch (err) {
-      console.error("addWork error:", err);
-    }
-  };
-
-  const updateWorkStatus = async (id, status) => {
-    try {
-      const res = await fetch(`${BASE_URL}/work/update/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status }),
+      await parseJsonResponse(res);
+      alert("Work added successfully!");
+      setWorkForm({
+        employeeId: "",
+        taskTitle: "",
+        description: "",
+        status: "In Progress",
+        deadline: "",
       });
-      const data = await res.json();
-      if (data.success) fetchAllWorks();
-      else alert(data.message);
+      fetchAllWorks();
     } catch (err) {
-      console.error("updateWorkStatus error:", err);
-    }
-  };
-
-  const deleteWork = async (id) => {
-    try {
-      const res = await fetch(`${BASE_URL}/work/delete/${id}`, { method: "DELETE" });
-      const data = await res.json();
-      if (data.success) {
-        alert("🗑️ Work deleted successfully!");
-        fetchAllWorks();
-      } else alert(data.message);
-    } catch (err) {
-      console.error("deleteWork error:", err);
-    }
-  };
-
-  // ============================
-  // 🕒 ATTENDANCE MANAGEMENT
-  // ============================
-  const fetchAttendance = async () => {
-    try {
-      setLoading(true);
-      const res = await fetch(`${BASE_URL}/attendance`);
-      const data = await res.json();
-      if (data.success) setAttendance(data.attendance);
-    } catch (err) {
-      console.error("fetchAttendance error:", err);
+      setError(err.message);
     } finally {
       setLoading(false);
     }
-  };
+  }
 
-  const markAttendance = async () => {
-    if (!attendanceForm.employeeId || !attendanceForm.date) {
-      return alert("Employee and Date are required.");
-    }
-
+  async function updateWorkStatus(id, status) {
     try {
+      const res = await fetch(`${BASE_URL}/work/update/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ status }),
+      });
+      await parseJsonResponse(res);
+      fetchAllWorks();
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
+  async function deleteWork(id) {
+    if (!confirm("Delete this work item?")) return;
+    try {
+      const res = await fetch(`${BASE_URL}/work/delete/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      await parseJsonResponse(res);
+      fetchAllWorks();
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
+  // ======================================================
+  // ATTENDANCE API
+  // ======================================================
+  async function fetchAttendance() {
+    try {
+      setLoading(true);
+      const res = await fetch(`${BASE_URL}/attendance`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await parseJsonResponse(res);
+      setAttendance(data.attendance || []);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function markAttendance() {
+    if (!attendanceForm.employeeId || !attendanceForm.date) {
+      alert("Employee ID & Date required");
+      return;
+    }
+    try {
+      setLoading(true);
       const res = await fetch(`${BASE_URL}/attendance`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify(attendanceForm),
       });
-      const data = await res.json();
-      if (data.success) {
-        alert(`✅ Attendance for ${attendanceForm.employeeId} marked!`);
-        // Reset form if needed
-        setAttendanceForm({ employeeId: "", date: "", status: "Present", notes: "" });
-        fetchAttendance(); // Refresh the list
-      } else {
-        alert(data.message);
-      }
+      await parseJsonResponse(res);
+      setAttendanceForm({
+        employeeId: "",
+        date: "",
+        status: "Present",
+        notes: "",
+      });
+      fetchAttendance();
     } catch (err) {
-      console.error("markAttendance error:", err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
-  };
+  }
 
-
-  const updateAttendance = async (id, status) => {
+  async function updateAttendance(id, status) {
     try {
       const res = await fetch(`${BASE_URL}/attendance/${id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ status }),
       });
-      const data = await res.json();
-      if (data.success) fetchAttendance();
-      else alert(data.message);
+      await parseJsonResponse(res);
+      fetchAttendance();
     } catch (err) {
-      console.error("updateAttendance error:", err);
+      setError(err.message);
     }
-  };
+  }
 
-  const deleteAttendance = async (id) => {
+  async function deleteAttendance(id) {
+    if (!confirm("Delete this attendance record?")) return;
     try {
-      const res = await fetch(`${BASE_URL}/attendance/${id}`, { method: "DELETE" });
-      const data = await res.json();
-      if (data.success) {
-        alert("🗑️ Attendance deleted!");
-        fetchAttendance();
-      } else alert(data.message);
+      const res = await fetch(`${BASE_URL}/attendance/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      await parseJsonResponse(res);
+      fetchAttendance();
     } catch (err) {
-      console.error("deleteAttendance error:", err);
+      setError(err.message);
     }
-  };
+  }
 
-  // ============================
-  // 📦 INITIAL LOAD
-  // ============================
+  // ======================================================
+  // SUPPORT TICKET API
+  // ======================================================
+  async function fetchTickets() {
+    try {
+      setLoading(true);
+      const res = await fetch(`${BASE_URL}/support/admin/tickets`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await parseJsonResponse(res);
+      setTickets(data.tickets || []);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+async function sendReply(ticketId) {
+  if (!replyMessage.trim()) {
+    alert("Reply message cannot be empty");
+    return;
+  }
+  try {
+    const res = await fetch(`${BASE_URL}/support/admin/reply/${ticketId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ replyMessage: replyMessage.trim() }),
+    });
+    await parseJsonResponse(res);
+    alert("Reply sent successfully!");
+    setReplyMessage("");
+    setSelectedTicketId(null);
+    fetchTickets();
+  } catch (err) {
+    console.error("sendReply error:", err);
+    alert("Failed to send reply");
+  }
+}
+
+
+  async function deleteTicket(ticketId) {
+    if (!confirm("Delete this ticket?")) return;
+    try {
+      setLoading(true);
+      const res = await fetch(`${BASE_URL}/support/admin/ticket/${ticketId}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      await parseJsonResponse(res);
+      fetchTickets();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // ======================================================
+  // LOAD DATA ON TAB CHANGE
+  // ======================================================
   useEffect(() => {
+    setError(null);
     if (activeTab === "work") fetchAllWorks();
-    else fetchAttendance();
+    if (activeTab === "attendance") fetchAttendance();
+    if (activeTab === "support") fetchTickets();
   }, [activeTab]);
 
-  // ============================
-  // 🧱 UI SECTION
-  // ============================
+  useEffect(() => {
+    fetchAllWorks(); // initial load
+  }, []);
+
+  // ======================================================
+  // UI RENDER
+  // ======================================================
   return (
-    <div className="min-h-screen p-6 bg-gray-50">
-
-    {/* ================= ADMIN HEADER - PREMIUM NEON DESIGN ================= */}
-<div className="sticky top-0 z-40 w-full mb-8">
-  <div className="
-    flex flex-col sm:flex-row items-center justify-between
-    w-full p-6 rounded-2xl
-    bg-gradient-to-r from-[#4f46e5] via-[#7c3aed] to-[#2563eb]
-    shadow-[0_0_25px_rgba(124,58,237,0.7)]
-    border border-white/20 backdrop-blur-xl
-    transition-all duration-300
-  ">
-
-    {/* LEFT: TITLE */}
-    <div className="flex items-center gap-4">
-      <div className="p-3 text-xl text-white border shadow-lg bg-white/20 backdrop-blur-lg rounded-2xl border-white/30">
-        🚀
-      </div>
-
-      <h1 className="text-2xl font-extrabold text-white sm:text-3xl drop-shadow-lg">
-        ReadyTech Admin Panel
-      </h1>
-    </div>
-
-    {/* RIGHT: ACTIONS */}
-    <div className="flex items-center gap-5 mt-4 sm:mt-0">
-
-      {/* Notifications */}
-      <button className="p-3 transition-all border shadow-md rounded-xl bg-white/10 backdrop-blur-lg border-white/30 hover:bg-white/20 hover:scale-110">
-        <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-white"
-          fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-            d="M15 17h5l-1.4-1.4A2 2 0 0118 14V11a6 6 0 10-12 0v3c0 .4-.1.7-.4 1L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-        </svg>
-      </button>
-
-      {/* Settings */}
-      <button className="p-3 transition-all border shadow-md rounded-xl bg-white/10 backdrop-blur-lg border-white/30 hover:bg-white/20 hover:scale-110">
-        <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-white"
-          fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-            d="M12 8v4l3 3m6 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      </button>
-
-      {/* Avatar with Glow */}
-      <div className="
-        w-12 h-12 flex items-center justify-center rounded-full 
-        bg-white text-indigo-700 font-bold text-lg 
-        shadow-[0_0_15px_rgba(255,255,255,0.6)] 
-        border border-indigo-200 
-        transition-all hover:scale-110 cursor-pointer
-      ">
-        {admin?.name?.charAt(0)?.toUpperCase()}
-      </div>
-
-      {/* Logout */}
-      <button
-        onClick={handleLogout}
-        className="px-5 py-2 text-sm font-semibold text-white transition-all bg-red-500 border border-red-300 shadow-lg rounded-xl hover:bg-red-600 hover:scale-110"
-      >
-        Logout
-      </button>
-    </div>
-  </div>
-</div>
-
-
-      {/* ================= ADMIN INFO CARD - UPDATED WITH LOGIN NAME ================= */}
-<div className="w-full mb-8">
-  <div className="relative p-6 overflow-hidden transition-all duration-300 bg-white border border-gray-200 shadow-xl rounded-2xl hover:shadow-2xl">
-
-    {/* Background Glow */}
-    <div className="absolute inset-0 -z-10 bg-gradient-to-r from-indigo-500/10 via-blue-500/10 to-purple-500/10 blur-2xl opacity-60"></div>
-
-    <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
-
-      {/* LEFT SIDE */}
-      <div className="flex items-center gap-5">
-        
-        {/* Avatar */}
-        <div className="relative group">
-          <div className="flex items-center justify-center w-20 h-20 overflow-hidden text-3xl font-semibold text-white border-4 border-white rounded-full shadow-md bg-gradient-to-br from-indigo-600 to-blue-600">
-            {admin?.avatarUrl ? (
-              <img
-                src={admin.avatarUrl}
-                alt={admin.name}
-                className="object-cover w-full h-full transition-all duration-300 group-hover:scale-110"
-              />
-            ) : (
-              admin?.name?.charAt(0)?.toUpperCase()
-            )}
-          </div>
+    <div className="min-h-screen p-6 bg-slate-100">
+      {/* HEADER */}
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-3xl font-bold text-indigo-700">Welcome, {admin.name}</h1>
+        <div className="flex items-center gap-3">
+          <span className="text-sm text-slate-600">{admin.adminId}</span>
+          <button
+            onClick={handleLogout}
+            className="px-4 py-2 text-white bg-red-600 rounded-xl hover:bg-red-700"
+          >
+            Logout
+          </button>
         </div>
-
-        {/* ADMIN INFO */}
-        <div className="flex flex-col">
-          <h1 className="flex items-center gap-2 text-2xl font-bold text-gray-900">
-            👋 <span>Hello,</span>
-            <span className="text-transparent bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text">
-              {admin?.name || "Admin"}
-            </span>
-          </h1>
-
-          <p className="mt-1 text-sm text-gray-600">
-            Admin ID:
-            <span className="ml-1 font-semibold text-gray-900">
-              {admin?.adminId || "-"}
-            </span>
-          </p>
-
-          {admin?.email && (
-            <p className="flex items-center gap-1 mt-1 text-sm text-gray-500">
-              📧 {admin.email}
-            </p>
-          )}
-        </div>
-
       </div>
 
-      {/* RIGHT SIDE - ROLE BADGE */}
-      <div className="flex items-center">
-        <span className="px-4 py-2 text-sm font-semibold text-white shadow-md rounded-xl bg-gradient-to-r from-indigo-600 to-blue-600">
-          🔑 {admin?.role || "Administrator"}
-        </span>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-
-
-
-
-      {/* Tabs */}
-      <div className="flex justify-center mb-8">
-        <button
-          className={`px-6 py-2 font-semibold transition-all duration-300 rounded-l-lg shadow-sm ${activeTab === "work"
-              ? "bg-gradient-to-r from-indigo-500 to-blue-600 text-white shadow-md scale-105"
-              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+      {/* TABS */}
+      <div className="flex justify-center gap-4 mb-8">
+        {["work", "attendance", "support"].map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`px-6 py-2 rounded-xl font-semibold transition ${
+              activeTab === tab
+                ? "bg-indigo-600 text-white shadow-lg scale-105"
+                : "bg-white text-slate-700 hover:bg-indigo-100"
             }`}
-          onClick={() => setActiveTab("work")}
-        >
-          Work Management
-        </button>
-        <button
-          className={`px-6 py-2 font-semibold transition-all duration-300 rounded-r-lg shadow-sm ${activeTab === "attendance"
-              ? "bg-gradient-to-r from-indigo-500 to-blue-600 text-white shadow-md scale-105"
-              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-            }`}
-          onClick={() => setActiveTab("attendance")}
-        >
-          Attendance
-        </button>
+          >
+            {tab.toUpperCase()}
+          </button>
+        ))}
       </div>
 
-
-      {/* Server Status */}
-      {serverStatus !== "connected" && (
-        <div className="p-3 mb-4 text-sm text-yellow-700 bg-yellow-100 rounded">
-          ⚠️ {serverStatus || "Connecting to backend... (Render cold start can take 1–2 minutes)"}
-        </div>
+      {/* ERROR */}
+      {error && (
+        <div className="p-3 mb-4 text-red-700 border border-red-200 rounded bg-red-50">{error}</div>
       )}
+      {loading && <div className="mb-4 text-sm text-slate-500">Loading...</div>}
 
-      {/* Content */}
-      {activeTab === "work" ? (
-        <>
-          {/* ================= WORK SECTION ================= */}
-          <div className="p-6 mb-8 border border-indigo-100 shadow-lg bg-gradient-to-br from-indigo-50 to-blue-50 rounded-2xl">
-            <h2 className="flex items-center gap-2 mb-5 text-2xl font-bold text-indigo-700">
-              <span className="text-2xl">➕</span> Add New Work
-            </h2>
-
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+      {/* ================= WORK TAB ================= */}
+      {activeTab === "work" && (
+        <div className="space-y-6">
+          {/* Add Work Form */}
+          <div className="p-6 bg-white border shadow-lg rounded-xl">
+            <h2 className="mb-3 text-xl font-bold text-indigo-700">Add Work</h2>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <input
-                type="text"
                 placeholder="Employee ID"
-                value={form.employeeId}
-                onChange={(e) => setForm({ ...form, employeeId: e.target.value })}
-                className="p-3 text-gray-700 placeholder-gray-400 transition-all border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+                className="p-3 border rounded-xl"
+                value={workForm.employeeId}
+                onChange={(e) => setWorkForm({ ...workForm, employeeId: e.target.value })}
               />
               <input
-                type="text"
                 placeholder="Task Title"
-                value={form.taskTitle}
-                onChange={(e) => setForm({ ...form, taskTitle: e.target.value })}
-                className="p-3 text-gray-700 placeholder-gray-400 transition-all border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none"
-              />
-              <input
-                type="date"
-                value={form.deadline}
-                onChange={(e) => setForm({ ...form, deadline: e.target.value })}
-                className="p-3 text-gray-700 transition-all border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+                className="p-3 border rounded-xl"
+                value={workForm.taskTitle}
+                onChange={(e) => setWorkForm({ ...workForm, taskTitle: e.target.value })}
               />
               <textarea
                 placeholder="Description"
-                value={form.description}
-                onChange={(e) => setForm({ ...form, description: e.target.value })}
-                className="p-3 text-gray-700 placeholder-gray-400 transition-all border border-gray-300 rounded-lg sm:col-span-2 md:col-span-3 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
-                rows="3"
+                className="p-3 border rounded-xl md:col-span-2"
+                value={workForm.description}
+                onChange={(e) => setWorkForm({ ...workForm, description: e.target.value })}
               />
-
-              <div className="flex justify-end sm:col-span-2 md:col-span-3">
-                <button
-                  onClick={addWork}
-                  className="px-6 py-2.5 text-white font-medium bg-gradient-to-r from-indigo-500 to-blue-600 rounded-lg shadow-md hover:from-indigo-600 hover:to-blue-700 transform hover:scale-105 transition-all"
-                >
-                  Add Work
-                </button>
-              </div>
+              <input
+                type="date"
+                className="p-3 border rounded-xl"
+                value={workForm.deadline}
+                onChange={(e) => setWorkForm({ ...workForm, deadline: e.target.value })}
+              />
+              <select
+                className="p-3 border rounded-xl"
+                value={workForm.status}
+                onChange={(e) => setWorkForm({ ...workForm, status: e.target.value })}
+              >
+                <option>In Progress</option>
+                <option>Pending</option>
+                <option>Completed</option>
+              </select>
+              <button
+                onClick={addWork}
+                className="p-3 text-white bg-green-600 rounded-xl hover:bg-green-700 md:col-span-2"
+              >
+                Add Work
+              </button>
             </div>
           </div>
 
-
-          {/* ================= WORK LIST SECTION ================= */}
-          <div className="p-6 border border-indigo-100 shadow-lg bg-gradient-to-br from-indigo-50 to-blue-50 rounded-2xl">
-            <h2 className="flex items-center gap-2 mb-5 text-2xl font-bold text-indigo-700">
-              <span className="text-2xl">📋</span> Work List
-            </h2>
-
-            {loading ? (
-              <p className="py-4 text-center text-gray-600">Loading...</p>
-            ) : (
-              <div className="overflow-x-auto border border-indigo-100 rounded-lg">
-                <table className="w-full text-sm text-left border-collapse">
-                  <thead className="text-white bg-gradient-to-r from-indigo-500 to-blue-600">
-                    <tr>
-                      <th className="p-3 font-semibold text-center">Employee ID</th>
-                      <th className="p-3 font-semibold text-center">Task</th>
-                      <th className="p-3 font-semibold text-center">Status</th>
-                      <th className="p-3 font-semibold text-center">Deadline</th>
-                      <th className="p-3 font-semibold text-center">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {works.length > 0 ? (
-                      works.map((w, index) => (
-                        <tr
-                          key={w._id}
-                          className={`${index % 2 === 0 ? "bg-white" : "bg-indigo-50"
-                            } hover:bg-indigo-100 transition-all`}
-                        >
-                          <td className="p-3 font-medium text-center text-gray-700 border-t">
-                            {w.employeeId}
-                          </td>
-                          <td className="p-3 text-center text-gray-700 border-t">
-                            {w.title}
-                          </td>
-                          <td
-                            className={`p-3 text-center font-semibold border-t ${w.status === "Completed"
-                                ? "text-green-600"
-                                : "text-yellow-600"
-                              }`}
-                          >
-                            {w.status}
-                          </td>
-                          <td className="p-3 text-center text-gray-600 border-t">
-                            {w.deadline?.split("T")[0]}
-                          </td>
-                          <td className="p-3 text-center border-t">
-                            <div className="flex justify-center gap-2">
-                              <button
-                                onClick={() => updateWorkStatus(w._id, "Completed")}
-                                className="px-3 py-1 text-sm font-medium text-white transition-all bg-green-500 rounded-md hover:bg-green-600"
-                              >
-                                Complete
-                              </button>
-                              <button
-                                onClick={() => deleteWork(w._id)}
-                                className="px-3 py-1 text-sm font-medium text-white transition-all bg-red-500 rounded-md hover:bg-red-600"
-                              >
-                                Delete
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td
-                          colSpan="5"
-                          className="p-4 italic text-center text-gray-500 bg-white"
-                        >
-                          No work records found.
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
+          {/* Work List */}
+          <div className="space-y-4">
+            {works.map((w) => (
+              <div key={w._id} className="p-5 bg-white border shadow rounded-xl hover:shadow-lg">
+                <p>
+                  <strong>Employee:</strong> {w.employeeId}
+                </p>
+                <p>
+                  <strong>Task:</strong> {w.taskTitle}
+                </p>
+                <p>
+                  <strong>Status:</strong> {w.status}
+                </p>
+                <p>
+                  <strong>Deadline:</strong>{" "}
+                  {w.deadline ? new Date(w.deadline).toLocaleDateString() : "N/A"}
+                </p>
+                <div className="flex gap-3 mt-3">
+                  <button
+                    onClick={() => updateWorkStatus(w._id, "Completed")}
+                    className="px-3 py-1 text-white bg-blue-600 rounded"
+                  >
+                    Complete
+                  </button>
+                  <button
+                    onClick={() => deleteWork(w._id)}
+                    className="px-3 py-1 text-white bg-red-600 rounded"
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
-            )}
+            ))}
           </div>
+        </div>
+      )}
 
-        </>
-      ) : (
-        <>
-          {/* ================= ATTENDANCE SECTION ================= */}
-          <div className="p-6 mb-8 border border-indigo-100 shadow-lg bg-gradient-to-br from-indigo-50 to-blue-50 rounded-2xl">
-            <h2 className="flex items-center gap-2 mb-5 text-2xl font-bold text-indigo-700">
-              <span className="text-2xl">🕒</span> Mark Attendance
-            </h2>
-
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+      {/* ================= ATTENDANCE TAB ================= */}
+      {activeTab === "attendance" && (
+        <div className="space-y-6">
+          {/* Add Attendance */}
+          <div className="p-6 bg-white border shadow-lg rounded-xl">
+            <h2 className="mb-3 text-xl font-bold text-indigo-700">Mark Attendance</h2>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <input
-                type="text"
                 placeholder="Employee ID"
+                className="p-3 border rounded-xl"
                 value={attendanceForm.employeeId}
                 onChange={(e) =>
                   setAttendanceForm({ ...attendanceForm, employeeId: e.target.value })
                 }
-                className="p-3 text-gray-700 placeholder-gray-400 transition-all border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none"
               />
-
               <input
                 type="date"
+                className="p-3 border rounded-xl"
                 value={attendanceForm.date}
-                onChange={(e) =>
-                  setAttendanceForm({ ...attendanceForm, date: e.target.value })
-                }
-                className="p-3 text-gray-700 transition-all border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+                onChange={(e) => setAttendanceForm({ ...attendanceForm, date: e.target.value })}
               />
-
               <select
+                className="p-3 border rounded-xl"
                 value={attendanceForm.status}
-                onChange={(e) =>
-                  setAttendanceForm({ ...attendanceForm, status: e.target.value })
-                }
-                className="p-3 text-gray-700 transition-all bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+                onChange={(e) => setAttendanceForm({ ...attendanceForm, status: e.target.value })}
               >
-                <option value="Present">Present</option>
-                <option value="Absent">Absent</option>
-                <option value="Leave">Leave</option>
+                <option>Present</option>
+                <option>Absent</option>
+                <option>On Leave</option>
               </select>
-
               <input
-                type="text"
                 placeholder="Notes"
+                className="p-3 border rounded-xl"
                 value={attendanceForm.notes}
-                onChange={(e) =>
-                  setAttendanceForm({ ...attendanceForm, notes: e.target.value })
-                }
-                className="p-3 text-gray-700 placeholder-gray-400 transition-all border border-gray-300 rounded-lg sm:col-span-2 md:col-span-3 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+                onChange={(e) => setAttendanceForm({ ...attendanceForm, notes: e.target.value })}
               />
+              <button
+                onClick={markAttendance}
+                className="p-3 text-white bg-green-600 rounded-xl md:col-span-2 hover:bg-green-700"
+              >
+                Mark Attendance
+              </button>
+            </div>
+          </div>
 
-              <div className="flex justify-end sm:col-span-2 md:col-span-3">
+          {/* Attendance List */}
+          <div className="space-y-4">
+            {attendance.map((a) => (
+              <div key={a._id} className="p-5 bg-white border shadow rounded-xl hover:shadow-lg">
+                <p>
+                  <strong>Employee:</strong> {a.employeeId}
+                </p>
+                <p>
+                  <strong>Date:</strong> {new Date(a.date).toLocaleDateString()}
+                </p>
+                <p>
+                  <strong>Status:</strong> {a.status}
+                </p>
+                <p>
+                  <strong>Notes:</strong> {a.notes || "N/A"}
+                </p>
+                <div className="flex gap-3 mt-3">
+                  <button
+                    onClick={() => updateAttendance(a._id, "Present")}
+                    className="px-3 py-1 text-white bg-blue-600 rounded"
+                  >
+                    Present
+                  </button>
+                  <button
+                    onClick={() => updateAttendance(a._id, "Absent")}
+                    className="px-3 py-1 text-white bg-yellow-600 rounded"
+                  >
+                    Absent
+                  </button>
+                  <button
+                    onClick={() => deleteAttendance(a._id)}
+                    className="px-3 py-1 text-white bg-red-600 rounded"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ================= SUPPORT TAB ================= */}
+      {activeTab === "support" && (
+        <div className="space-y-6">
+          <h2 className="mb-3 text-2xl font-bold text-indigo-700">💬 Support Tickets</h2>
+          {tickets.length === 0 && <p className="text-center text-slate-500">No tickets available</p>}
+          {tickets.map((t) => (
+            <div key={t.tokenId} className="p-6 bg-white border shadow-md rounded-2xl">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-lg font-semibold">
+                  🎫 Ticket ID: <span className="text-indigo-600">{t.tokenId}</span>
+                </h3>
+                <span className="px-3 py-1 text-sm text-white bg-indigo-600 rounded-full">{t.subject}</span>
+              </div>
+              <div className="grid grid-cols-1 gap-2 mb-4 lg:grid-cols-2 text-slate-700">
+                <p>
+                  <strong>👤 Employee:</strong> {t.employeeId || "N/A"}
+                </p>
+                <p>
+                  <strong>📧 Email:</strong> {t.email}
+                </p>
+                <p className="lg:col-span-2">
+                  <strong>📝 Description:</strong> {t.description}
+                </p>
+              </div>
+
+              {/* Responses */}
+              <div className="p-4 mb-4 border bg-slate-50 rounded-xl">
+                <strong className="text-slate-700">📨 Responses:</strong>
+                {!t.responses || t.responses.length === 0 ? (
+                  <p className="mt-2 text-slate-500">No responses yet</p>
+                ) : (
+                  <div className="mt-2 space-y-2">
+                    {t.responses.map((r, i) => (
+                      <div
+                        key={i}
+                        className={`p-3 rounded-xl text-sm border shadow-sm ${
+                          r.from === "admin" ? "bg-indigo-50 border-indigo-200" : "bg-green-50 border-green-200"
+                        }`}
+                      >
+                        <strong>{r.from.toUpperCase()}:</strong> {r.text}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Reply Form */}
+              <div className="flex flex-col gap-2 md:flex-row md:items-center">
+                <input
+                  type="text"
+                  placeholder="Type your reply..."
+                  className="flex-1 p-3 border rounded-xl"
+                  value={selectedTicketId === t.tokenId ? replyMessage : ""}
+                  onFocus={() => setSelectedTicketId(t.tokenId)}
+                  onChange={(e) => setReplyMessage(e.target.value)}
+                />
                 <button
-                  onClick={markAttendance}
-                  className="px-6 py-2.5 text-white font-medium bg-gradient-to-r from-indigo-500 to-blue-600 rounded-lg shadow-md hover:from-indigo-600 hover:to-blue-700 transform hover:scale-105 transition-all"
+                  onClick={() => sendReply(t.tokenId, replyMessage)}
+                  className="px-6 py-3 mt-2 text-white bg-indigo-600 rounded-xl md:mt-0 hover:bg-indigo-700"
                 >
-                  Mark Attendance
+                  Reply
+                </button>
+                <button
+                  onClick={() => deleteTicket(t.tokenId)}
+                  className="px-4 py-3 mt-2 text-white bg-red-600 rounded-xl md:mt-0 hover:bg-red-700"
+                >
+                  Delete
                 </button>
               </div>
             </div>
-          </div>
-
-
-          {/* ================= ATTENDANCE RECORDS SECTION ================= */}
-          <div className="p-6 border border-indigo-100 shadow-lg bg-gradient-to-br from-indigo-50 to-blue-50 rounded-2xl">
-            <h2 className="flex items-center gap-2 mb-5 text-2xl font-bold text-indigo-700">
-              <span className="text-2xl">📅</span> Attendance Records
-            </h2>
-
-            {loading ? (
-              <p className="py-4 text-center text-gray-600">Loading...</p>
-            ) : (
-              <div className="overflow-x-auto border border-indigo-100 rounded-lg">
-                <table className="w-full text-sm text-left border-collapse">
-                  <thead className="text-white bg-gradient-to-r from-indigo-500 to-blue-600">
-                    <tr>
-                      <th className="p-3 font-semibold text-center">Employee ID</th>
-                      <th className="p-3 font-semibold text-center">Date</th>
-                      <th className="p-3 font-semibold text-center">Status</th>
-                      <th className="p-3 font-semibold text-center">Notes</th>
-                      <th className="p-3 font-semibold text-center">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {attendance.length > 0 ? (
-                      attendance.map((a, index) => (
-                        <tr
-                          key={a._id}
-                          className={`${index % 2 === 0 ? "bg-white" : "bg-indigo-50"
-                            } hover:bg-indigo-100 transition-all`}
-                        >
-                          <td className="p-3 font-medium text-center text-gray-700 border-t">
-                            {a.employeeId}
-                          </td>
-                          <td className="p-3 text-center text-gray-700 border-t">
-                            {new Date(a.date).toLocaleDateString()}
-                          </td>
-                          <td className="p-3 text-center border-t">
-                            <span
-                              className={`px-3 py-1 text-xs font-semibold rounded-full ${a.status === "Present"
-                                  ? "bg-green-100 text-green-700"
-                                  : a.status === "Absent"
-                                    ? "bg-red-100 text-red-700"
-                                    : "bg-yellow-100 text-yellow-700"
-                                }`}
-                            >
-                              {a.status}
-                            </span>
-                          </td>
-                          <td className="p-3 text-center text-gray-600 border-t">
-                            {a.notes || "-"}
-                          </td>
-                          <td className="p-3 text-center border-t">
-                            <div className="flex justify-center gap-2">
-                              <button
-                                onClick={() => updateAttendance(a._id, "Present")}
-                                className="px-3 py-1 text-sm font-medium text-white transition-all bg-green-500 rounded-md hover:bg-green-600"
-                              >
-                                Mark Present
-                              </button>
-                              <button
-                                onClick={() => deleteAttendance(a._id)}
-                                className="px-3 py-1 text-sm font-medium text-white transition-all bg-red-500 rounded-md hover:bg-red-600"
-                              >
-                                Delete
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td
-                          colSpan="5"
-                          className="p-4 italic text-center text-gray-500 bg-white"
-                        >
-                          No attendance records found.
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-
-        </>
+          ))}
+        </div>
       )}
-      <div className="p-6 mt-10 border border-indigo-100 shadow-lg bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl">
-        <h2 className="flex items-center gap-2 mb-5 text-2xl font-bold text-indigo-700">
-          <span className="text-2xl">📊</span> Dashboard Insights
-        </h2>
-
-
-        {/* Quick Stats Cards */}
-        <div className="grid grid-cols-1 gap-6 mb-8 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="p-5 transition-all bg-white shadow rounded-2xl hover:shadow-lg">
-            <h3 className="text-sm font-semibold text-gray-500">Total Employees</h3>
-            <p className="mt-2 text-3xl font-bold text-indigo-600">48</p>
-          </div>
-
-
-          <div className="p-5 transition-all bg-white shadow rounded-2xl hover:shadow-lg">
-            <h3 className="text-sm font-semibold text-gray-500">Present Today</h3>
-            <p className="mt-2 text-3xl font-bold text-green-600">42</p>
-          </div>
-
-
-          <div className="p-5 transition-all bg-white shadow rounded-2xl hover:shadow-lg">
-            <h3 className="text-sm font-semibold text-gray-500">Absent Today</h3>
-            <p className="mt-2 text-3xl font-bold text-red-600">6</p>
-          </div>
-
-
-          <div className="p-5 transition-all bg-white shadow rounded-2xl hover:shadow-lg">
-            <h3 className="text-sm font-semibold text-gray-500">Pending Requests</h3>
-            <p className="mt-2 text-3xl font-bold text-yellow-600">3</p>
-          </div>
-        </div>
-
-
-        {/* Recent Activity Log */}
-        <div className="p-6 bg-white shadow rounded-2xl">
-          <h3 className="flex items-center gap-2 mb-4 text-xl font-semibold text-indigo-700">
-            <span>🕒</span> Recent Activity
-          </h3>
-
-
-          <ul className="space-y-3">
-            <li className="p-3 text-gray-700 border border-indigo-100 rounded-lg bg-indigo-50">
-              ✔️ Employee **RTS112** marked as **Present** today
-            </li>
-            <li className="p-3 text-gray-700 border border-indigo-100 rounded-lg bg-indigo-50">
-              ❌ Attendance entry deleted for **RTS125**
-            </li>
-            <li className="p-3 text-gray-700 border border-indigo-100 rounded-lg bg-indigo-50">
-              📝 Admin updated company holiday list
-            </li>
-          </ul>
-        </div>
-
-        <div className="p-6 mt-10 bg-white border border-indigo-100 shadow rounded-2xl">
-          <h3 className="flex items-center gap-2 mb-4 text-xl font-semibold text-indigo-700">
-            <span>⚙️</span> System Health
-          </h3>
-          <ul className="space-y-3 text-gray-700">
-            <li className="p-3 border border-green-100 rounded-lg bg-green-50">🟢 API Server: Running Smoothly</li>
-            <li className="p-3 border border-green-100 rounded-lg bg-green-50">🟢 Database Connection: Stable</li>
-            <li className="p-3 border border-yellow-100 rounded-lg bg-yellow-50">🟡 Storage Usage: 78% (Monitor Soon)</li>
-          </ul>
-        </div>
-
-
-        {/* User Management Panel */}
-        <div className="p-6 mt-10 shadow bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl">
-          <h3 className="flex items-center gap-2 mb-4 text-xl font-semibold text-indigo-700">
-            <span>👥</span> User Management
-          </h3>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            <div className="p-5 transition-all bg-white border border-indigo-100 shadow rounded-2xl hover:shadow-lg">
-              <h4 className="text-lg font-semibold text-gray-800">Add New Employee</h4>
-              <p className="mt-1 text-sm text-gray-500">Quickly register a new team member.</p>
-              <button className="px-4 py-2 mt-3 text-sm text-white bg-indigo-600 rounded-lg shadow hover:bg-indigo-700">Add Employee</button>
-            </div>
-
-
-            <div className="p-5 transition-all bg-white border border-indigo-100 shadow rounded-2xl hover:shadow-lg">
-              <h4 className="text-lg font-semibold text-gray-800">Manage Roles</h4>
-              <p className="mt-1 text-sm text-gray-500">Update access levels & permissions.</p>
-              <button className="px-4 py-2 mt-3 text-sm text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700">Manage Roles</button>
-            </div>
-          </div>
-        </div>
-
-
-        {/* Notifications Center */}
-        <div className="p-6 mt-10 bg-white border border-indigo-100 shadow rounded-2xl">
-          <h3 className="flex items-center gap-2 mb-4 text-xl font-semibold text-indigo-700">
-            <span>🔔</span> Notifications Center
-          </h3>
-          <ul className="space-y-3 text-gray-700">
-            <li className="p-3 border border-indigo-100 rounded-lg bg-indigo-50">📢 New update available for attendance module</li>
-            <li className="p-3 border border-indigo-100 rounded-lg bg-indigo-50">📅 Holiday added: Pongal (Jan 15)</li>
-            <li className="p-3 border border-indigo-100 rounded-lg bg-indigo-50">👤 New employee registered: RTS220</li>
-          </ul>
-        </div>
-
-
-
-        {/* Footer */}
-        <p className="mt-10 text-sm italic text-center text-gray-500">Enhanced Admin Dashboard © ReadyTech Solutions</p>
-
-
-      </div>
     </div>
   );
-};
-
-export default AdminDashboard;
+}

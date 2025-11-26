@@ -14,22 +14,18 @@ export default function HelpdeskChat() {
   const [chat, setChat] = useState([]);
   const [ticketId, setTicketId] = useState(localStorage.getItem("ticketId") || null);
   const [loading, setLoading] = useState(false);
+  const [typing, setTyping] = useState(false);
 
   const chatEndRef = useRef(null);
 
-  // Auto scroll
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [chat]);
+  }, [chat, typing]);
 
-  // Load existing ticket conversation if exists
   useEffect(() => {
     if (ticketId) fetchTicketConversation(ticketId);
   }, [ticketId]);
 
-  // ---------------------------
-  // 1️⃣ Fetch existing conversation
-  // ---------------------------
   const fetchTicketConversation = async (id) => {
     try {
       const res = await axios.get(`${BASE_URL}/tickets/${id}`);
@@ -49,9 +45,6 @@ export default function HelpdeskChat() {
     }
   };
 
-  // ---------------------------
-  // 2️⃣ Create ticket
-  // ---------------------------
   const createTicketIfNeeded = async () => {
     if (ticketId) return ticketId;
 
@@ -74,16 +67,12 @@ export default function HelpdeskChat() {
     }
   };
 
-  // ---------------------------
-  // 3️⃣ Send user message
-  // ---------------------------
   const sendMessage = async () => {
     if (!message.trim() || loading) return;
 
     const userText = message;
     setMessage("");
 
-    // Add user bubble
     const userBubble = {
       sender: "user",
       text: userText,
@@ -92,9 +81,11 @@ export default function HelpdeskChat() {
         minute: "2-digit",
       }),
     };
+
     setChat((prev) => [...prev, userBubble]);
 
     setLoading(true);
+    setTyping(true);
 
     try {
       const id = await createTicketIfNeeded();
@@ -105,25 +96,27 @@ export default function HelpdeskChat() {
         message: userText,
       });
 
-      // Add bot reply
-      if (res.data.reply) {
-        setChat((prev) => [
-          ...prev,
-          {
-            sender: "bot",
-            text: res.data.reply,
-            time: new Date().toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            }),
-          },
-        ]);
-      }
+      setTimeout(() => {
+        setTyping(false);
 
-      // Refresh from DB
-      fetchTicketConversation(id);
+        if (res.data.reply) {
+          setChat((prev) => [
+            ...prev,
+            {
+              sender: "bot",
+              text: res.data.reply,
+              time: new Date().toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              }),
+            },
+          ]);
+        }
+
+        fetchTicketConversation(id);
+      }, 600);
     } catch (err) {
-      console.error("Send error:", err);
+      setTyping(false);
 
       setChat((prev) => [
         ...prev,
@@ -143,12 +136,12 @@ export default function HelpdeskChat() {
 
   return (
     <div className="fixed z-50 bottom-5 right-5">
-      {/* Floating Button */}
+      {/* Floating Chat Button */}
       {!open && (
         <motion.button
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          className="p-4 text-white transition bg-blue-600 rounded-full shadow-xl hover:bg-blue-700"
+          className="p-4 text-white transition rounded-full shadow-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:shadow-blue-300 hover:scale-110"
           onClick={() => {
             setOpen(true);
             createTicketIfNeeded();
@@ -158,49 +151,67 @@ export default function HelpdeskChat() {
         </motion.button>
       )}
 
-      {/* Chat Window */}
+      {/* Chatbox Window */}
       <AnimatePresence>
         {open && (
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
-            className="flex flex-col bg-white border border-gray-200 shadow-2xl w-80 h-96 rounded-xl"
+            className="backdrop-blur-xl bg-white/80 border border-white/30 shadow-2xl w-80 h-[420px] rounded-2xl overflow-hidden flex flex-col"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-4 py-3 text-white bg-blue-600 rounded-t-xl">
+            <div className="flex items-center justify-between p-4 text-white bg-gradient-to-r from-blue-600 to-indigo-600">
               <div>
-                <h3 className="font-semibold">Helpdesk Support</h3>
-                {ticketId && <p className="text-[10px] opacity-80">Ticket: {ticketId}</p>}
+                <h2 className="text-lg font-semibold">Helpdesk Support</h2>
+                {ticketId && (
+                  <span className="text-[10px] opacity-80">Ticket: {ticketId}</span>
+                )}
               </div>
-              <button onClick={() => setOpen(false)}>
+              <button
+                onClick={() => setOpen(false)}
+                className="p-1 rounded-full hover:bg-white/10"
+              >
                 <X size={22} />
               </button>
             </div>
 
-            {/* Chat list */}
-            <div className="flex-1 p-3 space-y-3 overflow-y-auto bg-gray-50">
+            {/* Chat Area */}
+            <div className="flex-1 p-3 space-y-3 overflow-y-auto bg-gray-100">
               {chat.map((msg, index) => (
                 <div
                   key={index}
-                  className={`max-w-[75%] p-2 rounded-lg text-sm ${
-                    msg.sender === "user"
-                      ? "ml-auto bg-blue-500 text-white"
-                      : "mr-auto bg-gray-300 text-black"
-                  }`}
+                  className={`max-w-[75%] p-2 text-sm rounded-2xl shadow
+                    ${
+                      msg.sender === "user"
+                        ? "ml-auto bg-blue-600 text-white rounded-br-none"
+                        : "mr-auto bg-white text-gray-900 border rounded-bl-none"
+                    }`}
                 >
                   {msg.text}
-                  <div className="text-[10px] mt-1 text-right opacity-70">{msg.time}</div>
+                  <div className="text-[10px] text-right opacity-70 mt-1">
+                    {msg.time}
+                  </div>
                 </div>
               ))}
+
+              {/* Bot typing animation */}
+              {typing && (
+                <div className="flex gap-1 p-2 px-3 mr-auto bg-white border shadow rounded-xl">
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                  <div className="w-2 h-2 delay-150 bg-gray-400 rounded-full animate-bounce"></div>
+                  <div className="w-2 h-2 delay-300 bg-gray-400 rounded-full animate-bounce"></div>
+                </div>
+              )}
+
               <div ref={chatEndRef}></div>
             </div>
 
-            {/* Input box */}
-            <div className="flex items-center p-3 space-x-2 border-t">
+            {/* Input */}
+            <div className="flex items-center gap-2 p-3 border-t bg-white/60 backdrop-blur-md">
               <input
                 type="text"
-                className="flex-1 px-3 py-2 text-sm border rounded-lg outline-none"
+                className="flex-1 px-3 py-2 text-sm border shadow-sm outline-none rounded-xl"
                 placeholder="Type a message..."
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
@@ -208,9 +219,12 @@ export default function HelpdeskChat() {
               />
 
               <button
-                className={`p-2 rounded-lg text-white ${
-                  loading ? "bg-gray-400" : "bg-blue-600 hover:bg-blue-700"
-                }`}
+                className={`p-2 rounded-xl text-white shadow-md transition 
+                  ${
+                    loading
+                      ? "bg-gray-400"
+                      : "bg-blue-600 hover:bg-blue-700 hover:scale-105"
+                  }`}
                 onClick={sendMessage}
                 disabled={loading}
               >
