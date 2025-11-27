@@ -9,10 +9,11 @@ const BASE_URL =
 export default function AdminDashboard() {
   const navigate = useNavigate();
 
-  const admin = JSON.parse(localStorage.getItem("admin")) || {
-    name: "Admin User",
-    adminId: "RTS-ADMIN",
-  };
+  // Load admin details safely
+  const storedAdmin = localStorage.getItem("admin");
+  const admin = storedAdmin
+    ? JSON.parse(storedAdmin)
+    : { name: "Admin User", adminId: "RTS-ADMIN" };
 
   const token = localStorage.getItem("token");
 
@@ -65,7 +66,7 @@ export default function AdminDashboard() {
   function handleLogout() {
     localStorage.removeItem("token");
     localStorage.removeItem("admin");
-    navigate("/admin-login");
+    navigate("/dashboard");
   }
 
   // ======================================================
@@ -295,9 +296,11 @@ async function sendReply(ticketId) {
     <div className="min-h-screen p-6 bg-slate-100">
       {/* HEADER */}
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-indigo-700">Welcome, {admin.name}</h1>
+         <h1 className="text-3xl font-bold text-indigo-700">
+          Welcome, {admin.name}
+        </h1>
         <div className="flex items-center gap-3">
-          <span className="text-sm text-slate-600">{admin.adminId}</span>
+           <span className="text-sm text-slate-600">{admin.adminId}</span>
           <button
             onClick={handleLogout}
             className="px-4 py-2 text-white bg-red-600 rounded-xl hover:bg-red-700"
@@ -306,7 +309,21 @@ async function sendReply(ticketId) {
           </button>
         </div>
       </div>
-
+ {/* Quick Stats Section */}
+      <section className="grid grid-cols-1 gap-6 mb-6 md:grid-cols-3">
+        <div className="p-6 bg-white shadow rounded-xl">
+          <h2 className="text-lg font-semibold text-gray-700">Total Users</h2>
+          <p className="text-2xl font-bold text-indigo-600">120</p>
+        </div>
+        <div className="p-6 bg-white shadow rounded-xl">
+          <h2 className="text-lg font-semibold text-gray-700">Active Tickets</h2>
+          <p className="text-2xl font-bold text-indigo-600">45</p>
+        </div>
+        <div className="p-6 bg-white shadow rounded-xl">
+          <h2 className="text-lg font-semibold text-gray-700">Pending Tasks</h2>
+          <p className="text-2xl font-bold text-indigo-600">10</p>
+        </div>
+      </section>
       {/* TABS */}
       <div className="flex justify-center gap-4 mb-8">
         {["work", "attendance", "support"].map((tab) => (
@@ -339,30 +356,30 @@ async function sendReply(ticketId) {
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <input
                 placeholder="Employee ID"
-                className="p-3 border rounded-xl"
+                className="p-3 text-gray-800 border rounded-xl"
                 value={workForm.employeeId}
                 onChange={(e) => setWorkForm({ ...workForm, employeeId: e.target.value })}
               />
               <input
                 placeholder="Task Title"
-                className="p-3 border rounded-xl"
+                className="p-3 text-gray-800 border rounded-xl"
                 value={workForm.taskTitle}
                 onChange={(e) => setWorkForm({ ...workForm, taskTitle: e.target.value })}
               />
               <textarea
                 placeholder="Description"
-                className="p-3 border rounded-xl md:col-span-2"
+                className="p-3 text-gray-800 border rounded-xl md:col-span-2"
                 value={workForm.description}
                 onChange={(e) => setWorkForm({ ...workForm, description: e.target.value })}
               />
               <input
                 type="date"
-                className="p-3 border rounded-xl"
+                className="p-3 text-gray-800 border rounded-xl"
                 value={workForm.deadline}
                 onChange={(e) => setWorkForm({ ...workForm, deadline: e.target.value })}
               />
               <select
-                className="p-3 border rounded-xl"
+                className="p-3 text-gray-800 border rounded-xl"
                 value={workForm.status}
                 onChange={(e) => setWorkForm({ ...workForm, status: e.target.value })}
               >
@@ -382,7 +399,7 @@ async function sendReply(ticketId) {
           {/* Work List */}
           <div className="space-y-4">
             {works.map((w) => (
-              <div key={w._id} className="p-5 bg-white border shadow rounded-xl hover:shadow-lg">
+              <div key={w._id} className="p-5 text-black bg-white border shadow rounded-xl hover:shadow-lg">
                 <p>
                   <strong>Employee:</strong> {w.employeeId}
                 </p>
@@ -422,10 +439,10 @@ async function sendReply(ticketId) {
           {/* Add Attendance */}
           <div className="p-6 bg-white border shadow-lg rounded-xl">
             <h2 className="mb-3 text-xl font-bold text-indigo-700">Mark Attendance</h2>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 ">
               <input
                 placeholder="Employee ID"
-                className="p-3 border rounded-xl"
+                className="p-3 text-gray-800 border rounded-xl"
                 value={attendanceForm.employeeId}
                 onChange={(e) =>
                   setAttendanceForm({ ...attendanceForm, employeeId: e.target.value })
@@ -433,12 +450,12 @@ async function sendReply(ticketId) {
               />
               <input
                 type="date"
-                className="p-3 border rounded-xl"
+                className="p-3 text-gray-800 border rounded-xl"
                 value={attendanceForm.date}
                 onChange={(e) => setAttendanceForm({ ...attendanceForm, date: e.target.value })}
               />
               <select
-                className="p-3 border rounded-xl"
+                className="p-3 text-gray-800 border rounded-xl"
                 value={attendanceForm.status}
                 onChange={(e) => setAttendanceForm({ ...attendanceForm, status: e.target.value })}
               >
@@ -448,7 +465,7 @@ async function sendReply(ticketId) {
               </select>
               <input
                 placeholder="Notes"
-                className="p-3 border rounded-xl"
+                className="p-3 text-gray-800 border rounded-xl"
                 value={attendanceForm.notes}
                 onChange={(e) => setAttendanceForm({ ...attendanceForm, notes: e.target.value })}
               />
@@ -464,7 +481,7 @@ async function sendReply(ticketId) {
           {/* Attendance List */}
           <div className="space-y-4">
             {attendance.map((a) => (
-              <div key={a._id} className="p-5 bg-white border shadow rounded-xl hover:shadow-lg">
+              <div key={a._id} className="p-5 text-black bg-white border shadow rounded-xl hover:shadow-lg">
                 <p>
                   <strong>Employee:</strong> {a.employeeId}
                 </p>
@@ -529,7 +546,7 @@ async function sendReply(ticketId) {
               </div>
 
               {/* Responses */}
-              <div className="p-4 mb-4 border bg-slate-50 rounded-xl">
+              <div className="p-4 mb-4 text-green-500 border bg-slate-50 rounded-xl">
                 <strong className="text-slate-700">📨 Responses:</strong>
                 {!t.responses || t.responses.length === 0 ? (
                   <p className="mt-2 text-slate-500">No responses yet</p>
@@ -554,7 +571,7 @@ async function sendReply(ticketId) {
                 <input
                   type="text"
                   placeholder="Type your reply..."
-                  className="flex-1 p-3 border rounded-xl"
+                  className="flex-1 p-3 text-black border rounded-xl"
                   value={selectedTicketId === t.tokenId ? replyMessage : ""}
                   onFocus={() => setSelectedTicketId(t.tokenId)}
                   onChange={(e) => setReplyMessage(e.target.value)}
