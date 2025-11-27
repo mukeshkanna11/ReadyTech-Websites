@@ -76,7 +76,7 @@ export default function NewsletterCTA() {
           Let’s Build Your Next Digital Success Story 🚀
         </h2>
         <p className="max-w-2xl mx-auto mt-2 text-gray-200">
-          Join our community of growing brands — get insights, updates, and strategies
+          Join our community of growing brands — get insights, updates and strategies
           to help you lead in the digital world.
         </p>
 

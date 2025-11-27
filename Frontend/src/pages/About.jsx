@@ -23,19 +23,19 @@ export default function AboutReadyTech() {
     {
       city: "Coimbatore",
       address: "149 2nd Floor, Hopes, Coimbatore, Tamil Nadu",
-      phone: "+91 7010797721",
+      
     },
     {
       city: "Coimbatore",
       address:
         "Tidel Park, Peelamedu, B.R. Puram Industrial Estate, Coimbatore, Tamil Nadu 641014",
-      phone: "+91 7010797721",
+      
     },
     {
       city: "Bangalore",
       address:
         "2nd floor, Hanumanthappa building, 21/8, Konanakunte Cross Rd, Vasanthapura, Bikasipura, Bangalore, Karnataka",
-      phone: "+91 7010797721",
+      
     },
   ];
 
@@ -45,7 +45,7 @@ export default function AboutReadyTech() {
         <title>About Us | Ready Tech Solutions</title>
         <meta
           name="description"
-          content="Discover how Ready Tech Solutions drives innovation with AI, automation, and smart IT systems."
+          content="Discover how Ready Tech Solutions drives innovation with AI, automation and smart IT systems."
         />
       </Helmet>
 
@@ -83,7 +83,7 @@ export default function AboutReadyTech() {
             data-aos-delay="200"
           >
             Since 2019, Ready Tech Solutions has redefined innovation with
-            automation, data-driven systems, and AI products that empower
+            automation, data-driven systems and AI products that empower
             businesses to scale smarter.
           </p>
         </div>
@@ -98,11 +98,11 @@ export default function AboutReadyTech() {
             </h2>
             <p className="mb-6 leading-relaxed text-gray-300">
               We craft next-gen AI systems that automate workflows, optimize
-              decisions, and unlock digital growth opportunities.
+              decisions and unlock digital growth opportunities.
             </p>
             <p className="mb-6 leading-relaxed text-gray-300">
-              Our tech stack spans predictive analytics, cloud solutions, and
-              ML-powered automation — blending innovation with intelligence.
+              Our tech stack spans predictive analytics, cloud solutions and
+              ML-powered automation that blending innovation with intelligence.
             </p>
             <p className="leading-relaxed text-gray-300">
               Each solution we design evolves with your business, adapting to
@@ -141,7 +141,7 @@ export default function AboutReadyTech() {
               <p className="mb-6 text-lg leading-relaxed text-gray-300">
                 Innovation isn’t a department — it’s our DNA. From AI-powered
                 customer support to automated analytics pipelines, every project
-                we build is designed to create impact, speed, and intelligence.
+                we build is designed to create impact, speed and intelligence.
               </p>
               <p className="text-lg leading-relaxed text-gray-300">
                 We believe technology should evolve alongside you — transforming
@@ -185,7 +185,7 @@ export default function AboutReadyTech() {
             <ValueCard
               icon={<FaHeart />}
               title="Integrity"
-              description="We build technology with transparency, ethics, and impact."
+              description="We build technology with transparency, ethics and impact."
             />
             <ValueCard
               icon={<FaHeart />}
@@ -281,8 +281,7 @@ function MissionCard() {
         <FaBullseye /> Mission
       </h3>
       <p className="leading-relaxed text-gray-300">
-        Empower businesses with intelligent, scalable AI systems that simplify
-        challenges, automate processes, and drive measurable growth.
+       At Ready Tech Solutions, our mission is to build intelligent AI systems and automation platforms that enhance operational efficiency, secure business ecosystems, and advance ethical AI adoption across industries.
       </p>
     </div>
   );
@@ -299,8 +298,7 @@ function VisionCard() {
         <FaLightbulb /> Vision
       </h3>
       <p className="leading-relaxed text-gray-300">
-        Lead the global AI transformation by creating systems that think, learn,
-        and evolve — revolutionizing industries with intelligent progress.
+        Our vision is to transform organizations through AI-driven solutions and seamless automation, maximizing efficiency while delivering robust AI-based security frameworks and ethical AI systems that prioritize privacy, fairness, and responsible innovation.
       </p>
     </div>
   );

@@ -60,10 +60,10 @@ export default function ArtificialIntelligence() {
 
         {/* SEO Meta */}
         <Helmet>
-          <title>Artificial Intelligence (AI) Solutions | ReadyTech AI</title>
+          <title>Artificial Intelligence (AI) Solutions | Ready Tech Solutions AI</title>
           <meta
             name="description"
-            content="ReadyTech AI provides cutting-edge Artificial Intelligence solutions including Machine Learning, AI consulting, predictive analytics, and AI-powered applications for businesses."
+            content="ReadyTech AI provides cutting-edge Artificial Intelligence solutions including Machine Learning, AI consulting, predictive analytics and AI-powered applications for businesses."
           />
           <meta
             name="keywords"
@@ -78,8 +78,8 @@ export default function ArtificialIntelligence() {
           </h1>
           <p className="mt-4 text-lg text-gray-700 sm:text-xl">
             Empower your business with innovative AI solutions from{" "}
-            <span className="font-semibold text-indigo-500">ReadyTech AI</span>, 
-            improving efficiency, accuracy, and decision-making.
+            <span className="font-semibold text-indigo-500">ReadyTech Solutions AI</span>, 
+            improving efficiency, accuracy and decision-making.
           </p>
         </div>
 
@@ -89,12 +89,12 @@ export default function ArtificialIntelligence() {
             Artificial Intelligence (AI) enables machines to perform tasks 
             that mimic human intelligence, including learning, reasoning, 
             and problem-solving. Businesses use AI to automate operations, 
-            enhance customer experience, and generate actionable insights.
+            enhance customer experience and generate actionable insights.
           </p>
           <p>
             At ReadyTech AI, we deliver tailor-made AI solutions that align 
             with your business goals. Our expertise spans AI consulting, 
-            predictive analytics, machine learning, and advanced automation 
+            predictive analytics, machine learning and advanced automation 
             for smarter, data-driven decision-making.
           </p>
         </div>

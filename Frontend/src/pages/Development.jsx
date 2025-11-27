@@ -72,9 +72,9 @@ export default function Development() {
           data-aos="fade-up"
           data-aos-delay="150"
         >
-          Ready Tech Solutions develops, creates, and modifies applications to
+          Ready Tech Solutions develops, creates and modifies applications to
           meet the demands of today’s businesses. From mobile apps to enterprise
-          systems, we deliver scalable, reliable, and futuristic solutions.
+          systems, we deliver scalable, reliable and futuristic solutions.
         </p>
       </section>
 
@@ -97,7 +97,7 @@ export default function Development() {
           <GlowCard
             image="https://cdn-icons-png.flaticon.com/512/2906/2906274.png"
             title="Custom Projects"
-            description="Enterprise systems, IoT apps, and next-gen technology solutions."
+            description="Enterprise systems, IoT apps and next-gen technology solutions."
           />
         </div>
       </section>

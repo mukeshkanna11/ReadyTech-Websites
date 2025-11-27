@@ -19,7 +19,7 @@ import HelpdeskChat from "../components/HelpdeskChat";
 export default function Contact() {
   const contactInfo = [
     { title: "Call Us", info: "+91 7010797721", icon: <FaPhoneAlt /> },
-    { title: "Email Us", info: "uiuxmukesh@gmail.com", icon: <FaEnvelope /> },
+    { title: "Email Us", info: "devsupport@readytechsolutions.in", icon: <FaEnvelope /> },
     {
       title: "Address",
       info: "Coimbatore - 641004, Tamil Nadu, India",
@@ -31,35 +31,22 @@ export default function Contact() {
     {
       city: "Coimbatore",
       address: "No 149 2nd Floor, Hopes, Coimbatore",
-      phone: "+91 7010797721",
+      
     },
     {
       city: "Coimbatore",
       address: "Tidel Park, Peelamedu, B.R Puram Industrial Estate",
-      phone: "+91 7010797721",
+      
     },
     {
       city: "Bangalore",
       address:
         "2nd floor, Hanumanthappa building, 21/8, Konanakunte Cross Rd",
-      phone: "+91 7010797721",
+      
     },
   ];
 
-  const testimonials = [
-    {
-      name: "Suresh Kumar",
-      feedback:
-        "Ready Tech transformed our website, boosting our client engagement!",
-      role: "CEO, TechCorp",
-    },
-    {
-      name: "Anita Reddy",
-      feedback:
-        "Professional, efficient, and innovative solutions every time.",
-      role: "Founder, StartUpHub",
-    },
-  ];
+  
 
   const [formData, setFormData] = useState({
     name: "",
@@ -347,30 +334,7 @@ export default function Contact() {
       <HelpdeskChat />
 
       {/* ================= Testimonials ================= */}
-      <motion.section
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        variants={fadeUp}
-        className="max-w-6xl px-6 py-20 mx-auto"
-      >
-        <h2 className="mb-8 text-3xl font-bold text-center text-yellow-300">
-          Testimonials
-        </h2>
-        <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2">
-          {testimonials.map((t, idx) => (
-            <motion.div
-              whileHover={{ scale: 1.02 }}
-              key={idx}
-              className="p-6 shadow-xl bg-gray-800/70 rounded-xl"
-            >
-              <p className="mb-4 text-gray-300">"{t.feedback}"</p>
-              <h4 className="text-lg font-bold text-indigo-400">{t.name}</h4>
-              <p className="text-gray-400">{t.role}</p>
-            </motion.div>
-          ))}
-        </div>
-      </motion.section>
+      
     </div>
   );
 }

@@ -53,7 +53,7 @@ export default function Home() {
       Transforming Ideas Into Digital Excellence
     </h1>
     <p className="mt-6 text-lg leading-relaxed text-gray-300 sm:text-xl">
-      At <span className="font-semibold text-indigo-400">Ready Tech Solutions</span>, we craft intelligent, scalable, and secure platforms — blending <span className="font-semibold text-pink-400">AI innovation</span> and <span className="font-semibold text-yellow-300">cloud architecture</span>.
+      At <span className="font-semibold text-indigo-400">Ready Tech Solutions,</span>  we design secure and scalable platforms that unite AI-driven innovation with powerful cloud infrastructure. <span className="font-semibold text-pink-400">AI innovation</span> and <span className="font-semibold text-yellow-300">cloud architecture</span>.
     </p>
 
     <div className="flex flex-col items-center justify-center gap-6 mt-12 sm:flex-row">
@@ -279,7 +279,7 @@ function VisionMissionSection() {
           variants={itemVariants}
           className="max-w-3xl mx-auto mb-12 text-lg leading-relaxed text-gray-300"
         >
-          We envision a world where technology empowers creativity — blending{" "}
+          We envision a world where technology empowers creativity and innovation, blending{" "}
           <span className="font-semibold text-indigo-400">AI</span>,{" "}
           <span className="font-semibold text-pink-400">cloud systems</span>, and{" "}
           <span className="font-semibold text-yellow-400">secure solutions</span>{" "}
@@ -293,12 +293,12 @@ function VisionMissionSection() {
           {[
             {
               title: "🌐 Our Vision",
-              desc: "To lead global innovation through sustainable, AI-driven digital transformation.",
+              desc: "Our vision is to transform organizations through AI-driven solutions and seamless automation, maximizing efficiency while delivering robust AI-based security frameworks and ethical AI systems that prioritize privacy, fairness, and responsible innovation.",
               color: "from-indigo-600 to-cyan-400",
             },
             {
               title: "🚀 Our Mission",
-              desc: "To design intelligent, scalable, and secure platforms that empower industries worldwide.",
+              desc: "At Ready Tech Solutions, our mission is to build intelligent AI systems and automation platforms that enhance operational efficiency, secure business ecosystems, and advance ethical AI adoption across industries.",
               color: "from-pink-500 to-purple-500",
             },
           ].map((card, i) => (
@@ -413,7 +413,7 @@ function TemplateA() {
         </h1>
         <p className="max-w-3xl mx-auto mt-6 text-lg text-center text-gray-300">
           At <strong className="text-pink-400">ReadyTech Solutions</strong>, we help businesses scale with technology that lasts. From SaaS platforms to enterprise apps, we focus on{" "}
-          <span className="font-semibold text-purple-300">speed, security, and measurable growth</span>.
+          <span className="font-semibold text-purple-300">speed, security and measurable growth</span>.
         </p>
 
         {/* Business Outcomes */}
@@ -437,7 +437,7 @@ function TemplateA() {
     Trusted by Businesses Worldwide 🌍
   </h2>
   <p className="mt-2 text-gray-300">
-    From startups in Silicon Valley to SMEs in Europe — ReadyTech delivers secure, scalable, and user-friendly platforms.
+    From startups in Silicon Valley to SMEs in Europe — ReadyTech delivers secure, scalable and user-friendly platforms.
   </p>
 
   {/* Gradient overlays for soft fade edges */}
@@ -532,67 +532,97 @@ function TemplateA() {
 function TemplateB() {
   return (
     <section className="overflow-hidden text-gray-100 rounded-xl">
-      {/* Company Introduction */}
-      <div className="px-6 py-16 mx-auto max-w-7xl md:flex md:items-start md:gap-16">
-        <div className="space-y-6 md:w-1/2">
-          <div className="p-8 border border-gray-700 shadow-2xl rounded-3xl bg-gradient-to-br from-gray-800 to-gray-900">
-            <h2 className="mb-4 text-4xl font-extrabold text-pink-400">
-              ReadyTech Solutions – Engineering Digital Excellence
-            </h2>
-            <p className="text-lg text-gray-300">
-              At <span className="font-semibold text-pink-400">ReadyTech Solutions</span>, we deliver
-              <span className="font-semibold text-indigo-400"> end-to-end software solutions</span> that empower businesses to thrive in the digital era.
-              Our team combines <span className="font-semibold text-indigo-400">UX-focused design</span>
-              with <span className="font-semibold text-indigo-400">robust engineering</span> to create products that are visually compelling, technically strong, and market-ready.
-            </p>
-            <p className="mt-3 text-gray-400">
-              Serving clients across the US and domestic markets, we provide innovative solutions that streamline operations, enhance customer engagement, and drive measurable growth.
-            </p>
+ {/* Company Introduction */}
+<div className="px-6 py-16 mx-auto max-w-7xl">
+  <div className="md:flex md:items-start md:gap-16">
+    {/* Left Side */}
+<div className="md:w-1/2">
+  <div className="max-w-full p-8 border border-green-700 shadow-2xl rounded-3xl bg-gradient-to-br from-gray-800 to-gray-900">
+    {/* Heading */}
+    <h2 className="mb-6 text-4xl font-extrabold leading-snug text-pink-400">
+      ReadyTech Solutions – Engineering Digital Excellence
+    </h2>
 
-            <ul className="mt-6 space-y-3 text-gray-300 list-disc list-inside">
-              <li>Custom Web & Mobile Application Development</li>
-              <li>Cloud-Native & Scalable Systems</li>
-              <li>AI-Powered Automation & Smart Workflows</li>
-              <li>Intuitive UI/UX Designs for Maximum Engagement</li>
-              <li>Data Security & Compliance with Global Standards</li>
-            </ul>
-          </div>
-        </div>
+    {/* Paragraphs */}
+    <p className="mb-4 text-lg leading-relaxed text-gray-300 max-w-prose">
+      At <span className="font-semibold text-pink-400">ReadyTech Solutions</span>, we deliver{" "}
+      <span className="font-semibold text-indigo-400">end-to-end software solutions</span> that
+      empower businesses to thrive in the digital era. Our team combines{" "}
+      <span className="font-semibold text-indigo-400">UX-focused design</span> with{" "}
+      <span className="font-semibold text-indigo-400">robust engineering</span> to create products
+      that are visually compelling, technically strong, and market-ready.
+    </p>
 
-        {/* Right Side: Visual Elements */}
-        <div className="grid grid-cols-1 gap-6 mt-10 md:w-1/2 md:mt-0">
-          <div className="p-6 border shadow-lg rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 border-pink-500/40">
-            <h3 className="text-lg font-semibold text-pink-400">Custom Software Solutions</h3>
-            <p className="mt-2 text-gray-300">
-              Tailored applications that align with your business objectives, improving efficiency and user satisfaction.
-            </p>
-          </div>
-          <div className="p-6 border shadow-lg rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 border-cyan-500/40">
-            <h3 className="text-lg font-semibold text-cyan-400">Cloud & Scalable Systems</h3>
-            <p className="mt-2 text-gray-300">
-              Cloud-native architectures designed for high performance, security, and effortless scalability.
-            </p>
-          </div>
-          <div className="p-6 border shadow-lg rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 border-indigo-500/40">
-            <h3 className="text-lg font-semibold text-indigo-400">UX/UI Design Excellence</h3>
-            <p className="mt-2 text-gray-300">
-              Engaging, accessible, and responsive interfaces that boost conversion and retention.
-            </p>
-          </div>
-          <div className="p-6 border shadow-lg rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 border-yellow-500/40">
-            <h3 className="text-lg font-semibold text-yellow-400">AI & Automation</h3>
-            <p className="mt-2 text-gray-300">
-              Intelligent automation for smarter workflows, reduced errors, and faster decision-making.
-            </p>
-          </div>
-          <div className="p-6 border shadow-lg rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 border-green-500/40">
-            <h3 className="text-lg font-semibold text-green-400">Consulting & Support</h3>
-            <p className="mt-2 text-gray-300">
-              Expert guidance for technology adoption and continuous support for sustainable growth.
-            </p>
-          </div>
+    <p className="mb-6 text-lg leading-relaxed text-gray-400 max-w-prose">
+      Serving clients across the US and domestic markets, we provide innovative solutions that
+      streamline operations, enhance customer engagement, and drive measurable growth.
+    </p>
+
+    {/* Features List */}
+    <ul className="mt-6 space-y-3 text-gray-300 list-disc list-inside max-w-prose">
+      <li>Custom Web & Mobile Application Development</li>
+      <li>Cloud-Native & Scalable Systems</li>
+      <li>AI-Powered Automation & Smart Workflows</li>
+      <li>Intuitive UI/UX Designs for Maximum Engagement</li>
+      <li>Data Security & Compliance with Global Standards</li>
+    </ul>
+  </div>
+</div>
+
+
+    {/* Right Side */}
+    <div className="grid grid-cols-1 gap-6 mt-10 md:w-1/2 md:mt-0">
+      {[
+        {
+          title: "Custom Software Solutions",
+          color: "pink-400",
+          border: "border-pink-500/40",
+          description:
+            "Tailored applications that align with your business objectives, improving efficiency and user satisfaction.",
+        },
+        {
+          title: "Cloud & Scalable Systems",
+          color: "cyan-400",
+          border: "border-cyan-500/40",
+          description:
+            "Cloud-native architectures designed for high performance, security and effortless scalability.",
+        },
+        {
+          title: "UX/UI Design Excellence",
+          color: "indigo-400",
+          border: "border-indigo-500/40",
+          description:
+            "Engaging, accessible and responsive interfaces that boost conversion and retention.",
+        },
+        {
+          title: "AI & Automation",
+          color: "yellow-400",
+          border: "border-yellow-500/40",
+          description:
+            "Intelligent automation for smarter workflows, reduced errors and faster decision-making.",
+        },
+        {
+          title: "Consulting & Support",
+          color: "green-400",
+          border: "border-green-500/40",
+          description:
+            "Expert guidance for technology adoption and continuous support for sustainable growth.",
+        },
+      ].map((item, index) => (
+        <div
+          key={index}
+          className={`p-6 border shadow-lg rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 ${item.border} flex flex-col`}
+        >
+          <h3 className={`text-lg font-semibold text-${item.color} mb-2 text-center`}>
+            {item.title}
+          </h3>
+          <p className="text-base leading-relaxed text-left text-gray-300">{item.description}</p>
         </div>
-      </div>
+      ))}
+    </div>
+  </div>
+</div>
+
 
       {/* Industries Served */}
       <div className="py-16 ">
@@ -623,47 +653,103 @@ function TemplateB() {
         </div>
       </div>
 
+      
       {/* Our Process */}
-      <div className="px-6 py-16 mx-auto max-w-7xl">
-        <h2 className="mb-12 text-3xl font-bold text-center text-pink-400">Our Proven Process</h2>
-        <div className="grid grid-cols-1 gap-10 text-center md:grid-cols-4">
-          {[
-            { step: "1. Discovery", color: "text-pink-400", desc: "We understand your goals, audience, and challenges to define a clear roadmap." },
-            { step: "2. Design", color: "text-cyan-400", desc: "We create wireframes, prototypes, and intuitive designs that resonate with users." },
-            { step: "3. Development", color: "text-indigo-400", desc: "Our engineers build scalable, reliable, and maintainable solutions using best practices." },
-            { step: "4. Launch & Support", color: "text-yellow-400", desc: "We deploy your product and provide continuous monitoring, updates, and support." },
-          ].map((item, i) => (
-            <div key={i} className="p-6 bg-gray-800 border border-gray-700 shadow-xl rounded-2xl">
-              <h3 className={`text-lg font-semibold ${item.color}`}>{item.step}</h3>
-              <p className="mt-2 text-gray-300">{item.desc}</p>
-            </div>
-          ))}
-        </div>
+<div className="px-6 py-16 mx-auto max-w-7xl">
+  <h2 className="mb-12 text-3xl font-bold text-center text-pink-400">
+    Our Proven Process
+  </h2>
+  <div className="grid grid-cols-1 gap-10 text-center md:grid-cols-4">
+    {[
+      {
+        step: "1. Discovery",
+        color: "text-pink-400",
+        desc:
+          "We understand your goals, audience, and challenges to define a clear roadmap.",
+      },
+      {
+        step: "2. Design",
+        color: "text-cyan-400",
+        desc:
+          "We create wireframes, prototypes, and intuitive designs that resonate with users.",
+      },
+      {
+        step: "3. Development",
+        color: "text-indigo-400",
+        desc:
+          "Our engineers build scalable, reliable, and maintainable solutions using best practices.",
+      },
+      {
+        step: "4. Launch & Support",
+        color: "text-yellow-400",
+        desc:
+          "We deploy your product and provide continuous monitoring, updates, and support.",
+      },
+    ].map((item, i) => (
+      <div
+        key={i}
+        className="flex flex-col items-center p-6 bg-gray-800 border border-gray-700 shadow-xl rounded-2xl"
+      >
+        <h3 className={`text-lg font-semibold ${item.color} mb-3`}>{item.step}</h3>
+        <p className="text-base leading-relaxed text-left text-gray-300">
+          {item.desc}
+        </p>
       </div>
+    ))}
+  </div>
+</div>
+
 
       {/* Why Choose Us */}
-      <div className="py-16 ">
-        <div className="px-6 mx-auto space-y-8 text-center max-w-7xl">
-          <h2 className="mb-8 text-3xl font-bold text-pink-400">Why Choose ReadyTech Solutions?</h2>
-          <p className="max-w-3xl mx-auto text-gray-300">
-            With years of experience, a dedicated team of experts, and a commitment to innovation, we help businesses achieve their digital goals efficiently. Our clients value our transparency, creativity, and ability to deliver on time and within budget.
-          </p>
-          <div className="grid grid-cols-1 gap-8 mt-8 text-gray-200 md:grid-cols-3">
-            <div className="p-6 transition-shadow bg-gray-800 border shadow-lg border-pink-500/30 rounded-xl hover:shadow-2xl">
-              <h3 className="font-semibold text-pink-400">Experienced Team</h3>
-              <p className="mt-2">Professionals with deep expertise in full-stack development, design, and AI solutions.</p>
-            </div>
-            <div className="p-6 transition-shadow bg-gray-800 border shadow-lg border-cyan-500/30 rounded-xl hover:shadow-2xl">
-              <h3 className="font-semibold text-cyan-400">Client-Centric Approach</h3>
-              <p className="mt-2">We prioritize understanding client needs and delivering solutions that exceed expectations.</p>
-            </div>
-            <div className="p-6 transition-shadow bg-gray-800 border shadow-lg border-indigo-500/30 rounded-xl hover:shadow-2xl">
-              <h3 className="font-semibold text-indigo-400">Proven Results</h3>
-              <p className="mt-2">We have successfully helped clients in multiple industries achieve measurable growth.</p>
-            </div>
-          </div>
+<div className="py-16 bg-gray-900">
+  <div className="px-6 mx-auto space-y-8 text-center max-w-7xl">
+    {/* Section Heading */}
+    <h2 className="text-3xl font-bold text-pink-400">Why Choose ReadyTech Solutions?</h2>
+
+    {/* Intro Paragraph */}
+    <p className="max-w-3xl mx-auto text-lg leading-relaxed text-gray-300">
+      With years of experience, a dedicated team of experts, and a commitment to innovation, we help
+      businesses achieve their digital goals efficiently. Our clients value our transparency,
+      creativity, and ability to deliver on time and within budget.
+    </p>
+
+    {/* Features / Cards */}
+    <div className="grid grid-cols-1 gap-8 mt-8 md:grid-cols-3">
+      {[
+        {
+          title: "Experienced Team",
+          color: "pink-400",
+          description:
+            "Professionals with deep expertise in full-stack development, design, and AI solutions.",
+          border: "border-pink-500/30",
+        },
+        {
+          title: "Client-Centric Approach",
+          color: "cyan-400",
+          description:
+            "We prioritize understanding client needs and delivering solutions that exceed expectations.",
+          border: "border-cyan-500/30",
+        },
+        {
+          title: "Proven Results",
+          color: "indigo-400",
+          description:
+            "We have successfully helped clients in multiple industries achieve measurable growth.",
+          border: "border-indigo-500/30",
+        },
+      ].map((item, index) => (
+        <div
+          key={index}
+          className={`p-6 bg-gray-800 border shadow-lg rounded-xl transition-shadow hover:shadow-2xl ${item.border} flex flex-col`}
+        >
+          <h3 className={`text-lg font-semibold text-${item.color}`}>{item.title}</h3>
+          <p className="mt-2 leading-relaxed text-left text-gray-300">{item.description}</p>
         </div>
-      </div>
+      ))}
+    </div>
+  </div>
+</div>
+
 
       {/* Call to Action */}
       
@@ -699,16 +785,16 @@ function TemplateC() {
           <p className="mt-4 text-lg leading-relaxed text-gray-300">
             At <span className="font-semibold text-pink-400">Ready Tech Solutions</span>,
             we engineer scalable web & mobile applications for startups and enterprises.
-            Our team ensures clean code, robust APIs, and seamless deployments to exceed expectations.
+            Our team ensures clean code, robust APIs and seamless deployments to exceed expectations.
           </p>
 
           {/* Feature Highlights */}
           <div className="grid gap-6 mt-10 sm:grid-cols-2">
             {[
               { title: "APIs & Integrations", desc: "REST/GraphQL endpoints with documentation and third-party integrations.", color: "from-purple-700 to-purple-900" },
-              { title: "Performance", desc: "Optimized queries, server-side caching, and lazy-loading for lightning-fast apps.", color: "from-pink-700 to-pink-900" },
+              { title: "Performance", desc: "Optimized queries, server-side caching and lazy-loading for lightning-fast apps.", color: "from-pink-700 to-pink-900" },
               { title: "Scalability", desc: "Cloud-native deployments with CI/CD pipelines and microservices.", color: "from-indigo-700 to-indigo-900" },
-              { title: "Security", desc: "JWT/OAuth authentication, role-based access, and data encryption.", color: "from-yellow-600 to-yellow-800" }
+              { title: "Security", desc: "JWT/OAuth authentication, role-based access and data encryption.", color: "from-yellow-600 to-yellow-800" }
             ].map((feature, idx) => (
               <div key={idx} className={`p-6 rounded-xl shadow-xl bg-gradient-to-br ${feature.color} hover:scale-105 transition transform`}>
                 <h4 className="font-semibold text-white">{feature.title}</h4>
@@ -736,7 +822,7 @@ function TemplateC() {
       <div className="px-6 py-16 md:px-12">
         <h2 className="text-3xl font-bold text-center text-pink-400">Our Mission</h2>
         <p className="max-w-3xl mx-auto mt-4 text-center text-gray-300">
-          Empower businesses with reliable, scalable, and user-centric digital products. Bridging innovation and practicality to drive measurable growth.
+          Empower businesses with reliable, scalable and user-centric digital products. Bridging innovation and practicality to drive measurable growth.
         </p>
       </div>
 

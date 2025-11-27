@@ -1,104 +1,117 @@
-// // backend/controllers/helpdeskController.js
-// import HelpdeskTicket from "../models/HelpdeskTicket.js";
-// import { customAlphabet } from "nanoid";
+import HelpdeskTicket from "../models/HelpdeskTicket.js";
+import crypto from "crypto";
 
-// const nanoid = customAlphabet("0123456789abcdefghijklmnopqrstuvwxyz", 8);
+const generateToken = () => crypto.randomBytes(4).toString("hex");
 
-// // POST /api/helpdesk/create-ticket
-// export const createTicket = async (req, res, next) => {
-//   try {
-//     const { name, email, phone, subject = "General", message = "Chat started" } = req.body || {};
+// CREATE TICKET
+export const createTicket = async (req, res) => {
+  try {
+    const { email, text } = req.body;
 
-//     if (!message) return res.status(400).json({ error: "message required" });
+    if (!email || !text) {
+      return res.status(400).json({
+        success: false,
+        message: "Email and message text are required",
+      });
+    }
 
-//     const tokenId = nanoid();
+    const tokenId = generateToken();
 
-//     const ticket = new HelpdeskTicket({
-//       tokenId,
-//       name,
-//       email,
-//       phone,
-//       subject,
-//       message,
-//       responses: [
-//         { from: "bot", text: process.env.TICKET_AUTO_REPLY || "Thanks — we received your request. We'll get back to you soon." },
-//       ],
-//     });
+    const ticket = await HelpdeskTicket.create({
+      tokenId,
+      email,
+      subject: "",
+      description: "",
+      responses: [{ from: "user", text }],
+    });
 
-//     await ticket.save();
+    res.status(201).json({
+      success: true,
+      message: "Ticket created",
+      ticket,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
 
-//     return res.status(201).json({
-//       ticketId: tokenId,
-//       status: ticket.status,
-//       autoReply: ticket.responses[0].text,
-//       createdAt: ticket.createdAt,
-//     });
-//   } catch (err) {
-//     next(err);
-//   }
-// };
+// ADD RESPONSE
+export const addResponse = async (req, res) => {
+  try {
+    const { ticketId } = req.params;
+    const { from, text } = req.body;
 
-// // POST /api/helpdesk/send
-// export const sendMessage = async (req, res, next) => {
-//   try {
-//     const { ticketId, message } = req.body || {};
-//     if (!ticketId || !message) return res.status(400).json({ error: "ticketId and message required" });
+    if (!from || !text) {
+      return res.status(400).json({
+        success: false,
+        message: "Sender and text are required",
+      });
+    }
 
-//     const ticket = await HelpdeskTicket.findOne({ tokenId: ticketId });
-//     if (!ticket) return res.status(404).json({ error: "Ticket not found" });
+    const ticket = await HelpdeskTicket.findOne({ tokenId: ticketId });
 
-//     // Save user message
-//     ticket.responses.push({ from: "user", text: message });
+    if (!ticket) {
+      return res.status(404).json({
+        success: false,
+        message: "Ticket not found",
+      });
+    }
 
-//     // Example: simple auto-reply bot (replace with real logic later)
-//     const botReply = process.env.TICKET_AUTO_REPLY || "Thanks — we received your message. We'll respond soon.";
-//     ticket.responses.push({ from: "bot", text: botReply });
+    ticket.responses.push({ from, text });
+    ticket.status = "Open";
 
-//     await ticket.save();
+    await ticket.save();
 
-//     return res.json({ success: true, reply: botReply, ticket });
-//   } catch (err) {
-//     next(err);
-//   }
-// };
+    res.json({
+      success: true,
+      message: "Response added",
+      ticket,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
 
-// // GET /api/helpdesk/:token
-// export const getTicket = async (req, res, next) => {
-//   try {
-//     const { token } = req.params;
-//     const ticket = await HelpdeskTicket.findOne({ tokenId: token }).lean();
-//     if (!ticket) return res.status(404).json({ error: "Ticket not found" });
-//     return res.json(ticket);
-//   } catch (err) {
-//     next(err);
-//   }
-// };
+// GET TICKET BY ID
+export const getTicketById = async (req, res) => {
+  try {
+    const { ticketId } = req.params;
 
-// // PATCH /api/helpdesk/:token (admin)
-// export const patchTicket = async (req, res, next) => {
-//   try {
-//     const apiKey = process.env.API_KEY;
-//     const provided = req.headers["x-api-key"] || req.body.apiKey;
-//     if (apiKey && provided !== apiKey) return res.status(401).json({ error: "Unauthorized" });
+    const ticket = await HelpdeskTicket.findOne({ tokenId: ticketId });
 
-//     const { token } = req.params;
-//     const { status, response } = req.body || {};
-//     const ticket = await HelpdeskTicket.findOne({ tokenId: token });
-//     if (!ticket) return res.status(404).json({ error: "Ticket not found" });
+    if (!ticket) {
+      return res.status(404).json({
+        success: false,
+        message: "Ticket not found",
+      });
+    }
 
-//     if (status) ticket.status = status;
-//     if (response && response.text) {
-//       ticket.responses.push({
-//         from: response.from || "agent",
-//         text: response.text,
-//       });
-//     }
+    res.json({ success: true, ticket });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
 
-//     await ticket.save();
+// GET TICKETS BY EMAIL
+export const getTicketByEmail = async (req, res) => {
+  try {
+    const { email } = req.params;
 
-//     // Optionally notify user here by email (not implemented)
-//     return res.json(ticket);
-//   } catch (err) {
-//     next(err);
-//   }
-// };
+    const tickets = await HelpdeskTicket.find({ email });
+
+    res.json({ success: true, tickets });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// GET ALL TICKETS (ADMIN)
+export const getAllTickets = async (req, res) => {
+  try {
+    const tickets = await HelpdeskTicket.find().sort({ createdAt: -1 });
+
+    res.json({ success: true, tickets });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

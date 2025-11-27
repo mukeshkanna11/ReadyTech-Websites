@@ -19,14 +19,14 @@ export default function Services() {
   const services = [
     {
       title: "Website Maintenance",
-      description: "Keep your website updated, secure, and optimized for the best performance with 24/7 support.",
+      description: "Keep your website updated, secure and optimized for the best performance with 24/7 support.",
       icon: <FaLaptopCode className="text-4xl text-white" />,
       image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80",
       link: "/services/website-maintenance",
     },
     {
       title: "Digital Marketing",
-      description: "Boost your online presence with SEO, PPC, and content marketing campaigns that deliver results.",
+      description: "Boost your online presence with SEO, PPC and content marketing campaigns that deliver results.",
       icon: <FaChartLine className="text-4xl text-white" />,
       image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
       link: "/services/digital-marketing",
@@ -47,7 +47,7 @@ export default function Services() {
     },
     {
       title: "Artificial Intelligence",
-      description: "Leverage AI & ML for smarter automation, analytics, and customer engagement.",
+      description: "Leverage AI & ML for smarter automation, analytics and customer engagement.",
       icon: <FaRobot className="text-4xl text-white" />,
       image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800&q=80",
       link: "/services/artificial-intelligence",
@@ -68,7 +68,7 @@ export default function Services() {
     },
     {
       title: "BPO Solutions",
-      description: "End-to-end outsourcing with customer support, telemarketing, and back-office services.",
+      description: "End-to-end outsourcing with customer support, telemarketing and back-office services.",
       icon: <FaHeadset className="text-4xl text-white" />,
       image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80",
       link: "/services/bpo-solutions",

@@ -71,10 +71,10 @@ export default function WebsiteMaintenance() {
   return (
     <section className="relative py-20 bg-gradient-to-b from-white to-indigo-50">
       <Helmet>
-        <title>Website Maintenance Services | ReadyTech Solutions</title>
+        <title>Website Maintenance Services | Ready Tech Solutions</title>
         <meta
           name="description"
-          content="ReadyTech Solutions provides professional website maintenance services — ensuring your business website stays secure, updated, fast, and high-performing at all times."
+          content="ReadyTech Solutions provides professional website maintenance services — ensuring your business website stays secure, updated, fast and high-performing at all times."
         />
         <meta
           name="keywords"
@@ -90,8 +90,8 @@ export default function WebsiteMaintenance() {
           </h1>
           <p className="mt-4 text-lg text-gray-700 sm:text-xl">
             Keep your website performing at its best with{" "}
-            <span className="font-semibold text-indigo-500">ReadyTech Solutions</span> — 
-            we ensure it remains secure, optimized, and always up to date.
+            <span className="font-semibold text-indigo-500">Ready Tech Solutions</span> — 
+            we ensure it remains secure, optimized and always up to date.
           </p>
         </div>
 
@@ -107,11 +107,11 @@ export default function WebsiteMaintenance() {
           <p>
             At <strong>ReadyTech Solutions</strong>, our website maintenance services are crafted 
             to meet global quality standards. We manage everything — from CMS updates, plugin upgrades, 
-            and performance tuning to SSL renewals, database optimization, and security patching. 
+            and performance tuning to SSL renewals, database optimization and security patching. 
             Our proactive approach helps you avoid costly downtime and keeps your site future-ready.
           </p>
           <p>
-            With a decade of IT experience, we maintain business websites, portals, and enterprise 
+            With a decade of IT experience, we maintain business websites, portals and enterprise 
             systems across industries, ensuring uninterrupted performance and growth.
           </p>
         </div>
@@ -188,7 +188,7 @@ export default function WebsiteMaintenance() {
             Get Your Website Professionally Maintained
           </a>
           <p className="mt-4 text-gray-600">
-            Keep your site healthy, fast, and secure — focus on your business, while we handle your technology.
+            Keep your site healthy, fast and secure — focus on your business, while we handle your technology.
           </p>
         </div>
       </div>

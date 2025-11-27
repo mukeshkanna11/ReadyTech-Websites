@@ -1,73 +1,31 @@
+// backend/models/Ticket.js
 import mongoose from "mongoose";
-
-const responseSchema = new mongoose.Schema(
-  {
-    from: {
-      type: String,
-      enum: ["employee", "admin"],
-      required: true,
-    },
-    text: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    }
-  },
-  { _id: false }
-);
 
 const ticketSchema = new mongoose.Schema(
   {
-    tokenId: {
-      type: String,
-      required: true,
-      unique: true,
-      index: true,
-    },
-    subject: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    description: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    email: {
-      type: String,
-      required: true,
-      lowercase: true,
-      trim: true,
-    },
-    employeeId: {
-      type: String,
-      default: null,
-      trim: true,
-    },
+    tokenId: { type: String, required: true, unique: true },
+
+    // Not required anymore
+    email: { type: String, required: true },
+
+    subject: { type: String, default: "" },     // ← removed required
+    description: { type: String, default: "" }, // ← removed required
+
     status: {
       type: String,
-      enum: ["open", "in-progress", "closed"],
-      default: "open",
+      enum: ["New", "Open", "Closed"],
+      default: "New",
     },
-    responses: [responseSchema],
+
+    responses: [
+      {
+        from: { type: String, enum: ["user", "admin"], required: true },
+        text: { type: String, required: true },
+        createdAt: { type: Date, default: Date.now },
+      },
+    ],
   },
   { timestamps: true }
 );
-
-/** 🔥 Permanent Fix: Auto-lowercase ANY incorrect old values */
-ticketSchema.pre("save", function (next) {
-  if (this.responses && this.responses.length > 0) {
-    this.responses = this.responses.map((r) => ({
-      ...r,
-      from: r.from.toLowerCase(), // auto-fix Admin → admin
-    }));
-  }
-  next();
-});
 
 export default mongoose.model("Ticket", ticketSchema);

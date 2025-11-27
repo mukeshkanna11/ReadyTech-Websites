@@ -22,6 +22,7 @@ import workRoutes from "./routes/workRoutes.js";
 import ticketsRoutes from "./routes/ticketRoutes.js";  
 import supportRoutes from "./routes/supportRoutes.js"; // ADMIN + EMPLOYEE SUPPORT CHAT
 
+
 // =============================================================
 // Environment Setup
 // =============================================================
@@ -110,11 +111,14 @@ app.use("/api/attendance", attendanceRoutes);
 app.use("/api/work", workRoutes);
 
 // ===================== SUPPORT / HELP DESK ====================
+
 // Employee creates ticket (chatbot)
 app.use("/api/tickets", ticketLimiter, ticketsRoutes);
 
+
 // Admin + Employee support chat
 app.use("/api/support", supportRoutes);
+
 
 // =============================================================
 // 404 Handler

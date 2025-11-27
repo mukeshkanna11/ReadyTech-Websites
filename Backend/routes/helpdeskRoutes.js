@@ -1,52 +1,28 @@
-// import express from "express";
-// import {
-//   createTicket,
-//   addResponse,
-//   getTicketByEmail,
-//   getTicketById,
-//   getAllTickets
-// } from "../controllers/helpdeskController.js";
-// import authMiddleware from "../middleware/authMiddleware.js";
+import express from "express";
+import {
+  createTicket,
+  addResponse,
+  getTicketByEmail,
+  getTicketById,
+  getAllTickets,
+} from "../controllers/helpdeskController.js";
+import authMiddleware from "../middleware/authMiddleware.js"; // optional
 
-// const router = express.Router();
+const router = express.Router();
 
-// /* ---------------------------------------------
-//    HELP DESK ROUTES (AI SMART SUPPORT SYSTEM)
-//    --------------------------------------------- */
+// USER: Create ticket
+router.post("/create", createTicket);
 
-// /**
-//  * @route   POST /api/support/create-ticket
-//  * @desc    Create a new support ticket (initial employee message)
-//  * @access  Private (authenticated user)
-//  */
-// router.post("/create-ticket", authMiddleware, createTicket);
+// USER/ADMIN: Add response
+router.post("/response/:ticketId", addResponse);
 
-// /**
-//  * @route   POST /api/support/add-response/:ticketId
-//  * @desc    Add a response to a ticket (employee, admin, or bot)
-//  * @access  Private (authenticated)
-//  */
-// router.post("/add-response/:ticketId", authMiddleware, addResponse);
+// USER/ADMIN: Get ticket by tokenId
+router.get("/ticket/:ticketId", getTicketById);
 
-// /**
-//  * @route   GET /api/support/by-email/:email
-//  * @desc    Get all tickets for a specific employee by email
-//  * @access  Private (authenticated)
-//  */
-// router.get("/by-email/:email", authMiddleware, getTicketByEmail);
+// USER: Get all tickets by email
+router.get("/email/:email", getTicketByEmail);
 
-// /**
-//  * @route   GET /api/support/:ticketId
-//  * @desc    Get full conversation of a ticket by ID
-//  * @access  Private (authenticated)
-//  */
-// router.get("/:ticketId", authMiddleware, getTicketById);
+// ADMIN: Get all tickets
+router.get("/all", getAllTickets);
 
-// /**
-//  * @route   GET /api/support/all
-//  * @desc    Get all tickets (for admin overview)
-//  * @access  Private (Admin only)
-//  */
-// router.get("/all", authMiddleware, getAllTickets);
-
-// export default router;
+export default router;
