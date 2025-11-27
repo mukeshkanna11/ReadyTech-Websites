@@ -294,21 +294,125 @@ async function sendReply(ticketId) {
   // ======================================================
   return (
     <div className="min-h-screen p-6 bg-slate-100">
-      {/* HEADER */}
-      <div className="flex items-center justify-between mb-6">
-         <h1 className="text-3xl font-bold text-indigo-700">
-          Welcome, {admin.name}
-        </h1>
-        <div className="flex items-center gap-3">
-           <span className="text-sm text-slate-600">{admin.adminId}</span>
+      {/* ADMIN HEADER */}
+<header className="p-5 mb-8 border-b shadow-lg backdrop-blur-xl bg-white/60 border-indigo-200/40 sm:p-6 rounded-2xl">
+  <div className="flex items-center justify-between">
+
+    {/* LEFT — TITLE + SEARCH */}
+    <div className="flex items-center gap-6">
+      <h1 className="flex items-center gap-2 text-3xl font-extrabold text-transparent bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text">
+        ⚡ Admin Dashboard
+      </h1>
+
+      {/* Search */}
+      <div className="items-center hidden px-4 py-2 border border-indigo-100 shadow-md md:flex bg-white/80 rounded-xl">
+        <input
+          type="text"
+          placeholder="Search users, tickets, projects..."
+          className="w-56 text-sm text-black bg-transparent outline-none"
+        />
+        <svg
+          className="w-5 h-5 text-indigo-500"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M10 18a8 8 0 100-16 8 8 0 000 16z"/>
+        </svg>
+      </div>
+    </div>
+
+    {/* RIGHT — NOTIFICATIONS + PROFILE */}
+    <div className="flex items-center gap-5">
+
+      {/* Notifications */}
+      <button className="relative p-2 transition border border-indigo-100 rounded-full shadow-md bg-white/80 hover:shadow-lg hover:bg-white">
+        <svg
+          className="w-6 h-6 text-indigo-600"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M14.25 18.25a1.75 1.75 0 11-3.5 0m7-5.5V10a6 6 0 10-12 0v2.75L4 17h16l-2.75-4.25z"
+          />
+        </svg>
+        <span className="absolute top-1 right-1 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full">
+          5
+        </span>
+      </button>
+
+      {/* ADMIN MENU */}
+      <div className="relative group">
+        <button className="flex items-center gap-3 px-3 py-2 pr-4 transition border border-indigo-100 rounded-full shadow-md bg-white/80 hover:shadow-lg">
+          {/* Avatar letter */}
+          <div className="flex items-center justify-center text-lg font-bold text-white rounded-full w-11 h-11 bg-gradient-to-r from-indigo-500 to-blue-500">
+            {admin.name.charAt(0).toUpperCase()}
+          </div>
+
+          <div className="flex-col hidden text-left sm:flex">
+            <p className="font-semibold text-green-900">{admin.name}</p>
+            <p className="text-xs text-gray-800">{admin.adminId}</p>
+          </div>
+
+          <svg
+            className="w-4 h-4 text-gray-600 transition group-hover:rotate-180"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+
+        {/* Dropdown */}
+        <div className="absolute right-0 z-20 flex-col hidden p-3 mt-2 border border-indigo-100 shadow-xl group-hover:flex bg-white/90 backdrop-blur-xl rounded-xl w-52">
+          <button className="flex items-center gap-2 px-3 py-2 text-sm text-black rounded-lg hover:bg-indigo-50">⚙️ Admin Settings</button>
+          <button className="flex items-center gap-2 px-3 py-2 text-sm text-black rounded-lg hover:bg-indigo-50">👥 Employees</button>
+          <button className="flex items-center gap-2 px-3 py-2 text-sm text-black rounded-lg hover:bg-indigo-50">🎫 View Tickets</button>
+          <button className="flex items-center gap-2 px-3 py-2 text-sm text-black rounded-lg hover:bg-indigo-50">📊 Reports & Analytics</button>
           <button
             onClick={handleLogout}
-            className="px-4 py-2 text-white bg-red-600 rounded-xl hover:bg-red-700"
+            className="flex items-center gap-2 px-3 py-2 text-sm text-red-600 rounded-lg hover:bg-red-50"
           >
-            Logout
+            🚪 Logout
           </button>
         </div>
       </div>
+    </div>
+  </div>
+
+  {/* QUICK ADMIN SHORTCUTS */}
+  <div className="grid grid-cols-2 gap-4 mt-6 sm:grid-cols-4">
+
+    <div className="p-4 transition border border-indigo-100 shadow-md cursor-pointer bg-white/70 rounded-xl hover:scale-105">
+      <p className="text-xs text-gray-800">Total Employees</p>
+      <h3 className="text-xl font-bold text-indigo-700">42</h3>
+    </div>
+
+    <div className="p-4 transition border border-indigo-100 shadow-md cursor-pointer bg-white/70 rounded-xl hover:scale-105">
+      <p className="text-xs text-gray-800">Pending Tickets</p>
+      <h3 className="text-xl font-bold text-yellow-600">6</h3>
+    </div>
+
+    <div className="p-4 transition border border-indigo-100 shadow-md cursor-pointer bg-white/70 rounded-xl hover:scale-105">
+      <p className="text-xs text-gray-800">Projects Active</p>
+      <h3 className="text-xl font-bold text-blue-700">3</h3>
+    </div>
+
+    <div className="p-4 transition border border-indigo-100 shadow-md cursor-pointer bg-white/70 rounded-xl hover:scale-105">
+      <p className="text-xs text-gray-800">System Alerts</p>
+      <h3 className="text-xl font-bold text-red-600">2</h3>
+    </div>
+
+  </div>
+</header>
+
  {/* Quick Stats Section */}
       <section className="grid grid-cols-1 gap-6 mb-6 md:grid-cols-3">
         <div className="p-6 bg-white shadow rounded-xl">
@@ -333,7 +437,7 @@ async function sendReply(ticketId) {
             className={`px-6 py-2 rounded-xl font-semibold transition ${
               activeTab === tab
                 ? "bg-indigo-600 text-white shadow-lg scale-105"
-                : "bg-white text-slate-700 hover:bg-indigo-100"
+                : "bg-white text-indigo-600 hover:bg-indigo-100"
             }`}
           >
             {tab.toUpperCase()}

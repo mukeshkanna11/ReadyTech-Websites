@@ -174,26 +174,134 @@ const EmployeeDashboard = () => {
   return (
     <div className="min-h-screen p-6 bg-gradient-to-br from-indigo-50 to-white">
       {/* HEADER */}
-      <header className="flex flex-col items-center justify-between p-6 mb-8 shadow-lg sm:flex-row bg-gradient-to-r from-indigo-100 to-blue-50 rounded-2xl">
-        <h1 className="text-3xl font-bold text-indigo-700">🚀 ReadyTech Dashboard</h1>
-        <div className="flex items-center gap-4 mt-4 sm:mt-0">
-          <div className="flex items-center gap-3 px-3 py-1 bg-white rounded-full shadow-md">
-            <div className="flex items-center justify-center w-10 h-10 text-lg font-bold text-white bg-indigo-500 rounded-full">
-              {employee.name.charAt(0).toUpperCase()}
-            </div>
-            <div className="flex-col hidden sm:flex">
-              <p className="font-semibold text-gray-700">{employee.name}</p>
-              <p className="text-xs text-gray-500">{employee.employeeId}</p>
-            </div>
+<header className="p-4 mb-8 border-b shadow-lg backdrop-blur-xl bg-white/60 border-indigo-200/40 sm:p-6 rounded-2xl">
+  <div className="flex items-center justify-between">
+
+    {/* LEFT — LOGO + SEARCH */}
+    <div className="flex items-center gap-6">
+      {/* Logo */}
+      <h1 className="flex items-center gap-2 text-3xl font-extrabold tracking-wide text-transparent bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text">
+        <span>⚡</span> ReadyTech Dashboard
+      </h1>
+
+      {/* Search */}
+      <div className="items-center hidden px-4 py-2 border border-indigo-100 shadow-md md:flex bg-white/70 rounded-xl">
+        <input
+          type="text"
+          placeholder="Search anything..."
+          className="w-48 text-sm bg-transparent outline-none"
+        />
+        <svg
+          className="w-5 h-5 text-indigo-500"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M10 18a8 8 0 100-16 8 8 0 000 16z" />
+        </svg>
+      </div>
+    </div>
+
+    {/* RIGHT — NOTIFICATIONS + ACCOUNT DROPDOWN */}
+    <div className="flex items-center gap-5">
+
+      {/* Notifications */}
+      <button className="relative p-2 transition rounded-full shadow-md bg-white/70 hover:shadow-lg hover:bg-white">
+        <svg
+          className="w-6 h-6 text-indigo-600"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M14.25 18.25a1.75 1.75 0 11-3.5 0m7-5.5V10a6 6 0 10-12 0v2.75L4 17h16l-2.75-4.25z"
+          />
+        </svg>
+        <span className="absolute top-1 right-1 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full">
+          3
+        </span>
+      </button>
+
+      {/* Account dropdown */}
+      <div className="relative group">
+        <button className="flex items-center gap-3 p-2 pr-4 transition border border-indigo-100 rounded-full shadow-md bg-white/80 hover:shadow-lg">
+          {/* Avatar */}
+          <div className="flex items-center justify-center text-lg font-bold text-white rounded-full w-11 h-11 bg-gradient-to-r from-indigo-500 to-blue-500">
+            {employee.name.charAt(0).toUpperCase()}
           </div>
+
+          {/* Employee Name */}
+          <div className="flex-col hidden text-left sm:flex">
+            <p className="font-semibold text-green-800">{employee.name}</p>
+            <p className="text-xs text-gray-800">{employee.employeeId}</p>
+          </div>
+
+          {/* Arrow */}
+          <svg
+            className="w-4 h-4 text-gray-600 transition group-hover:rotate-180"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+
+        {/* Dropdown Menu */}
+        <div className="absolute right-0 z-20 flex-col hidden w-48 p-3 mt-2 border border-indigo-100 shadow-xl group-hover:flex bg-white/90 backdrop-blur-xl rounded-xl">
+          <button className="flex items-center gap-2 px-3 py-2 text-sm text-black rounded-lg hover:bg-indigo-50">
+            👤 Account
+          </button>
+          <button className="flex items-center py-2 text-sm text-black rounded-lg x-3 hover:bg-indigo-50">
+            ⚙️ Settings
+          </button>
+          <button className="flex items-center gap-2 px-3 py-2 text-sm text-black rounded-lg hover:bg-indigo-50">
+            📄 My Reports
+          </button>
           <button
             onClick={handleLogout}
-            className="px-5 py-2 font-semibold text-white bg-red-500 rounded-lg shadow-md hover:bg-red-600"
+            className="flex items-center gap-2 px-3 py-2 text-sm text-red-600 rounded-lg hover:bg-red-50"
           >
-            Logout
+            🚪 Logout
           </button>
         </div>
-      </header>
+      </div>
+    </div>
+  </div>
+
+  {/* EXTRA HEADER SECTIONS */}
+  <div className="flex items-center justify-between mt-6">
+
+    {/* Quick Stats */}
+    <div className="grid w-full grid-cols-2 gap-4 sm:grid-cols-4">
+      <div className="p-4 transition border border-indigo-100 shadow-md bg-white/70 rounded-xl hover:scale-105">
+        <p className="text-xs text-gray-800">Today's Tasks</p>
+        <h3 className="text-xl font-bold text-indigo-700">12</h3>
+      </div>
+
+      <div className="p-4 transition border border-indigo-100 shadow-md bg-white/70 rounded-xl hover:scale-105">
+        <p className="text-xs text-gray-800">Completed</p>
+        <h3 className="text-xl font-bold text-green-700">8</h3>
+      </div>
+
+      <div className="p-4 transition border border-indigo-100 shadow-md bg-white/70 rounded-xl hover:scale-105">
+        <p className="text-xs text-gray-800">Pending</p>
+        <h3 className="text-xl font-bold text-yellow-600">4</h3>
+      </div>
+
+      <div className="p-4 transition border border-indigo-100 shadow-md bg-white/70 rounded-xl hover:scale-105">
+        <p className="text-xs text-gray-800">Messages</p>
+        <h3 className="text-xl font-bold text-blue-700">3</h3>
+      </div>
+    </div>
+  </div>
+</header>
+
 
       {/* TABS */}
       <div className="flex justify-center mb-8 space-x-2">
@@ -203,7 +311,7 @@ const EmployeeDashboard = () => {
             className={`px-6 py-2 font-semibold rounded-lg transition-all ${
               tab === t
                 ? "bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-lg"
-                : "bg-gray-200 text-gray-700 hover:bg-indigo-100"
+                : "bg-gray-200 text-indigo-600 hover:bg-indigo-100"
             }`}
             onClick={() => setTab(t)}
           >
@@ -235,9 +343,9 @@ const EmployeeDashboard = () => {
                 </thead>
                 <tbody>
                   {works.map((w, i) => (
-                    <tr key={w._id} className={i % 2 === 0 ? "bg-white" : "bg-indigo-50"}>
-                      <td className="p-3 text-center">{w.taskTitle}</td>
-                      <td className="p-3 text-center">{w.description}</td>
+                    <tr key={w._id} className={i % 2 === 0 ? "bg-white " : "bg-indigo-50"}>
+                      <td className="p-3 text-center text-black">{w.taskTitle}</td>
+                      <td className="p-3 text-center text-black">{w.description}</td>
                       <td className="p-3 text-center">
                         <span
                           className={`px-2 py-1 rounded-full text-xs font-semibold ${
@@ -249,7 +357,7 @@ const EmployeeDashboard = () => {
                           {w.status}
                         </span>
                       </td>
-                      <td className="p-3 text-center">{w.deadline?.split("T")[0] || "-"}</td>
+                      <td className="p-3 text-center text-black">{w.deadline?.split("T")[0] || "-"}</td>
                       <td className="p-3 text-center">
                         {w.status !== "Completed" && (
                           <button
@@ -279,12 +387,12 @@ const EmployeeDashboard = () => {
                   type="date"
                   value={attendanceForm.date}
                   onChange={(e) => setAttendanceForm({ ...attendanceForm, date: e.target.value })}
-                  className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400"
+                  className="p-3 text-gray-800 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400"
                 />
                 <select
                   value={attendanceForm.status}
                   onChange={(e) => setAttendanceForm({ ...attendanceForm, status: e.target.value })}
-                  className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400"
+                  className="p-3 text-gray-800 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400"
                 >
                   <option>Present</option>
                   <option>Absent</option>
@@ -295,7 +403,7 @@ const EmployeeDashboard = () => {
                   placeholder="Notes (optional)"
                   value={attendanceForm.notes}
                   onChange={(e) => setAttendanceForm({ ...attendanceForm, notes: e.target.value })}
-                  className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400 sm:col-span-2 md:col-span-3"
+                  className="p-3 text-gray-800 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400 sm:col-span-2 md:col-span-3"
                 />
                 <div className="flex justify-end sm:col-span-2 md:col-span-3">
                   <button
@@ -319,7 +427,7 @@ const EmployeeDashboard = () => {
                 <table className="w-full overflow-hidden text-sm border border-gray-300 rounded-lg table-auto">
                   <thead className="text-white bg-gradient-to-r from-indigo-500 to-blue-600">
                     <tr>
-                      <th className="p-3">Date</th>
+                      <th className="p-3 ">Date</th>
                       <th className="p-3">Status</th>
                       <th className="p-3">Notes</th>
                     </tr>
@@ -327,8 +435,8 @@ const EmployeeDashboard = () => {
                   <tbody>
                     {attendance.map((a, i) => (
                       <tr key={a._id} className={i % 2 === 0 ? "bg-white" : "bg-indigo-50"}>
-                        <td className="p-3 text-center">{new Date(a.date).toLocaleDateString()}</td>
-                        <td className="p-3 text-center">
+                        <td className="p-3 text-center text-black">{new Date(a.date).toLocaleDateString()}</td>
+                        <td className="p-3 text-center text-black">
                           <span
                             className={`px-2 py-1 rounded-full text-xs font-semibold ${
                               a.status === "Present"
@@ -341,7 +449,7 @@ const EmployeeDashboard = () => {
                             {a.status}
                           </span>
                         </td>
-                        <td className="p-3 text-center">{a.notes || "-"}</td>
+                        <td className="p-3 text-center text-black">{a.notes || "-"}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -363,14 +471,14 @@ const EmployeeDashboard = () => {
                   placeholder="Subject"
                   value={ticketForm.subject}
                   onChange={(e) => setTicketForm({ ...ticketForm, subject: e.target.value })}
-                  className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400"
+                  className="p-3 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400"
                 />
                 <textarea
                   placeholder="Describe your issue..."
                   value={ticketForm.description}
                   onChange={(e) => setTicketForm({ ...ticketForm, description: e.target.value })}
                   rows={5}
-                  className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400"
+                  className="p-3 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-400"
                 />
                 <button
                   onClick={submitTicket}
