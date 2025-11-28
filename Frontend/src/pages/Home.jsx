@@ -327,7 +327,7 @@ function TemplateSwitcher({ template, setTemplate }) {
   return (
     <section
   className="relative py-20 overflow-hidden bg-center bg-cover opacity-60"
-  style={{ backgroundImage: "url(/images/bg2-hero.jpg)" }}
+  style={{ backgroundImage: "url(/images/bg3-hero.jpg)" }}
 >
   {/* Optional dark overlay for readability */}
   <div className="absolute 0"></div>
@@ -532,96 +532,99 @@ function TemplateA() {
 function TemplateB() {
   return (
     <section className="overflow-hidden text-gray-100 rounded-xl">
- {/* Company Introduction */}
-<div className="px-6 py-16 mx-auto max-w-7xl">
-  <div className="md:flex md:items-start md:gap-16">
-    {/* Left Side */}
-<div className="md:w-1/2">
-  <div className="max-w-full p-8 border border-green-700 shadow-2xl rounded-3xl bg-gradient-to-br from-gray-800 to-gray-900">
-    {/* Heading */}
-    <h2 className="mb-6 text-4xl font-extrabold leading-snug text-pink-400">
-      ReadyTech Solutions – Engineering Digital Excellence
+{/* Updated Company Introduction (Top → Bottom, Perfect Alignment, Clean Professional Design) */}
+<div className="max-w-6xl px-6 py-20 mx-auto space-y-16">
+
+  {/* Top Heading Section */}
+  <div className="max-w-4xl mx-auto text-center">
+    <h2 className="mb-4 text-4xl font-extrabold leading-tight text-white">
+      <span className="text-pink-600">ReadyTech Solutions</span> – Innovating the Future with Precision Engineering
     </h2>
-
-    {/* Paragraphs */}
-    <p className="mb-4 text-lg leading-relaxed text-gray-300 max-w-prose">
-      At <span className="font-semibold text-pink-400">ReadyTech Solutions</span>, we deliver{" "}
-      <span className="font-semibold text-indigo-400">end-to-end software solutions</span> that
-      empower businesses to thrive in the digital era. Our team combines{" "}
-      <span className="font-semibold text-indigo-400">UX-focused design</span> with{" "}
-      <span className="font-semibold text-indigo-400">robust engineering</span> to create products
-      that are visually compelling, technically strong, and market-ready.
+    <p className="max-w-3xl mx-auto text-lg leading-relaxed text-white md:text-xl">
+      At <span className="font-semibold text-pink-600">ReadyTech Solutions</span>, we craft
+      <span className="font-semibold text-indigo-600"> end‑to‑end digital solutions</span> engineered for performance, usability and scale. We blend
+      <span className="font-semibold text-indigo-600"> human‑centered design</span> with
+      <span className="font-semibold text-indigo-600"> enterprise‑grade engineering</span> to build products that elevate businesses and create lasting digital impact.
     </p>
 
-    <p className="mb-6 text-lg leading-relaxed text-gray-400 max-w-prose">
-      Serving clients across the US and domestic markets, we provide innovative solutions that
-      streamline operations, enhance customer engagement, and drive measurable growth.
+    <p className="max-w-3xl mx-auto mt-5 text-lg leading-relaxed text-white md:text-xl">
+      With trusted clients across the US and global markets, we deliver solutions that streamline operations,
+      strengthen customer engagement and support long‑term growth through innovation.
     </p>
+  </div>
 
-    {/* Features List */}
-    <ul className="mt-6 space-y-3 text-gray-300 list-disc list-inside max-w-prose">
+
+  {/* What We Offer Section */}
+  <div className="max-w-4xl mx-auto">
+    <h3 className="mb-6 text-3xl font-bold text-center text-white">What We Offer</h3>
+
+    <ul className="max-w-3xl mx-auto space-y-4 text-lg leading-relaxed text-white list-disc list-inside">
       <li>Custom Web & Mobile Application Development</li>
-      <li>Cloud-Native & Scalable Systems</li>
-      <li>AI-Powered Automation & Smart Workflows</li>
-      <li>Intuitive UI/UX Designs for Maximum Engagement</li>
-      <li>Data Security & Compliance with Global Standards</li>
+      <li>Cloud‑Native, Scalable & High‑Availability Systems</li>
+      <li>AI‑Powered Automation & Intelligent Business Workflows</li>
+      <li>Modern UI/UX Design with Maximum Engagement & Accessibility</li>
+      <li>Advanced Data Security, Privacy & Global Compliance Standards</li>
     </ul>
   </div>
-</div>
 
 
-    {/* Right Side */}
-    <div className="grid grid-cols-1 gap-6 mt-10 md:w-1/2 md:mt-0">
-      {[
-        {
-          title: "Custom Software Solutions",
-          color: "pink-400",
-          border: "border-pink-500/40",
-          description:
-            "Tailored applications that align with your business objectives, improving efficiency and user satisfaction.",
-        },
-        {
-          title: "Cloud & Scalable Systems",
-          color: "cyan-400",
-          border: "border-cyan-500/40",
-          description:
-            "Cloud-native architectures designed for high performance, security and effortless scalability.",
-        },
-        {
-          title: "UX/UI Design Excellence",
-          color: "indigo-400",
-          border: "border-indigo-500/40",
-          description:
-            "Engaging, accessible and responsive interfaces that boost conversion and retention.",
-        },
-        {
-          title: "AI & Automation",
-          color: "yellow-400",
-          border: "border-yellow-500/40",
-          description:
-            "Intelligent automation for smarter workflows, reduced errors and faster decision-making.",
-        },
-        {
-          title: "Consulting & Support",
-          color: "green-400",
-          border: "border-green-500/40",
-          description:
-            "Expert guidance for technology adoption and continuous support for sustainable growth.",
-        },
-      ].map((item, index) => (
-        <div
-          key={index}
-          className={`p-6 border shadow-lg rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 ${item.border} flex flex-col`}
-        >
-          <h3 className={`text-lg font-semibold text-${item.color} mb-2 text-center`}>
-            {item.title}
-          </h3>
-          <p className="text-base leading-relaxed text-left text-gray-300">{item.description}</p>
-        </div>
-      ))}
-    </div>
+  {/* Service Cards - Bottom Section */}
+  <div className="grid max-w-6xl grid-cols-1 gap-8 mx-auto md:grid-cols-2 lg:grid-cols-3">
+    {[
+      {
+        title: "Custom Software Solutions",
+        color: "pink-400",
+        border: "border-pink-500/40",
+        description:
+          "Tailored applications built for performance, efficiency and seamless business integration.",
+      },
+      {
+        title: "Cloud & Scalable Systems",
+        color: "cyan-400",
+        border: "border-cyan-500/40",
+        description:
+          "High‑performance cloud infrastructure engineered for speed, security and global scale.",
+      },
+      {
+        title: "UI/UX Experience Design",
+        color: "indigo-400",
+        border: "border-indigo-500/40",
+        description:
+          "Modern, intuitive, and accessible interfaces that enhance user satisfaction and engagement.",
+      },
+      {
+        title: "AI & Automation",
+        color: "yellow-400",
+        border: "border-yellow-500/40",
+        description:
+          "Smart automation solutions that increase accuracy, reduce cost and accelerate decision‑making.",
+      },
+      {
+        title: "Consulting & Technical Strategy",
+        color: "green-400",
+        border: "border-green-500/40",
+        description:
+          "Expert guidance for digital transformation, innovation and long‑term tech strategy.",
+      },
+      {
+        title: "End‑to‑End Support",
+        color: "purple-400",
+        border: "border-purple-500/40",
+        description:
+          "Reliable technical support ensuring continuous improvement and operational stability.",
+      },
+    ].map((item, index) => (
+      <div
+        key={index}
+        className={`p-6 border shadow-lg rounded-2xl bg-gradient-to-br from-gray-800 to-gray-900 ${item.border} flex flex-col text-center`}
+      >
+        <h3 className={`text-xl font-semibold text-${item.color} mb-3`}>{item.title}</h3>
+        <p className="text-base leading-relaxed text-gray-300">{item.description}</p>
+      </div>
+    ))}
   </div>
 </div>
+
 
 
       {/* Industries Served */}
