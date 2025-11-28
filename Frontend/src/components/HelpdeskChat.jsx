@@ -163,7 +163,7 @@ export default function HelpdeskChat() {
             </div>
 
             {/* Input */}
-            <div className="flex items-center gap-2 p-3 border-t bg-white/60 backdrop-blur-md">
+            <div className="flex items-center gap-2 p-3 text-black border-t bg-white/60 backdrop-blur-md">
               <input
                 type="text"
                 placeholder="Type a message..."
