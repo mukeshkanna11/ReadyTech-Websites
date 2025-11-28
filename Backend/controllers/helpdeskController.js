@@ -5,7 +5,7 @@ import crypto from "crypto";
 const generateToken = () => crypto.randomBytes(4).toString("hex");
 
 // Shared ticket token
-const SHARED_TOKEN = "helpdesk_shared";
+export const SHARED_TOKEN = "helpdesk_shared";
 
 // Ensure shared ticket exists
 export const ensureSharedTicketExists = async () => {
@@ -76,7 +76,11 @@ export const addResponse = async (req, res) => {
 export const getTicketById = async (req, res) => {
   try {
     const { ticketId } = req.params;
-    let ticket = ticketId === SHARED_TOKEN ? await ensureSharedTicketExists() : await HelpdeskTicket.findOne({ tokenId: ticketId });
+    let ticket =
+      ticketId === SHARED_TOKEN
+        ? await ensureSharedTicketExists()
+        : await HelpdeskTicket.findOne({ tokenId: ticketId });
+
     if (!ticket) return res.status(404).json({ success: false, message: "Ticket not found" });
 
     res.json({ success: true, ticket });

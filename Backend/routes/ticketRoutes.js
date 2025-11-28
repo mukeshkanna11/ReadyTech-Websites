@@ -9,10 +9,10 @@ import {
 
 const router = express.Router();
 
-// USER: Create ticket
+// USER: Create a new individual ticket
 router.post("/create-ticket", createTicket);
 
-// USER/ADMIN: Add response (shared or individual)
+// USER/ADMIN: Add response to a ticket (shared or individual)
 router.post("/response/:ticketId", addResponse);
 
 // USER/ADMIN: Get ticket by tokenId
