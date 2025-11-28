@@ -4,24 +4,24 @@ import {
   addResponse,
   getTicketById,
   getTicketByEmail,
-  getAllTickets,
+  getAllTickets
 } from "../controllers/helpdeskController.js";
 
 const router = express.Router();
 
-// Create ticket
+// USER: Create ticket
 router.post("/create-ticket", createTicket);
 
-// Add response
-router.post("/add-response/:ticketId", addResponse);
+// USER/ADMIN: Add response (shared or individual)
+router.post("/response/:ticketId", addResponse);
 
-// Get all tickets (admin) — static first
+// USER/ADMIN: Get ticket by tokenId
+router.get("/ticket/:ticketId", getTicketById);
+
+// USER: Get tickets by email
+router.get("/email/:email", getTicketByEmail);
+
+// ADMIN: Get all tickets
 router.get("/all", getAllTickets);
-
-// Get tickets by email — static first
-router.get("/by-email/:email", getTicketByEmail);
-
-// Get ticket by ID — dynamic last
-router.get("/:ticketId", getTicketById);
 
 export default router;

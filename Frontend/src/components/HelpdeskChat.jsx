@@ -8,96 +8,63 @@ const BASE_URL =
     ? "http://localhost:5000/api"
     : "https://readytech-websites.onrender.com/api";
 
+// Shared ticket for all users
+const SHARED_TICKET_ID = "helpdesk_shared";
+
 export default function HelpdeskChat() {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [chat, setChat] = useState([]);
-  const [ticketId, setTicketId] = useState(localStorage.getItem("ticketId") || null);
+  const [ticketId] = useState(SHARED_TICKET_ID); // always shared
   const [loading, setLoading] = useState(false);
   const [typing, setTyping] = useState(false);
 
   const chatEndRef = useRef(null);
 
-  // Auto-scroll
+  // Auto-scroll chat
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chat, typing]);
 
-  // Load existing conversation when widget opens
+  // Load conversation on mount
   useEffect(() => {
-    if (ticketId) fetchTicketConversation(ticketId);
-  }, [ticketId]);
+    fetchConversation();
+  }, []);
 
-  // ---------------------------
-  // FETCH TICKET CONVERSATION
-  // ---------------------------
-  const fetchTicketConversation = async (id) => {
+  // Fetch shared ticket conversation
+  const fetchConversation = async () => {
     try {
-      const res = await axios.get(`${BASE_URL}/tickets/${id}`);
-
-      if (!res.data.ticket) return;
-
-      const mapped = res.data.ticket.responses.map((msg) => ({
-        sender: msg.from,
-        text: msg.text,
-        time: new Date(msg.createdAt).toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-      }));
-
-      setChat(mapped);
+      const res = await axios.get(`${BASE_URL}/tickets/ticket/${ticketId}`);
+      if (res.data.ticket) {
+        const mapped = res.data.ticket.responses.map((msg) => ({
+          sender: msg.from,
+          text: msg.text,
+          time: new Date(msg.createdAt).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+        }));
+        setChat(mapped);
+      }
     } catch (err) {
-      console.error("Conversation load error:", err);
+      console.error("Failed to fetch conversation:", err);
     }
   };
 
-  // ---------------------------
-  // CREATE TICKET IF NOT EXISTS
-  // ---------------------------
-  const createTicketIfNeeded = async () => {
-    if (ticketId) return ticketId;
-
-    try {
-      const res = await axios.post(`${BASE_URL}/tickets/create`, {
-        email: "customer@gmail.com",
-        subject: "Help Request",
-        description: "Customer opened Helpdesk widget.",
-      });
-
-      const newId = res.data.ticket.tokenId;
-
-      localStorage.setItem("ticketId", newId);
-      setTicketId(newId);
-
-      fetchTicketConversation(newId);
-
-      return newId;
-    } catch (err) {
-      console.error("Ticket creation failed:", err);
-      return null;
-    }
-  };
-
-  // ---------------------------
-  // SEND USER MESSAGE
-  // ---------------------------
+  // Send message
   const sendMessage = async () => {
     if (!message.trim() || loading) return;
 
     const userText = message;
     setMessage("");
 
-    // Add user's bubble immediately
+    // Optimistic UI
     setChat((prev) => [
       ...prev,
       {
         sender: "user",
         text: userText,
-        time: new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
+        time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       },
     ]);
 
@@ -105,35 +72,29 @@ export default function HelpdeskChat() {
     setTyping(true);
 
     try {
-      const id = await createTicketIfNeeded();
-      if (!id) return;
-
-      // Send message to backend
-      await axios.post(`${BASE_URL}/tickets/response/${id}`, {
+      await axios.post(`${BASE_URL}/tickets/response/${ticketId}`, {
         from: "user",
         text: userText,
       });
 
-      // Simulated bot reply
+      // Bot/admin response
       setTimeout(() => {
         setTyping(false);
         const botBubble = {
           sender: "admin",
-          text: "🤖 Thank you! Your message has been received. Our support team will get back within 24 hours.",
+          text: "🤖 Thank you for your message! Please share your email. Our team will connect with you shortly.",
           time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         };
         setChat((prev) => [...prev, botBubble]);
-        fetchTicketConversation(id); // Always sync from DB
-      }, 600);
+      }, 500);
     } catch (err) {
       console.error(err);
       setTyping(false);
-
       setChat((prev) => [
         ...prev,
         {
           sender: "admin",
-          text: "Unable to send message right now. Please try again.",
+          text: "Unable to send message. Please try again.",
           time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         },
       ]);
@@ -142,25 +103,19 @@ export default function HelpdeskChat() {
     setLoading(false);
   };
 
-  // UI -----------------------------------------
   return (
     <div className="fixed z-50 bottom-5 right-5">
-      {/* OPEN BUTTON */}
       {!open && (
         <motion.button
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          onClick={() => {
-            setOpen(true);
-            createTicketIfNeeded();
-          }}
+          onClick={() => setOpen(true)}
           className="p-4 text-white rounded-full shadow-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:scale-110"
         >
           <MessageCircle size={28} />
         </motion.button>
       )}
 
-      {/* CHAT WINDOW */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -173,9 +128,8 @@ export default function HelpdeskChat() {
             <div className="flex items-center justify-between p-4 text-white bg-gradient-to-r from-blue-600 to-indigo-600">
               <div>
                 <h2 className="text-lg font-semibold">Helpdesk Support</h2>
-                {ticketId && <span className="text-xs opacity-80">Ticket: {ticketId}</span>}
+                <span className="text-xs opacity-80">Ticket: {ticketId}</span>
               </div>
-
               <button onClick={() => setOpen(false)} className="p-1 rounded-full hover:bg-white/10">
                 <X size={22} />
               </button>
@@ -183,9 +137,9 @@ export default function HelpdeskChat() {
 
             {/* Chat Area */}
             <div className="flex-1 p-3 space-y-3 overflow-y-auto bg-gray-100">
-              {chat.map((msg, index) => (
+              {chat.map((msg, idx) => (
                 <div
-                  key={index}
+                  key={idx}
                   className={`max-w-[75%] p-2 text-sm rounded-2xl shadow ${
                     msg.sender === "user"
                       ? "ml-auto bg-blue-600 text-white rounded-br-none"
@@ -208,7 +162,7 @@ export default function HelpdeskChat() {
               <div ref={chatEndRef}></div>
             </div>
 
-            {/* Input Box */}
+            {/* Input */}
             <div className="flex items-center gap-2 p-3 border-t bg-white/60 backdrop-blur-md">
               <input
                 type="text"

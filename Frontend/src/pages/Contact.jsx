@@ -19,7 +19,7 @@ import HelpdeskChat from "../components/HelpdeskChat";
 export default function Contact() {
   const contactInfo = [
     { title: "Call Us", info: "+91 7010797721", icon: <FaPhoneAlt /> },
-    { title: "Email Us", info: "devsupport@readytechsolutions.in", icon: <FaEnvelope /> },
+    { title: "Email Us", info: "quries.readytechsolutions@gmail.com", icon: <FaEnvelope /> },
     {
       title: "Address",
       info: "Coimbatore - 641004, Tamil Nadu, India",

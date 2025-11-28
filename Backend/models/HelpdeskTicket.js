@@ -18,6 +18,5 @@ const helpdeskSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// ✔ Default export
 const HelpdeskTicket = mongoose.model("HelpdeskTicket", helpdeskSchema);
 export default HelpdeskTicket;
