@@ -15,6 +15,7 @@ router.post("/create-ticket", createTicket);
 // Add response
 router.post("/response/:ticketId", addResponse);
 
+
 // Get ticket by ID
 router.get("/ticket/:ticketId", getTicketById);
 

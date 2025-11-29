@@ -137,7 +137,6 @@ const sendHelpdeskEmail = async (req, res) => {
         msg: "Email and message are required.",
       });
     }
-
     console.log("📩 Helpdesk email received:", req.body);
 
     // If you want to send the email using Nodemailer later, add here.

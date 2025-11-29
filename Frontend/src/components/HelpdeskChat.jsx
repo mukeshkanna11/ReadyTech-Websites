@@ -46,7 +46,6 @@ export default function HelpdeskChat() {
       fetchConversation();
     }
   };
-
   // ================================
   // Fetch Conversation
   // ================================

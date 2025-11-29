@@ -122,8 +122,6 @@ app.use("/api/support", supportRoutes);
 
 // ⬅️ NEW (Your Chat Helpdesk System)
 app.use("/api/helpdesk", helpdeskRoutes);
-
-// =============================================================
 // 404 Handler
 // =============================================================
 app.use((req, res) => {
