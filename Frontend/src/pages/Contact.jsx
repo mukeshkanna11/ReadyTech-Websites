@@ -18,7 +18,11 @@ import HelpdeskChat from "../components/HelpdeskChat";
 
 export default function Contact() {
   const contactInfo = [
+<<<<<<< HEAD
     { title: "Helpline Number", info: "+91 9600364121", icon: <FaPhoneAlt /> },
+=======
+    { title: "Helpline Number", info: "+919600364121", icon: <FaPhoneAlt /> },
+>>>>>>> 240980aad5d310f4547f4d7ab89aa63e9c9d6a91
     { title: "Email Us", info: "quries.readytechsolutions@gmail.com", icon: <FaEnvelope /> },
     {
       title: "Address",
