@@ -6,7 +6,7 @@ import { FaUserShield, FaUserTie } from "react-icons/fa";
 
 // 🖼 Role-based Backgrounds
 import AdminBg from "../assets/images/landing.jpg"; // premium office / control room
-import EmployeeBg from "../assets/images/p3.png"; // teamwork / workspace
+import EmployeeBg from "../assets/images/p3.jpg"; // teamwork / workspace
 
 export default function Login() {
   const navigate = useNavigate();

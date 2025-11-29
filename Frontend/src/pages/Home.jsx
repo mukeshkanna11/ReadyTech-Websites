@@ -18,9 +18,9 @@ import {
 // 🖼️ Local floating images (tech-style)
 import BgVision from "../assets/images/bg-vision.jpg";
 import BgHero from "../assets/images/bg-hero.jpg";
-import Img1 from "../assets/images/image1.png";
-import Img2 from "../assets/images/image2.png";
-import Img3 from "../assets/images/image3.png";
+import Img1 from "../assets/images/image1.jpg";
+import Img2 from "../assets/images/image2.jpg";
+import Img3 from "../assets/images/image3.jpg";
 
 export default function Home() {
   const [template, setTemplate] = useState("A");

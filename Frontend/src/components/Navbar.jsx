@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import Logo from "../assets/images/Rtech1-logo.png";
+import Logo from "../assets/images/Rtech1-logo.jpg";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
