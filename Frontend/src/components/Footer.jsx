@@ -7,6 +7,12 @@ export default function Footer() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Set backend URL based on environment
+  const BASE_URL =
+    import.meta.env.MODE === "development"
+      ? "http://localhost:5000/api"
+      : "https://readytech-websites.onrender.com/api"; // <-- replace with your Render URL
+
   const handleSubscribe = async (e) => {
     e.preventDefault();
     if (!email) {
@@ -15,7 +21,7 @@ export default function Footer() {
     }
     try {
       setLoading(true);
-      await axios.post("http://localhost:5000/api/contact", {
+      await axios.post(`${BASE_URL}/contact`, {
         name: "Newsletter Subscriber",
         email,
         message: "Subscribed to newsletter",
@@ -84,9 +90,7 @@ export default function Footer() {
             <button
               type="submit"
               disabled={loading}
-              className={`flex items-center justify-center gap-2 px-4 py-3 font-semibold text-white rounded-md transition bg-indigo-600 hover:bg-indigo-500 ${
-                loading ? "cursor-not-allowed bg-gray-400" : ""
-              }`}
+              className={`flex items-center justify-center gap-2 px-4 py-3 font-semibold text-white rounded-md transition bg-indigo-600 hover:bg-indigo-500 ${loading ? "cursor-not-allowed bg-gray-400" : ""}`}
             >
               <FaEnvelope /> {loading ? "Sending..." : "Send"}
             </button>
