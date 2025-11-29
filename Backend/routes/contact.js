@@ -42,7 +42,7 @@ router.post("/", async (req, res) => {
     // Company email
     const companyMail = {
       from: `"ReadyTech Contact" <${process.env.MAIL_USER}>`,
-      to: process.env.COMPANY_EMAIL || "uiuxmukesh@gmail.com",
+      to: process.env.COMPANY_EMAIL || "quries.readytechsolutions@gmail.com",
       subject: `📬 New Contact from ${name}`,
       html: `
         <h2 style="color:#4f46e5;">📩 New Contact Submission</h2>
@@ -93,7 +93,7 @@ router.post("/subscribe", async (req, res) => {
 
     const companyMail = {
       from: `"New Settler Subscriptions" <${process.env.MAIL_USER}>`,
-      to: process.env.COMPANY_EMAIL || "uiuxmukesh@gmail.com",
+      to: process.env.COMPANY_EMAIL || "quries.readytechsolutions@gmail.com",
       subject: `📰 New Newsletter Subscriber`,
       html: `
         <h2 style="color:#4f46e5;">🆕 New Subscriber Alert</h2>

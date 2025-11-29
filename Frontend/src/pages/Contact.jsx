@@ -24,9 +24,9 @@ export default function Contact() {
   ];
 
   const locations = [
-    { city: "Coimbatore", address: "No 149 2nd Floor, Hopes, Coimbatore", phone: "+91 9600364121" },
-    { city: "Coimbatore", address: "Tidel Park, Peelamedu, B.R Puram Industrial Estate", phone: "+91 9600364121" },
-    { city: "Bangalore", address: "2nd floor, Hanumanthappa building, 21/8, Konanakunte Cross Rd", phone: "+91 9600364121" },
+    { city: "Coimbatore", address: "No 149 2nd Floor, Hopes, Coimbatore" },
+    { city: "Coimbatore", address: "Tidel Park, Peelamedu, B.R Puram Industrial Estate" },
+    { city: "Bangalore", address: "2nd floor, Hanumanthappa building, 21/8, Konanakunte Cross Rd" },
   ];
 
   const [formData, setFormData] = useState({
