@@ -8,7 +8,6 @@ dotenv.config();
 const router = express.Router();
 
 // ---------------- Nodemailer Transporter ----------------
-// Uses Gmail SMTP with App Password (secure)
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 465,
@@ -29,15 +28,10 @@ transporter.verify((error, success) => {
 });
 
 // ---------------- POST /api/contact ----------------
-/**
- * Send contact form message
- * Sends notification to company and confirmation to user
- */
 router.post("/", async (req, res) => {
   try {
     const { name, email, phone, message } = req.body;
 
-    // Basic validation
     if (!name || !email || !message) {
       return res.status(400).json({ msg: "Name, email, and message are required." });
     }
@@ -45,7 +39,7 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ msg: "Invalid email address." });
     }
 
-    // Company notification email
+    // Company email
     const companyMail = {
       from: `"ReadyTech Contact" <${process.env.MAIL_USER}>`,
       to: process.env.COMPANY_EMAIL || "uiuxmukesh@gmail.com",
@@ -80,7 +74,6 @@ router.post("/", async (req, res) => {
       `,
     };
 
-    // Send both emails in parallel
     await Promise.all([transporter.sendMail(companyMail), transporter.sendMail(userMail)]);
 
     res.status(200).json({ msg: "✅ Message sent successfully." });
@@ -91,19 +84,13 @@ router.post("/", async (req, res) => {
 });
 
 // ---------------- POST /api/contact/subscribe ----------------
-/**
- * Subscribe user to newsletter
- * Sends notification to company and confirmation to user
- */
 router.post("/subscribe", async (req, res) => {
   try {
     const { email } = req.body;
-
     if (!email || !validator.isEmail(email)) {
       return res.status(400).json({ msg: "Please provide a valid email address." });
     }
 
-    // Company notification email
     const companyMail = {
       from: `"New Settler Subscriptions" <${process.env.MAIL_USER}>`,
       to: process.env.COMPANY_EMAIL || "uiuxmukesh@gmail.com",
@@ -115,7 +102,6 @@ router.post("/subscribe", async (req, res) => {
       `,
     };
 
-    // User confirmation email
     const userMail = {
       from: `"New Settler" <${process.env.MAIL_USER}>`,
       to: email,
@@ -129,7 +115,6 @@ router.post("/subscribe", async (req, res) => {
       `,
     };
 
-    // Send both emails
     await Promise.all([transporter.sendMail(companyMail), transporter.sendMail(userMail)]);
 
     res.status(200).json({ msg: "🎉 Subscribed successfully! Confirmation email sent." });
@@ -138,5 +123,42 @@ router.post("/subscribe", async (req, res) => {
     res.status(500).json({ msg: "Failed to subscribe. Please try again later.", error: err.message });
   }
 });
+
+// ---------------- POST /api/contact/helpdesk-email ----------------
+// ===================== HELP DESK EMAIL HANDLER =====================
+const sendHelpdeskEmail = async (req, res) => {
+  try {
+    const { email, message } = req.body;
+
+    // Validate
+    if (!email || !message) {
+      return res.status(400).json({
+        success: false,
+        msg: "Email and message are required.",
+      });
+    }
+
+    console.log("📩 Helpdesk email received:", req.body);
+
+    // If you want to send the email using Nodemailer later, add here.
+
+    return res.status(200).json({
+      success: true,
+      msg: "Helpdesk message received successfully.",
+    });
+
+  } catch (err) {
+    console.error("❌ HELPDESK ERROR:", err);
+    return res.status(500).json({
+      success: false,
+      msg: "Failed to process helpdesk message.",
+      error: err.message,
+    });
+  }
+};
+
+// Route
+router.post("/helpdesk-email", sendHelpdeskEmail);
+
 
 export default router;
