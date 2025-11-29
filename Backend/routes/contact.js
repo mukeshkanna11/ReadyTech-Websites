@@ -27,6 +27,16 @@ transporter.verify((error, success) => {
   }
 });
 
+// ---------------- Helper: Safe sendMail ----------------
+const safeSendMail = async (mailOptions) => {
+  try {
+    await transporter.sendMail(mailOptions);
+  } catch (err) {
+    console.error("❌ Email send failed:", err);
+    // Don't throw to stop other operations
+  }
+};
+
 // ---------------- POST /api/contact ----------------
 router.post("/", async (req, res) => {
   try {
@@ -39,7 +49,7 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ msg: "Invalid email address." });
     }
 
-    // Company email
+    // Email to company
     const companyMail = {
       from: `"ReadyTech Contact" <${process.env.MAIL_USER}>`,
       to: process.env.COMPANY_EMAIL || "quries.readytechsolutions@gmail.com",
@@ -57,7 +67,7 @@ router.post("/", async (req, res) => {
       `,
     };
 
-    // User confirmation email
+    // Email to user
     const userMail = {
       from: `"ReadyTech Solutions" <${process.env.MAIL_USER}>`,
       to: email,
@@ -74,12 +84,13 @@ router.post("/", async (req, res) => {
       `,
     };
 
-    await Promise.all([transporter.sendMail(companyMail), transporter.sendMail(userMail)]);
+    // Send emails concurrently
+    await Promise.all([safeSendMail(companyMail), safeSendMail(userMail)]);
 
     res.status(200).json({ msg: "✅ Message sent successfully." });
   } catch (err) {
     console.error("❌ CONTACT ERROR:", err);
-    res.status(500).json({ msg: "Failed to send message", error: err.message });
+    res.status(500).json({ msg: "Failed to send message. Please try again later.", error: err.message });
   }
 });
 
@@ -92,30 +103,29 @@ router.post("/subscribe", async (req, res) => {
     }
 
     const companyMail = {
-      from: `"New Settler Subscriptions" <${process.env.MAIL_USER}>`,
+      from: `"Newsletter Subscription" <${process.env.MAIL_USER}>`,
       to: process.env.COMPANY_EMAIL || "quries.readytechsolutions@gmail.com",
       subject: `📰 New Newsletter Subscriber`,
       html: `
         <h2 style="color:#4f46e5;">🆕 New Subscriber Alert</h2>
         <p><strong>Email:</strong> ${validator.escape(email)}</p>
-        <p style="font-size:12px;color:#999;">New Settler Newsletter - ${new Date().toLocaleDateString()}</p>
+        <p style="font-size:12px;color:#999;">Newsletter - ${new Date().toLocaleDateString()}</p>
       `,
     };
 
     const userMail = {
-      from: `"New Settler" <${process.env.MAIL_USER}>`,
+      from: `"ReadyTech Newsletter" <${process.env.MAIL_USER}>`,
       to: email,
-      subject: "🎉 Welcome to New Settler!",
+      subject: "🎉 Welcome to Our Newsletter!",
       html: `
-        <h2 style="color:#4f46e5;">Welcome to <strong>New Settler</strong> 🚀</h2>
-        <p>Thank you for subscribing! You're now part of our community.</p>
-        <p>We’ll share growth insights, digital marketing tips, and updates directly to your inbox.</p>
+        <h2 style="color:#4f46e5;">Welcome! 🚀</h2>
+        <p>Thank you for subscribing to our newsletter. You’ll receive updates, insights, and tips directly in your inbox.</p>
         <p>Stay tuned for your first edition soon!</p>
-        <p>– The ReadyTech / New Settler Team</p>
+        <p>– ReadyTech Solutions Team</p>
       `,
     };
 
-    await Promise.all([transporter.sendMail(companyMail), transporter.sendMail(userMail)]);
+    await Promise.all([safeSendMail(companyMail), safeSendMail(userMail)]);
 
     res.status(200).json({ msg: "🎉 Subscribed successfully! Confirmation email sent." });
   } catch (err) {
@@ -125,39 +135,22 @@ router.post("/subscribe", async (req, res) => {
 });
 
 // ---------------- POST /api/contact/helpdesk-email ----------------
-// ===================== HELP DESK EMAIL HANDLER =====================
-const sendHelpdeskEmail = async (req, res) => {
+router.post("/helpdesk-email", async (req, res) => {
   try {
     const { email, message } = req.body;
-
-    // Validate
     if (!email || !message) {
-      return res.status(400).json({
-        success: false,
-        msg: "Email and message are required.",
-      });
+      return res.status(400).json({ success: false, msg: "Email and message are required." });
     }
+
     console.log("📩 Helpdesk email received:", req.body);
 
-    // If you want to send the email using Nodemailer later, add here.
+    // Add Nodemailer code here if needed
 
-    return res.status(200).json({
-      success: true,
-      msg: "Helpdesk message received successfully.",
-    });
-
+    res.status(200).json({ success: true, msg: "Helpdesk message received successfully." });
   } catch (err) {
     console.error("❌ HELPDESK ERROR:", err);
-    return res.status(500).json({
-      success: false,
-      msg: "Failed to process helpdesk message.",
-      error: err.message,
-    });
+    res.status(500).json({ success: false, msg: "Failed to process helpdesk message.", error: err.message });
   }
-};
-
-// Route
-router.post("/helpdesk-email", sendHelpdeskEmail);
-
+});
 
 export default router;

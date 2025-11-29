@@ -11,26 +11,34 @@ export default function Footer() {
   const BASE_URL =
     import.meta.env.MODE === "development"
       ? "http://localhost:5000/api"
-      : "https://readytech-websites.onrender.com/api"; // <-- replace with your Render URL
+      : "https://readytech-websites.onrender.com/api";
 
+  // Handle newsletter subscription
   const handleSubscribe = async (e) => {
     e.preventDefault();
+
     if (!email) {
       alert("Please enter your email.");
       return;
     }
+
     try {
       setLoading(true);
-      await axios.post(`${BASE_URL}/contact`, {
-        name: "Newsletter Subscriber",
-        email,
-        message: "Subscribed to newsletter",
-      });
-      alert("Subscribed successfully! ✅");
+
+      // Call the new subscribe endpoint
+      const response = await axios.post(`${BASE_URL}/contact/subscribe`, { email });
+
+      alert(response.data.msg || "Subscribed successfully! ✅");
       setEmail("");
     } catch (err) {
-      console.error(err);
-      alert("Something went wrong. Please try again.");
+      console.error("Subscribe Error:", err);
+
+      // Show specific server message if available
+      if (err.response?.data?.msg) {
+        alert(err.response.data.msg);
+      } else {
+        alert("Something went wrong. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
