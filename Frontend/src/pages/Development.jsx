@@ -6,7 +6,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 
 import DevImg1 from "../assets/images/bg5-hero.jpg"; // background 1
-import DevImg2 from "../assets/images/bg6-hero.jpg"; // background 2
+import DevImg2 from "../assets/images/bg5-hero.jpg"; // background 2
 
 export default function Development() {
   const navigate = useNavigate();
