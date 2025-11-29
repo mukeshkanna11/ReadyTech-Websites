@@ -1,3 +1,4 @@
+// src/components/HelpdeskChat.jsx
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
@@ -41,11 +42,12 @@ export default function HelpdeskChat() {
         tokenId: ticketId,
       });
       fetchConversation();
-    } catch (err) {
+    } catch {
       // Ticket already exists → just fetch
       fetchConversation();
     }
   };
+
   // ================================
   // Fetch Conversation
   // ================================
@@ -91,10 +93,7 @@ export default function HelpdeskChat() {
       {
         sender: "user",
         text: userText,
-        time: new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
+        time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       },
     ]);
 
@@ -123,10 +122,7 @@ export default function HelpdeskChat() {
             {
               sender: "admin",
               text: "📩 Thanks! We received your email. Our support team will contact you soon.",
-              time: new Date().toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              }),
+              time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
             },
           ]);
         }, 700);
@@ -139,10 +135,7 @@ export default function HelpdeskChat() {
             {
               sender: "admin",
               text: "🤖 Please share your email so our support team can assist you.",
-              time: new Date().toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              }),
+              time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
             },
           ]);
         }, 700);
@@ -155,10 +148,7 @@ export default function HelpdeskChat() {
         {
           sender: "admin",
           text: "⚠️ Unable to send message. Please try again.",
-          time: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
+          time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         },
       ]);
     }
@@ -171,7 +161,6 @@ export default function HelpdeskChat() {
   // ================================
   return (
     <div className="fixed z-50 bottom-5 right-5">
-      {/* Floating Button */}
       {!open && (
         <motion.button
           initial={{ scale: 0 }}
@@ -183,7 +172,6 @@ export default function HelpdeskChat() {
         </motion.button>
       )}
 
-      {/* Chat Window */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -198,10 +186,7 @@ export default function HelpdeskChat() {
                 <h2 className="text-lg font-semibold">Helpdesk Support</h2>
                 <span className="text-xs opacity-80">Ticket ID: {ticketId}</span>
               </div>
-              <button
-                onClick={() => setOpen(false)}
-                className="p-1 rounded-full hover:bg-white/10"
-              >
+              <button onClick={() => setOpen(false)} className="p-1 rounded-full hover:bg-white/10">
                 <X size={22} />
               </button>
             </div>
@@ -222,7 +207,6 @@ export default function HelpdeskChat() {
                 </div>
               ))}
 
-              {/* Typing Loader */}
               {typing && (
                 <div className="flex gap-1 p-2 px-3 mr-auto bg-white border shadow rounded-xl">
                   <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
