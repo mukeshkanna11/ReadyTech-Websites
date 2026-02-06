@@ -325,7 +325,7 @@ const EmployeeDashboard = () => {
           </div>
 
           <div className="border-t">
-            <button className="w-full px-5 py-3 text-sm font-semibold text-left text-red-600 hover:bg-red-50">
+            <button onClick={handleLogout} className="w-full px-5 py-3 text-sm font-semibold text-left text-red-600 hover:bg-red-50">
               🚪 Logout
             </button>
           </div>
