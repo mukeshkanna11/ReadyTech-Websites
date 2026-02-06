@@ -24,6 +24,47 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+// ===============================
+  // 🔔 NOTIFICATIONS
+  // ===============================
+  const [notifications, setNotifications] = useState([
+    {
+      id: 1,
+      title: "New Work Assigned",
+      message: "Task assigned to EMP-102",
+      time: "2 mins ago",
+      icon: "🧾",
+      unread: true,
+    },
+    {
+      id: 2,
+      title: "Attendance Alert",
+      message: "EMP-110 marked Absent today",
+      time: "15 mins ago",
+      icon: "📅",
+      unread: true,
+    },
+    {
+      id: 3,
+      title: "Support Ticket",
+      message: "Login issue reported by employee",
+      time: "1 hour ago",
+      icon: "🎫",
+      unread: false,
+    },
+    {
+      id: 4,
+      title: "Security Login",
+      message: "Admin login from Chrome • Chennai",
+      time: "Today 09:12 AM",
+      icon: "🔐",
+      unread: false,
+    },
+  ]);
+
+  const unreadCount = notifications.filter(n => n.unread).length;
+
+  
   // WORK
   const [works, setWorks] = useState([]);
   const [workForm, setWorkForm] = useState({
@@ -294,140 +335,273 @@ async function sendReply(ticketId) {
   // ======================================================
   return (
     <div className="min-h-screen p-6 bg-slate-100">
-      {/* ADMIN HEADER */}
-<header className="p-5 mb-8 border-b shadow-lg backdrop-blur-xl bg-white/60 border-indigo-200/40 sm:p-6 rounded-2xl">
-  <div className="flex items-center justify-between">
+ {/* ================= PREMIUM ADMIN HEADER ================= */}
+<header className="sticky top-0 z-40 mb-8 border shadow-sm backdrop-blur-xl bg-white/70 border-slate-200 rounded-2xl">
+  <div className="flex items-center justify-between px-6 py-4">
 
-    {/* LEFT — TITLE + SEARCH */}
-    <div className="flex items-center gap-6">
-      <h1 className="flex items-center gap-2 text-3xl font-extrabold text-transparent bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text">
-        ⚡ Admin Dashboard
-      </h1>
-
-      {/* Search */}
-      <div className="items-center hidden px-4 py-2 border border-indigo-100 shadow-md md:flex bg-white/80 rounded-xl">
-        <input
-          type="text"
-          placeholder="Search users, tickets, projects..."
-          className="w-56 text-sm text-black bg-transparent outline-none"
-        />
-        <svg
-          className="w-5 h-5 text-indigo-500"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          viewBox="0 0 24 24"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M10 18a8 8 0 100-16 8 8 0 000 16z"/>
-        </svg>
+    {/* LEFT : TITLE */}
+    <div className="flex items-center gap-3">
+      <div className="flex items-center justify-center w-10 h-10 text-white shadow rounded-xl bg-gradient-to-br from-indigo-600 to-blue-600">
+        ⚡
+      </div>
+      <div>
+        <h1 className="text-xl font-extrabold text-slate-900">
+          Admin Dashboard
+        </h1>
+        <p className="text-xs text-slate-500">
+          Control panel & system overview
+        </p>
       </div>
     </div>
 
-    {/* RIGHT — NOTIFICATIONS + PROFILE */}
-    <div className="flex items-center gap-5">
+    {/* RIGHT : ACTIONS */}
+    <div className="flex items-center gap-4">
 
-      {/* Notifications */}
-      <button className="relative p-2 transition border border-indigo-100 rounded-full shadow-md bg-white/80 hover:shadow-lg hover:bg-white">
-        <svg
-          className="w-6 h-6 text-indigo-600"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M14.25 18.25a1.75 1.75 0 11-3.5 0m7-5.5V10a6 6 0 10-12 0v2.75L4 17h16l-2.75-4.25z"
-          />
-        </svg>
-        <span className="absolute top-1 right-1 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full">
-          5
-        </span>
-      </button>
-
-      {/* ADMIN MENU */}
+      {/* 🔔 NOTIFICATIONS */}
       <div className="relative group">
-        <button className="flex items-center gap-3 px-3 py-2 pr-4 transition border border-indigo-100 rounded-full shadow-md bg-white/80 hover:shadow-lg">
-          {/* Avatar letter */}
-          <div className="flex items-center justify-center text-lg font-bold text-white rounded-full w-11 h-11 bg-gradient-to-r from-indigo-500 to-blue-500">
-            {admin.name.charAt(0).toUpperCase()}
-          </div>
-
-          <div className="flex-col hidden text-left sm:flex">
-            <p className="font-semibold text-green-900">{admin.name}</p>
-            <p className="text-xs text-gray-800">{admin.adminId}</p>
-          </div>
-
-          <svg
-            className="w-4 h-4 text-gray-600 transition group-hover:rotate-180"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-          </svg>
+        <button className="relative p-2 transition bg-white border shadow-sm border-slate-200 rounded-xl hover:bg-slate-50">
+          🔔
+          <span className="absolute -top-1 -right-1 px-1.5 text-xs text-white bg-red-500 rounded-full">
+            {unreadCount}
+          </span>
         </button>
 
-        {/* Dropdown */}
-        <div className="absolute right-0 z-20 flex-col hidden p-3 mt-2 border border-indigo-100 shadow-xl group-hover:flex bg-white/90 backdrop-blur-xl rounded-xl w-52">
-          <button className="flex items-center gap-2 px-3 py-2 text-sm text-black rounded-lg hover:bg-indigo-50">⚙️ Admin Settings</button>
-          <button className="flex items-center gap-2 px-3 py-2 text-sm text-black rounded-lg hover:bg-indigo-50">👥 Employees</button>
-          <button className="flex items-center gap-2 px-3 py-2 text-sm text-black rounded-lg hover:bg-indigo-50">🎫 View Tickets</button>
-          <button className="flex items-center gap-2 px-3 py-2 text-sm text-black rounded-lg hover:bg-indigo-50">📊 Reports & Analytics</button>
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 px-3 py-2 text-sm text-red-600 rounded-lg hover:bg-red-50"
-          >
-            🚪 Logout
-          </button>
+        {/* DROPDOWN */}
+        <div className="absolute right-0 hidden mt-3 bg-white border shadow-2xl w-96 rounded-2xl group-hover:block border-slate-200">
+          <div className="flex items-center justify-between px-5 py-4 border-b">
+            <h3 className="font-semibold text-slate-900">Notifications</h3>
+            <button
+              onClick={() =>
+                setNotifications(prev =>
+                  prev.map(n => ({ ...n, unread: false }))
+                )
+              }
+              className="text-xs text-indigo-600 hover:underline"
+            >
+              Mark all read
+            </button>
+          </div>
+
+          <div className="overflow-y-auto max-h-80">
+            {notifications.map(n => (
+              <div
+                key={n.id}
+                className={`flex gap-4 px-5 py-4 border-b hover:bg-slate-50 ${
+                  n.unread ? "bg-indigo-50" : ""
+                }`}
+              >
+                <span className="text-xl">{n.icon}</span>
+                <div>
+                  <p className="text-sm font-semibold text-slate-800">
+                    {n.title}
+                  </p>
+                  <p className="text-xs text-slate-600">
+                    {n.message}
+                  </p>
+                  <p className="text-[10px] text-slate-400 mt-1">
+                    {n.time}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
+
+      {/* ================= ADMIN ACCOUNT (UPDATED PREMIUM) ================= */}
+<div className="relative group">
+
+  {/* ACCOUNT BUTTON */}
+  <button className="flex items-center gap-4 px-4 py-2 transition-all bg-white border shadow-md rounded-xl border-slate-300 hover:bg-slate-100">
+
+    {/* Avatar */}
+    <div className="relative">
+      <div className="flex items-center justify-center text-lg font-bold text-white rounded-full shadow-md w-11 h-11 bg-gradient-to-br from-indigo-700 to-blue-700">
+        {admin.name.charAt(0)}
+      </div>
+      <span className="absolute bottom-0 right-0 w-3 h-3 border-2 border-white rounded-full bg-emerald-500"></span>
+    </div>
+
+    {/* Info */}
+    <div className="hidden text-left sm:block">
+      <p className="text-sm font-bold text-slate-900">
+        {admin.name}
+      </p>
+      <p className="text-xs font-medium text-indigo-700">
+        System Administrator
+      </p>
+    </div>
+
+    {/* Chevron */}
+    <svg
+      className="w-4 h-4 transition-transform text-slate-600 group-hover:rotate-180"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      viewBox="0 0 24 24"
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+    </svg>
+  </button>
+
+  {/* ================= DROPDOWN ================= */}
+  <div className="absolute right-0 z-40 hidden mt-3 overflow-hidden bg-white border shadow-2xl w-80 rounded-2xl group-hover:block border-slate-300">
+
+    {/* PROFILE HEADER */}
+    <div className="px-6 py-4 text-white bg-gradient-to-r from-indigo-700 to-blue-700">
+      <p className="text-sm font-bold">{admin.name}</p>
+      <p className="text-xs opacity-90">Administrator • {admin.adminId}</p>
+    </div>
+
+    {/* SECTION: ACCOUNT */}
+    <div className="px-2 py-2">
+      <p className="px-4 py-2 text-xs font-semibold tracking-wide uppercase text-slate-500">
+        Account
+      </p>
+
+      <button className="flex items-start w-full gap-3 px-4 py-3 rounded-lg hover:bg-indigo-50">
+        <span className="text-indigo-700">⚙️</span>
+        <div className="text-left">
+          <p className="text-sm font-semibold text-slate-800">Account Settings</p>
+          <p className="text-xs text-slate-500">
+            Profile, preferences, language, timezone
+          </p>
+        </div>
+      </button>
+
+      <button className="flex items-start w-full gap-3 px-4 py-3 rounded-lg hover:bg-indigo-50">
+        <span className="text-indigo-700">🔐</span>
+        <div className="text-left">
+          <p className="text-sm font-semibold text-slate-800">Security & Access</p>
+          <p className="text-xs text-slate-500">
+            Password, 2FA, login activity
+          </p>
+        </div>
+      </button>
+    </div>
+
+    {/* SECTION: ADMIN */}
+    <div className="px-2 py-2 border-t">
+      <p className="px-4 py-2 text-xs font-semibold tracking-wide uppercase text-slate-500">
+        Administration
+      </p>
+
+      <button className="flex items-start w-full gap-3 px-4 py-3 rounded-lg hover:bg-indigo-50">
+        <span className="text-indigo-700">👥</span>
+        <div className="text-left">
+          <p className="text-sm font-semibold text-slate-800">User Management</p>
+          <p className="text-xs text-slate-500">
+            Employees, roles & permissions
+          </p>
+        </div>
+      </button>
+
+      <button className="flex items-start w-full gap-3 px-4 py-3 rounded-lg hover:bg-indigo-50">
+        <span className="text-indigo-700">📊</span>
+        <div className="text-left">
+          <p className="text-sm font-semibold text-slate-800">Reports & Analytics</p>
+          <p className="text-xs text-slate-500">
+            Performance, usage & system stats
+          </p>
+        </div>
+      </button>
+    </div>
+
+    {/* FOOTER */}
+    <div className="border-t bg-slate-50">
+      <button
+        onClick={handleLogout}
+        className="flex items-center w-full gap-3 px-6 py-3 text-sm font-bold text-red-700 hover:bg-red-100"
+      >
+        🚪 Sign out
+      </button>
     </div>
   </div>
+</div>
 
-  {/* QUICK ADMIN SHORTCUTS */}
-  <div className="grid grid-cols-2 gap-4 mt-6 sm:grid-cols-4">
-
-    <div className="p-4 transition border border-indigo-100 shadow-md cursor-pointer bg-white/70 rounded-xl hover:scale-105">
-      <p className="text-xs text-gray-800">Total Employees</p>
-      <h3 className="text-xl font-bold text-indigo-700">42</h3>
     </div>
-
-    <div className="p-4 transition border border-indigo-100 shadow-md cursor-pointer bg-white/70 rounded-xl hover:scale-105">
-      <p className="text-xs text-gray-800">Pending Tickets</p>
-      <h3 className="text-xl font-bold text-yellow-600">6</h3>
-    </div>
-
-    <div className="p-4 transition border border-indigo-100 shadow-md cursor-pointer bg-white/70 rounded-xl hover:scale-105">
-      <p className="text-xs text-gray-800">Projects Active</p>
-      <h3 className="text-xl font-bold text-blue-700">3</h3>
-    </div>
-
-    <div className="p-4 transition border border-indigo-100 shadow-md cursor-pointer bg-white/70 rounded-xl hover:scale-105">
-      <p className="text-xs text-gray-800">System Alerts</p>
-      <h3 className="text-xl font-bold text-red-600">2</h3>
-    </div>
-
   </div>
 </header>
 
- {/* Quick Stats Section */}
-      <section className="grid grid-cols-1 gap-6 mb-6 md:grid-cols-3">
-        <div className="p-6 bg-white shadow rounded-xl">
-          <h2 className="text-lg font-semibold text-gray-700">Total Users</h2>
-          <p className="text-2xl font-bold text-indigo-600">120</p>
-        </div>
-        <div className="p-6 bg-white shadow rounded-xl">
-          <h2 className="text-lg font-semibold text-gray-700">Active Tickets</h2>
-          <p className="text-2xl font-bold text-indigo-600">45</p>
-        </div>
-        <div className="p-6 bg-white shadow rounded-xl">
-          <h2 className="text-lg font-semibold text-gray-700">Pending Tasks</h2>
-          <p className="text-2xl font-bold text-indigo-600">10</p>
-        </div>
-      </section>
+
+
+{/* ================= QUICK STATS (ZOHO STYLE – FRONTEND ONLY) ================= */}
+{/* ================= QUICK STATS (PREMIUM – HIGH VISIBILITY) ================= */}
+<section className="grid grid-cols-1 gap-6 mb-10 md:grid-cols-3">
+
+  {/* TOTAL USERS */}
+  <div className="relative p-6 overflow-hidden transition-all duration-300 bg-white shadow-xl rounded-2xl hover:shadow-2xl">
+    <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/10 via-indigo-400/5 to-transparent"></div>
+
+    <div className="relative flex items-center justify-between">
+      <div>
+        <p className="text-sm font-bold tracking-wide text-indigo-700 uppercase">
+          Total Users
+        </p>
+        <p className="mt-2 text-4xl font-extrabold text-indigo-800">
+          120
+        </p>
+        <p className="mt-1 text-xs font-medium text-indigo-600/70">
+          Employees & Admins
+        </p>
+      </div>
+
+      <div className="flex items-center justify-center text-xl text-white shadow-lg w-14 h-14 bg-gradient-to-br from-indigo-600 to-indigo-500 rounded-2xl">
+        👥
+      </div>
+    </div>
+  </div>
+
+  {/* ACTIVE TICKETS */}
+  <div className="relative p-6 overflow-hidden transition-all duration-300 bg-white shadow-xl rounded-2xl hover:shadow-2xl">
+    <div className="absolute inset-0 bg-gradient-to-br from-amber-500/15 via-yellow-400/10 to-transparent"></div>
+
+    <div className="relative flex items-center justify-between">
+      <div>
+        <p className="text-sm font-bold tracking-wide uppercase text-amber-700">
+          Active Tickets
+        </p>
+        <p className="mt-2 text-4xl font-extrabold text-amber-700">
+          45
+        </p>
+        <p className="mt-1 text-xs font-medium text-amber-600/80">
+          Awaiting resolution
+        </p>
+      </div>
+
+      <div className="flex items-center justify-center text-xl text-white shadow-lg w-14 h-14 bg-gradient-to-br from-amber-500 to-yellow-400 rounded-2xl">
+        🎧
+      </div>
+    </div>
+  </div>
+
+  {/* PENDING TASKS */}
+  <div className="relative p-6 overflow-hidden transition-all duration-300 bg-white shadow-xl rounded-2xl hover:shadow-2xl">
+    <div className="absolute inset-0 bg-gradient-to-br from-rose-500/15 via-pink-400/10 to-transparent"></div>
+
+    <div className="relative flex items-center justify-between">
+      <div>
+        <p className="text-sm font-bold tracking-wide uppercase text-rose-700">
+          Pending Tasks
+        </p>
+        <p className="mt-2 text-4xl font-extrabold text-rose-700">
+          10
+        </p>
+        <p className="mt-1 text-xs font-medium text-rose-600/80">
+          Incomplete work items
+        </p>
+      </div>
+
+      <div className="flex items-center justify-center text-xl text-white shadow-lg w-14 h-14 bg-gradient-to-br from-rose-500 to-pink-500 rounded-2xl">
+        📋
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+
       {/* TABS */}
       <div className="flex justify-center gap-4 mb-8">
         {["work", "attendance", "support"].map((tab) => (
