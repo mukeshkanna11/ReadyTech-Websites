@@ -173,76 +173,125 @@ const EmployeeDashboard = () => {
   // ================= RENDER =================
   return (
     <div className="min-h-screen p-6 bg-gradient-to-br from-indigo-50 to-white">
-      {/* HEADER */}
-<header className="p-4 mb-8 border-b shadow-lg backdrop-blur-xl bg-white/60 border-indigo-200/40 sm:p-6 rounded-2xl">
-  <div className="flex items-center justify-between">
+      {/* ================= EMPLOYEE HEADER (PREMIUM) ================= */}
+{/* ================= PREMIUM HEADER ================= */}
+<header className="sticky top-0 z-40 mb-8 border shadow-xl bg-white/90 backdrop-blur-xl rounded-3xl border-slate-200">
 
-    {/* LEFT — LOGO + SEARCH */}
-    <div className="flex items-center gap-6">
-      {/* Logo */}
-      <h1 className="flex items-center gap-2 text-3xl font-extrabold tracking-wide text-transparent bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text">
-        <span>⚡</span> ReadyTech Dashboard
-      </h1>
+  <div className="flex items-center justify-between px-6 py-4">
 
-      {/* Search */}
-      <div className="items-center hidden px-4 py-2 border border-indigo-100 shadow-md md:flex bg-white/70 rounded-xl">
-        <input
-          type="text"
-          placeholder="Search anything..."
-          className="w-48 text-sm bg-transparent outline-none"
-        />
-        <svg
-          className="w-5 h-5 text-indigo-500"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          viewBox="0 0 24 24"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M10 18a8 8 0 100-16 8 8 0 000 16z" />
-        </svg>
+    {/* ================= LEFT : LOGO ================= */}
+    <div className="flex items-center gap-4">
+      <div className="flex items-center justify-center w-12 h-12 text-xl font-bold text-white shadow-lg rounded-2xl bg-gradient-to-br from-indigo-600 via-blue-600 to-sky-500">
+        ⚡
+      </div>
+
+      <div>
+        <h1 className="text-2xl font-extrabold tracking-wide text-slate-900">
+          ReadyTech
+        </h1>
+        <p className="text-xs font-semibold tracking-wider text-indigo-600 uppercase">
+          Employee Panel
+        </p>
       </div>
     </div>
 
-    {/* RIGHT — NOTIFICATIONS + ACCOUNT DROPDOWN */}
-    <div className="flex items-center gap-5">
+    {/* ================= RIGHT : ACTIONS ================= */}
+    <div className="flex items-center gap-6">
 
-      {/* Notifications */}
-      <button className="relative p-2 transition rounded-full shadow-md bg-white/70 hover:shadow-lg hover:bg-white">
-        <svg
-          className="w-6 h-6 text-indigo-600"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M14.25 18.25a1.75 1.75 0 11-3.5 0m7-5.5V10a6 6 0 10-12 0v2.75L4 17h16l-2.75-4.25z"
-          />
-        </svg>
-        <span className="absolute top-1 right-1 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full">
-          3
-        </span>
-      </button>
-
-      {/* Account dropdown */}
+      {/* ================= NOTIFICATIONS ================= */}
       <div className="relative group">
-        <button className="flex items-center gap-3 p-2 pr-4 transition border border-indigo-100 rounded-full shadow-md bg-white/80 hover:shadow-lg">
+        <button className="relative flex items-center justify-center transition border shadow-md w-11 h-11 rounded-xl border-slate-200 bg-slate-50 hover:bg-indigo-50">
+          🔔
+          <span className="absolute -top-1 -right-1 px-1.5 text-[10px] font-bold text-white bg-red-500 rounded-full">
+            3
+          </span>
+        </button>
+
+        {/* Notification Dropdown */}
+        <div className="absolute right-0 z-30 hidden mt-4 bg-white border shadow-2xl w-96 rounded-2xl border-slate-200 group-hover:block">
+          <div className="flex items-center justify-between px-5 py-4 border-b">
+            <h3 className="font-bold text-slate-900">
+              Notifications
+            </h3>
+            <button className="text-xs font-semibold text-indigo-600">
+              Mark all read
+            </button>
+          </div>
+
+          <div className="overflow-y-auto max-h-80">
+            <div className="flex gap-4 px-5 py-4 border-b bg-indigo-50">
+              <span className="text-xl">🧾</span>
+              <div>
+                <p className="text-sm font-semibold text-slate-900">
+                  New task assigned
+                </p>
+                <p className="text-xs text-slate-500">
+                  CRM Dashboard UI
+                </p>
+                <p className="text-[10px] text-slate-400 mt-1">
+                  2 minutes ago
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-4 px-5 py-4 border-b">
+              <span className="text-xl">🎧</span>
+              <div>
+                <p className="text-sm font-semibold text-slate-900">
+                  Ticket updated
+                </p>
+                <p className="text-xs text-slate-500">
+                  VPN access issue
+                </p>
+                <p className="text-[10px] text-slate-400 mt-1">
+                  1 hour ago
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-4 px-5 py-4">
+              <span className="text-xl">✅</span>
+              <div>
+                <p className="text-sm font-semibold text-slate-900">
+                  Task completed
+                </p>
+                <p className="text-xs text-slate-500">
+                  Bug fix approved
+                </p>
+                <p className="text-[10px] text-slate-400 mt-1">
+                  Yesterday
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ================= ACCOUNT ================= */}
+      <div className="relative group">
+        <button className="flex items-center gap-4 px-4 py-2 transition bg-white border shadow-md rounded-2xl border-slate-200 hover:bg-slate-50">
+
           {/* Avatar */}
-          <div className="flex items-center justify-center text-lg font-bold text-white rounded-full w-11 h-11 bg-gradient-to-r from-indigo-500 to-blue-500">
-            {employee.name.charAt(0).toUpperCase()}
+          <div className="relative">
+            <div className="flex items-center justify-center text-lg font-bold text-white shadow w-11 h-11 rounded-xl bg-gradient-to-br from-indigo-600 to-blue-600">
+              MK
+            </div>
+            <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
           </div>
 
-          {/* Employee Name */}
-          <div className="flex-col hidden text-left sm:flex">
-            <p className="font-semibold text-green-800">{employee.name}</p>
-            <p className="text-xs text-gray-800">{employee.employeeId}</p>
+          {/* Info */}
+          <div className="text-left">
+            <p className="text-sm font-semibold text-slate-900">
+              Mukesh
+            </p>
+            <p className="text-xs font-medium text-slate-500">
+              RTS-112
+            </p>
           </div>
 
-          {/* Arrow */}
+          {/* Chevron */}
           <svg
-            className="w-4 h-4 text-gray-600 transition group-hover:rotate-180"
+            className="w-4 h-4 transition text-slate-500 group-hover:rotate-180"
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
@@ -252,55 +301,138 @@ const EmployeeDashboard = () => {
           </svg>
         </button>
 
-        {/* Dropdown Menu */}
-        <div className="absolute right-0 z-20 flex-col hidden w-48 p-3 mt-2 border border-indigo-100 shadow-xl group-hover:flex bg-white/90 backdrop-blur-xl rounded-xl">
-          <button className="flex items-center gap-2 px-3 py-2 text-sm text-black rounded-lg hover:bg-indigo-50">
-            👤 Account
-          </button>
-          <button className="flex items-center py-2 text-sm text-black rounded-lg x-3 hover:bg-indigo-50">
-            ⚙️ Settings
-          </button>
-          <button className="flex items-center gap-2 px-3 py-2 text-sm text-black rounded-lg hover:bg-indigo-50">
-            📄 My Reports
-          </button>
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 px-3 py-2 text-sm text-red-600 rounded-lg hover:bg-red-50"
-          >
-            🚪 Logout
-          </button>
+        {/* Account Dropdown */}
+        <div className="absolute right-0 z-30 hidden w-64 mt-4 bg-white border shadow-2xl rounded-2xl border-slate-200 group-hover:block">
+          <div className="px-5 py-4 border-b bg-slate-50">
+            <p className="text-sm font-bold text-slate-900">
+              Mukesh
+            </p>
+            <p className="text-xs text-slate-500">
+              Mern SDE
+            </p>
+          </div>
+
+          <div className="py-2">
+            <button className="w-full px-5 py-3 text-sm text-left text-black hover:bg-indigo-50">
+              👤 My Profile
+            </button>
+            <button className="w-full px-5 py-3 text-sm text-left text-black hover:bg-indigo-50">
+              🕒 Attendance
+            </button>
+            <button className="w-full px-5 py-3 text-sm text-left text-black hover:bg-indigo-50">
+              🎧 Support Tickets
+            </button>
+          </div>
+
+          <div className="border-t">
+            <button className="w-full px-5 py-3 text-sm font-semibold text-left text-red-600 hover:bg-red-50">
+              🚪 Logout
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  {/* EXTRA HEADER SECTIONS */}
-  <div className="flex items-center justify-between mt-6">
-
-    {/* Quick Stats */}
-    <div className="grid w-full grid-cols-2 gap-4 sm:grid-cols-4">
-      <div className="p-4 transition border border-indigo-100 shadow-md bg-white/70 rounded-xl hover:scale-105">
-        <p className="text-xs text-gray-800">Today's Tasks</p>
-        <h3 className="text-xl font-bold text-indigo-700">12</h3>
-      </div>
-
-      <div className="p-4 transition border border-indigo-100 shadow-md bg-white/70 rounded-xl hover:scale-105">
-        <p className="text-xs text-gray-800">Completed</p>
-        <h3 className="text-xl font-bold text-green-700">8</h3>
-      </div>
-
-      <div className="p-4 transition border border-indigo-100 shadow-md bg-white/70 rounded-xl hover:scale-105">
-        <p className="text-xs text-gray-800">Pending</p>
-        <h3 className="text-xl font-bold text-yellow-600">4</h3>
-      </div>
-
-      <div className="p-4 transition border border-indigo-100 shadow-md bg-white/70 rounded-xl hover:scale-105">
-        <p className="text-xs text-gray-800">Messages</p>
-        <h3 className="text-xl font-bold text-blue-700">3</h3>
-      </div>
     </div>
   </div>
 </header>
+{/* ================= QUICK STATS ================= */}
+<section className="grid grid-cols-1 gap-6 mb-10 sm:grid-cols-2 lg:grid-cols-4">
+
+  {/* TODAY TASKS */}
+  <div className="relative p-6 transition bg-white shadow-xl rounded-2xl hover:shadow-2xl">
+    <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/10 to-transparent rounded-2xl"></div>
+
+    <div className="relative flex items-center justify-between">
+      <div>
+        <p className="text-xs font-bold tracking-wide text-indigo-700 uppercase">
+          Today Tasks
+        </p>
+        <p className="mt-2 text-4xl font-extrabold text-indigo-800">
+          12
+        </p>
+        <p className="mt-1 text-xs font-medium text-indigo-600/70">
+          Assigned to you
+        </p>
+      </div>
+
+      <div className="flex items-center justify-center text-xl text-white shadow-lg w-14 h-14 bg-gradient-to-br from-indigo-600 to-blue-600 rounded-2xl">
+        📋
+      </div>
+    </div>
+  </div>
+
+  {/* COMPLETED */}
+  <div className="relative p-6 transition bg-white shadow-xl rounded-2xl hover:shadow-2xl">
+    <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/15 to-transparent rounded-2xl"></div>
+
+    <div className="relative flex items-center justify-between">
+      <div>
+        <p className="text-xs font-bold tracking-wide uppercase text-emerald-700">
+          Completed
+        </p>
+        <p className="mt-2 text-4xl font-extrabold text-emerald-700">
+          8
+        </p>
+        <p className="mt-1 text-xs font-medium text-emerald-600/70">
+          Finished today
+        </p>
+      </div>
+
+      <div className="flex items-center justify-center text-xl text-white shadow-lg w-14 h-14 bg-gradient-to-br from-emerald-500 to-green-500 rounded-2xl">
+        ✅
+      </div>
+    </div>
+  </div>
+
+  {/* PENDING */}
+  <div className="relative p-6 transition bg-white shadow-xl rounded-2xl hover:shadow-2xl">
+    <div className="absolute inset-0 bg-gradient-to-br from-amber-500/20 to-transparent rounded-2xl"></div>
+
+    <div className="relative flex items-center justify-between">
+      <div>
+        <p className="text-xs font-bold tracking-wide uppercase text-amber-700">
+          Pending
+        </p>
+        <p className="mt-2 text-4xl font-extrabold text-amber-700">
+          4
+        </p>
+        <p className="mt-1 text-xs font-medium text-amber-600/80">
+          Needs attention
+        </p>
+      </div>
+
+      <div className="flex items-center justify-center text-xl text-white shadow-lg w-14 h-14 bg-gradient-to-br from-amber-500 to-yellow-400 rounded-2xl">
+        ⏳
+      </div>
+    </div>
+  </div>
+
+  {/* SUPPORT TICKETS */}
+  <div className="relative p-6 transition bg-white shadow-xl rounded-2xl hover:shadow-2xl">
+    <div className="absolute inset-0 bg-gradient-to-br from-rose-500/15 to-transparent rounded-2xl"></div>
+
+    <div className="relative flex items-center justify-between">
+      <div>
+        <p className="text-xs font-bold tracking-wide uppercase text-rose-700">
+          Tickets
+        </p>
+        <p className="mt-2 text-4xl font-extrabold text-rose-700">
+          3
+        </p>
+        <p className="mt-1 text-xs font-medium text-rose-600/80">
+          Open requests
+        </p>
+      </div>
+
+      <div className="flex items-center justify-center text-xl text-white shadow-lg w-14 h-14 bg-gradient-to-br from-rose-500 to-pink-500 rounded-2xl">
+        🎧
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
 
 
       {/* TABS */}
