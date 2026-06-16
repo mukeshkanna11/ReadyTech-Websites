@@ -1,320 +1,192 @@
-import React, { useEffect } from "react";
-import AOS from "aos";
-import "aos/dist/aos.css";
+import React, { memo } from "react";
 import {
-  FaRobot,
-  FaCloud,
-  FaBullseye,
+  FaBuilding,
+  FaLock,
+  FaGlobe,
+  FaLeaf,
+  FaRocket,
   FaLightbulb,
-  FaHeart,
-  FaMapMarkerAlt,
-  FaMicrochip,
+  FaUsers,
+  FaChartLine,
 } from "react-icons/fa";
-import { Helmet } from "react-helmet-async";
-import InnovationImg from "../assets/images/C1.jpg";
-import AIImg from "../assets/images/unnamed.webp";
 
+/* ================= MAIN PAGE ================= */
 export default function AboutReadyTech() {
-  useEffect(() => {
-    AOS.init({ duration: 1000, once: true });
-  }, []);
+  return (
+    <div className="min-h-screen text-white bg-black">
 
-  const locations = [
-    {
-      city: "Coimbatore",
-      address: "149 2nd Floor, Hopes, Coimbatore, Tamil Nadu",
-      
-    },
-    {
-      city: "Coimbatore",
-      address:
-        "Tidel Park, Peelamedu, B.R. Puram Industrial Estate, Coimbatore, Tamil Nadu 641014",
-      
-    },
-    {
-      city: "Bangalore",
-      address:
-        "2nd floor, Hanumanthappa building, 21/8, Konanakunte Cross Rd, Vasanthapura, Bikasipura, Bangalore, Karnataka",
-      
-    },
+      {/* ================= HERO ================= */}
+      <section className="px-6 py-32 text-center">
+        <div className="max-w-4xl mx-auto">
+
+          <h1 className="text-4xl font-bold leading-tight md:text-6xl">
+            Building Software That Thinks, Scales & Evolves
+          </h1>
+
+          <p className="mt-6 text-lg leading-relaxed text-gray-300 md:text-xl">
+            For over a decade, Ready Tech Solutions has taken a different path —
+            focusing on deep engineering, long-term thinking, and building
+            intelligent systems that help businesses grow sustainably.
+          </p>
+
+        </div>
+      </section>
+
+      {/* ================= CRAFT SECTION ================= */}
+      <Section title="Software is Our Craft">
+        <p className="leading-relaxed text-gray-300">
+          Good software is not built fast — it is crafted. Our teams focus on
+          mastering engineering, design, and AI systems to deliver long-lasting
+          value. We don’t treat software as a product alone — it is our craft,
+          our discipline, and our identity.
+        </p>
+
+        <p className="mt-4 text-gray-300">
+          We spend years refining systems so businesses can depend on them for
+          decades.
+        </p>
+      </Section>
+
+      {/* ================= TECHNOLOGY PHILOSOPHY ================= */}
+      <Section title="Cutting-Edge Technology Meets Timeless Thinking">
+        <p className="text-gray-300">
+          We believe technology should solve real problems, anticipate needs,
+          and unlock opportunities — not just follow trends.
+        </p>
+
+        <Grid>
+          <Feature icon={<FaRocket />} title="Long-Term Engineering" />
+          <Feature icon={<FaLightbulb />} title="Innovation Driven R&D" />
+          <Feature icon={<FaChartLine />} title="Scalable Systems" />
+        </Grid>
+      </Section>
+
+      {/* ================= PRIVACY ================= */}
+      <Section title="A Common Sense Approach to Privacy">
+        <p className="leading-relaxed text-gray-300">
+          We don’t believe in ads inside products. We don’t sell user data.
+          And we never rely on third-party trackers to understand our users.
+        </p>
+
+        <div className="grid gap-6 mt-8 md:grid-cols-3">
+          <Card icon={<FaLock />} title="No Ads in Products" />
+          <Card icon={<FaLock />} title="No Data Selling" />
+          <Card icon={<FaLock />} title="User-Controlled Privacy" />
+        </div>
+      </Section>
+
+      {/* ================= BUSINESS MODEL ================= */}
+      <Section title="A Company You Can Trust">
+        <p className="leading-relaxed text-gray-300">
+          We are independent, self-funded, and long-term focused. This allows us
+          to build for customers — not investors or short-term profit cycles.
+        </p>
+
+        <Grid>
+          <Feature icon={<FaBuilding />} title="Independent Company" />
+          <Feature icon={<FaUsers />} title="Customer First Approach" />
+          <Feature icon={<FaChartLine />} title="Sustainable Growth" />
+        </Grid>
+      </Section>
+
+      {/* ================= PLATFORM ================= */}
+      <Section title="A New Way to Run Your Business">
+        <p className="text-gray-300">
+          Ready Tech Solutions is more than a product — it is a connected
+          ecosystem of intelligent systems designed to power modern businesses.
+        </p>
+
+        <div className="mt-10 text-sm tracking-wider text-cyan-400">
+          AI • AUTOMATION • CLOUD • ERP • DIGITAL SYSTEMS
+        </div>
+      </Section>
+
+      {/* ================= GLOBAL IMPACT ================= */}
+      <Section title="Global Reach & Impact">
+        <p className="text-gray-300">
+          From startups to enterprises, our systems power businesses across
+          industries, enabling digital transformation at scale.
+        </p>
+
+        <Grid>
+          <Feature icon={<FaGlobe />} title="Global Clients" />
+          <Feature icon={<FaUsers />} title="Enterprise Users" />
+          <Feature icon={<FaRocket />} title="Fast Scaling Systems" />
+        </Grid>
+      </Section>
+
+      {/* ================= TIMELINE ================= */}
+      <Section title="Our Journey">
+        <Timeline />
+      </Section>
+
+      {/* ================= CLOSING ================= */}
+      <section className="py-24 text-center border-t border-white/10">
+        <h2 className="text-3xl font-bold">
+          A Company You Will Keep
+        </h2>
+
+        <p className="max-w-2xl mx-auto mt-4 text-gray-400">
+          We build systems that last — designed to grow with you, not replace you.
+        </p>
+      </section>
+
+    </div>
+  );
+}
+
+/* ================= SECTIONS ================= */
+
+const Section = ({ title, children }) => (
+  <section className="max-w-5xl px-6 py-20 mx-auto">
+    <h2 className="mb-6 text-3xl font-bold text-white">{title}</h2>
+    {children}
+  </section>
+);
+
+const Grid = ({ children }) => (
+  <div className="grid gap-6 mt-10 md:grid-cols-3">
+    {children}
+  </div>
+);
+
+/* ================= CARDS ================= */
+
+const Feature = memo(({ icon, title }) => (
+  <div className="p-6 transition border rounded-xl bg-white/5 border-white/10 hover:border-cyan-400/40">
+    <div className="mb-3 text-3xl text-cyan-400">{icon}</div>
+    <h3 className="font-semibold">{title}</h3>
+  </div>
+));
+
+const Card = memo(({ icon, title }) => (
+  <div className="p-6 text-center border rounded-xl bg-white/5 border-white/10">
+    <div className="mb-3 text-3xl text-cyan-400">{icon}</div>
+    <h3 className="font-semibold">{title}</h3>
+  </div>
+));
+
+/* ================= TIMELINE ================= */
+
+function Timeline() {
+  const years = [
+    "2000 - Foundation of engineering vision",
+    "2008 - First enterprise systems",
+    "2015 - Cloud transformation era",
+    "2020 - AI & automation expansion",
+    "2026 - Intelligent ecosystem platform",
   ];
 
   return (
-    <div className="relative min-h-screen overflow-hidden text-gray-100">
-      <Helmet>
-        <title>About Us | Ready Tech Solutions</title>
-        <meta
-          name="description"
-          content="Discover how Ready Tech Solutions drives innovation with AI, automation and smart IT systems."
-        />
-      </Helmet>
-
-      {/* === FULL BACKGROUND WITH TWO IMAGES === */}
-      <div className="absolute inset-0 overflow-hidden -z-10">
-        {/* Two blended background layers */}
+    <div className="space-y-4">
+      {years.map((y, i) => (
         <div
-          className="absolute inset-0 bg-center bg-cover opacity-70 animate-bgShift"
-          style={{
-            backgroundImage: `url(${AIImg})`,
-            backgroundAttachment: "fixed",
-          }}
-        ></div>
-        <div
-          className="absolute inset-0 bg-center bg-cover opacity-50 mix-blend-overlay animate-bgShiftReverse"
-          style={{
-            backgroundImage: `url(${InnovationImg})`,
-            backgroundAttachment: "fixed",
-          }}
-        ></div>
-
-        {/* Overlay gradient for text clarity */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black/90"></div>
-      </div>
-
-      {/* === PAGE CONTENT === */}
-      <section className="relative flex flex-col items-center justify-center text-center text-white py-28">
-        <div className="relative z-10 px-6" data-aos="zoom-in">
-          <h1 className="mb-4 text-4xl font-extrabold md:text-5xl drop-shadow-lg">
-            We Build the Future with AI & Technology
-          </h1>
-          <p
-            className="max-w-2xl mx-auto text-lg md:text-xl text-gray-200/90"
-            data-aos="fade-up"
-            data-aos-delay="200"
-          >
-            Since 2019, Ready Tech Solutions has redefined innovation with
-            automation, data-driven systems and AI products that empower
-            businesses to scale smarter.
-          </p>
+          key={i}
+          className="p-4 text-gray-300 border-l-2 border-cyan-400"
+        >
+          {y}
         </div>
-      </section>
-
-      {/* ABOUT SECTION */}
-      <section className="relative z-10 max-w-6xl px-6 py-20 mx-auto">
-        <div className="grid items-center gap-12 md:grid-cols-2">
-          <div data-aos="fade-right">
-            <h2 className="mb-4 text-3xl font-bold text-white">
-              Our Expertise in AI & Digital Innovation
-            </h2>
-            <p className="mb-6 leading-relaxed text-gray-300">
-              We craft next-gen AI systems that automate workflows, optimize
-              decisions and unlock digital growth opportunities.
-            </p>
-            <p className="mb-6 leading-relaxed text-gray-300">
-              Our tech stack spans predictive analytics, cloud solutions and
-              ML-powered automation that blending innovation with intelligence.
-            </p>
-            <p className="leading-relaxed text-gray-300">
-              Each solution we design evolves with your business, adapting to
-              the ever-changing digital landscape.
-            </p>
-          </div>
-          <div
-            className="flex justify-center"
-            data-aos="fade-left"
-            data-aos-delay="200"
-          >
-            <img
-              src={AIImg}
-              alt="AI Development Illustration"
-              className="h-auto p-4 mx-auto border shadow-xl rounded-2xl w-80 bg-gradient-to-br from-gray-800 via-gray-900 to-black border-cyan-500/20 animate-float"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* FLOW SECTION */}
-      <section className="relative z-10 py-20 bg-black/30 backdrop-blur-sm">
-        <div className="max-w-6xl px-6 mx-auto text-center">
-          <h2 className="mb-12 text-3xl font-bold text-white" data-aos="fade-up">
-            Innovation Flows Through Everything We Do
-          </h2>
-          <div className="grid ">
-            <div data-aos="fade-right">
-              {/* <img
-                src={InnovationImg}
-                alt="Innovation Illustration"
-                className="border shadow-xl rounded-2xl border-cyan-500/30"
-              /> */}
-            </div>
-            <div className="flex flex-col justify-center" data-aos="fade-left">
-              <p className="mb-6 text-lg leading-relaxed text-gray-300">
-                Innovation isn’t a department — it’s our DNA. From AI-powered
-                customer support to automated analytics pipelines, every project
-                we build is designed to create impact, speed and intelligence.
-              </p>
-              <p className="text-lg leading-relaxed text-gray-300">
-                We believe technology should evolve alongside you — transforming
-                ideas into intelligent systems that move industries forward.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CAPABILITIES */}
-      <section className="relative z-10 py-16 border-t border-gray-800 bg-black/40 backdrop-blur-sm">
-        <div className="max-w-6xl px-6 mx-auto text-center" data-aos="fade-up">
-          <h2 className="mb-12 text-3xl font-bold text-white">Our Capabilities</h2>
-          <div className="grid gap-12 md:grid-cols-3">
-            <StatCard icon={<FaRobot />} title="AI Development" value={95} />
-            <StatCard icon={<FaCloud />} title="Web Development" value={90} />
-            <StatCard icon={<FaMicrochip />} title="BPO Services" value={88} />
-          </div>
-        </div>
-      </section>
-
-      {/* MISSION & VISION */}
-      <section className="relative z-10 grid max-w-6xl gap-12 px-6 py-20 mx-auto md:grid-cols-2">
-        <MissionCard />
-        <VisionCard />
-      </section>
-
-      {/* VALUES */}
-      <section className="relative z-10 py-20 bg-black/60" data-aos="fade-up">
-        <div className="max-w-6xl px-6 mx-auto text-center">
-          <h2 className="mb-12 text-3xl font-bold text-white">
-            Our Core Values
-          </h2>
-          <div className="grid gap-8 md:grid-cols-3">
-            <ValueCard
-              icon={<FaHeart />}
-              title="Innovation"
-              description="Exploring new frontiers in AI and automation to redefine possibilities."
-            />
-            <ValueCard
-              icon={<FaHeart />}
-              title="Integrity"
-              description="We build technology with transparency, ethics and impact."
-            />
-            <ValueCard
-              icon={<FaHeart />}
-              title="Excellence"
-              description="Delivering world-class solutions that exceed standards."
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* LOCATIONS */}
-      <section className="relative z-10 py-20 border-t border-gray-800 bg-black/40" data-aos="zoom-in">
-        <div className="max-w-6xl px-6 mx-auto text-center">
-          <h2 className="mb-12 text-3xl font-bold text-white">Our Locations</h2>
-          <div className="grid gap-8 md:grid-cols-3">
-            {locations.map((loc, idx) => (
-              <div
-                key={idx}
-                className="p-6 transition transform border shadow-lg bg-gradient-to-br from-gray-800/80 to-gray-900/90 border-cyan-500/20 rounded-xl hover:-translate-y-1 hover:shadow-cyan-500/40"
-                data-aos="fade-up"
-                data-aos-delay={idx * 150}
-              >
-                <div className="flex justify-center mb-4 text-3xl text-cyan-400 animate-bounce">
-                  <FaMapMarkerAlt />
-                </div>
-                <h4 className="mb-2 text-xl font-semibold text-white">{loc.city}</h4>
-                <p className="text-sm text-gray-300">{loc.address}</p>
-                <p className="mt-2 text-sm font-medium text-cyan-400">
-                  {loc.phone}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ANIMATIONS */}
-      <style>
-        {`
-        @keyframes bgShift {
-          0% { transform: scale(1) translateY(0px); opacity: 0.65; }
-          50% { transform: scale(1.05) translateY(-15px); opacity: 0.75; }
-          100% { transform: scale(1) translateY(0px); opacity: 0.65; }
-        }
-        @keyframes bgShiftReverse {
-          0% { transform: scale(1) translateY(0px); opacity: 0.55; }
-          50% { transform: scale(1.07) translateY(15px); opacity: 0.65; }
-          100% { transform: scale(1) translateY(0px); opacity: 0.55; }
-        }
-        .animate-bgShift { animation: bgShift 20s ease-in-out infinite; }
-        .animate-bgShiftReverse { animation: bgShiftReverse 22s ease-in-out infinite; }
-
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
-        }
-        .animate-float { animation: float 4s ease-in-out infinite; }
-      `}
-      </style>
-    </div>
-  );
-}
-
-/* COMPONENTS */
-function StatCard({ icon, title, value }) {
-  return (
-    <div
-      className="p-6 transition border shadow-lg bg-gradient-to-br from-gray-800 via-gray-900 to-black border-cyan-500/20 rounded-xl hover:shadow-cyan-500/40 hover:-translate-y-1"
-      data-aos="flip-left"
-    >
-      <div className="flex items-center justify-center mb-4 text-4xl text-cyan-400 animate-pulse">
-        {icon}
-      </div>
-      <h4 className="text-xl font-semibold text-white">{title}</h4>
-      <p className="mt-2 text-gray-300">{value}%</p>
-      <div className="h-2 mt-2 bg-gray-700 rounded-full">
-        <div
-          className="h-2 rounded-full bg-cyan-400"
-          style={{ width: `${value}%` }}
-        ></div>
-      </div>
-    </div>
-  );
-}
-
-function MissionCard() {
-  return (
-    <div
-      className="p-8 transition border shadow-lg bg-gradient-to-br from-gray-800 via-gray-900 to-black border-cyan-500/20 rounded-xl hover:shadow-cyan-500/40"
-      data-aos="fade-right"
-    >
-      <h3 className="flex items-center gap-2 mb-4 text-2xl font-bold text-cyan-400">
-        <FaBullseye /> Mission
-      </h3>
-      <p className="leading-relaxed text-gray-300">
-       At Ready Tech Solutions, our mission is to build intelligent AI systems and automation platforms that enhance operational efficiency, secure business ecosystems, and advance ethical AI adoption across industries.
-      </p>
-    </div>
-  );
-}
-
-function VisionCard() {
-  return (
-    <div
-      className="p-8 transition border shadow-lg bg-gradient-to-br from-gray-800 via-gray-900 to-black border-cyan-500/20 rounded-xl hover:shadow-cyan-500/40"
-      data-aos="fade-left"
-      data-aos-delay="200"
-    >
-      <h3 className="flex items-center gap-2 mb-4 text-2xl font-bold text-cyan-400">
-        <FaLightbulb /> Vision
-      </h3>
-      <p className="leading-relaxed text-gray-300">
-        Our vision is to transform organizations through AI-driven solutions and seamless automation, maximizing efficiency while delivering robust AI-based security frameworks and ethical AI systems that prioritize privacy, fairness, and responsible innovation.
-      </p>
-    </div>
-  );
-}
-
-function ValueCard({ icon, title, description }) {
-  return (
-    <div
-      className="p-6 transition transform border shadow-lg bg-gradient-to-br from-gray-800 via-gray-900 to-black border-cyan-500/20 rounded-xl hover:shadow-cyan-500/40 hover:-translate-y-1"
-      data-aos="zoom-in-up"
-    >
-      <div className="flex justify-center mb-4 text-3xl text-cyan-400 animate-pulse">
-        {icon}
-      </div>
-      <h4 className="mb-2 text-xl font-semibold text-white">{title}</h4>
-      <p className="text-sm text-gray-300">{description}</p>
+      ))}
     </div>
   );
 }

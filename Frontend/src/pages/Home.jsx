@@ -1,8 +1,9 @@
 import { useState } from "react";
 import Navbar from "../components/Navbar";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { Link } from "react-router-dom";
 import {
   FaCloud,
   FaCode,
@@ -12,9 +13,24 @@ import {
   FaLock,
   FaReact,
   FaRobot,
+  FaUsers,
+  FaRocket,
+  FaAward,
   FaGlobe,
+  FaArrowRight,
+} from "react-icons/fa";
+import {
+  FaAws,
+  FaDocker,
 } from "react-icons/fa";
 
+import {
+  SiNodedotjs,
+  SiMongodb,
+  SiOpenai,
+  SiGoogleads,
+  SiMeta,
+} from "react-icons/si";
 // 🖼️ Local floating images (tech-style)
 import BgVision from "../assets/images/bg-vision.jpg";
 import BgHero from "../assets/images/bg-hero.jpg";
@@ -37,44 +53,331 @@ export default function Home() {
         />
       </Helmet>
 
-{/* -------------------- Hero Section -------------------- */}
-<section className="relative flex flex-col items-center justify-center min-h-screen px-6 text-center sm:px-16 bg-hero">
-  {/* Gradient overlay */}
-  <div className="absolute inset-0 bg-gradient-overlay -z-5"></div>
+{/* ================= PREMIUM HERO ================= */}
+<section className="relative overflow-hidden bg-[#050816]">
 
-  {/* Hero Content */}
-  <motion.div
-    initial={{ opacity: 0, y: 40 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 1.2 }}
-    className="z-10 max-w-3xl"
-  >
-    <h1 className="text-4xl font-extrabold leading-tight sm:text-5xl md:text-6xl text-gradient">
-      Transforming Ideas Into Digital Excellence
-    </h1>
-    <p className="mt-6 text-lg leading-relaxed text-gray-300 sm:text-xl">
-      At <span className="font-semibold text-indigo-400">Ready Tech Solutions,</span>  we design secure and scalable platforms that unite AI-driven innovation with powerful cloud infrastructure. <span className="font-semibold text-pink-400">AI innovation</span> and <span className="font-semibold text-yellow-300">cloud architecture</span>.
+  {/* Background */}
+  <div className="absolute inset-0">
+
+    <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-cyan-500/10 blur-[180px]" />
+
+    <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-indigo-500/10 blur-[180px]" />
+
+    <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:70px_70px]" />
+
+  </div>
+
+  <div className="container relative z-10 px-6 py-24 mx-auto lg:px-12">
+
+    <div className="grid items-center gap-14 lg:grid-cols-2">
+
+      {/* ================= LEFT ================= */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+
+        {/* Badge */}
+        <div className="inline-flex items-center gap-2 px-4 py-2 mb-8 border rounded-full bg-white/5 border-white/10 backdrop-blur-md">
+
+          <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+
+          <span className="text-sm text-gray-300">
+            AI • SaaS • Digital Marketing
+          </span>
+
+        </div>
+
+        {/* Heading */}
+        <h1 className="max-w-3xl text-4xl font-black leading-tight text-white lg:text-5xl">
+
+          Next-Generation Solutions For
+
+          <span className="block mt-2 text-transparent bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-500 bg-clip-text">
+
+            AI-Powered Solutions
+
+          </span>
+
+        </h1>
+
+        {/* Description */}
+        <p className="max-w-2xl text-lg leading-relaxed text-gray-400 mt-7">
+
+          ReadyTechSolutions helps businesses scale faster through
+          AI automation, SaaS development, CRM systems, SEO,
+          performance marketing and lead generation.
+
+        </p>
+
+        {/* CTA */}
+        <div className="flex flex-col gap-4 mt-10 sm:flex-row">
+
+          <motion.a
+            href="/contact"
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            className="inline-flex items-center justify-center gap-2 px-8 py-4 font-semibold text-black transition-all rounded-xl bg-gradient-to-r from-yellow-300 to-orange-400"
+          >
+            Get Free Consultation
+            <FaArrowRight />
+          </motion.a>
+
+          <motion.a
+            href="/services"
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            className="inline-flex items-center justify-center px-8 py-4 font-semibold text-white border rounded-xl border-white/10 bg-white/5 backdrop-blur-md"
+          >
+            Explore Services
+          </motion.a>
+
+        </div>
+
+        {/* ================= PREMIUM STATS ================= */}
+{/* ================= PREMIUM STATS (COMPACT) ================= */}
+<div className="grid grid-cols-2 gap-3 mt-10 md:grid-cols-4">
+
+  {/* Card 1 */}
+  <div className="p-4 transition-all duration-300 border rounded-xl border-white/10 bg-white/5 backdrop-blur-md hover:border-cyan-400/30">
+
+    <h3 className="text-2xl font-bold leading-tight text-white">
+      300<span className="text-cyan-400">%</span>
+    </h3>
+
+    <p className="mt-1 text-xs text-gray-400">
+      Growth Rate
     </p>
 
-    <div className="flex flex-col items-center justify-center gap-6 mt-12 sm:flex-row">
-      <motion.a
-        href="/services"
-        whileHover={{ scale: 1.08 }}
-        className="inline-block px-10 py-4 text-lg font-semibold text-gray-900 transition-all duration-300 bg-yellow-300 rounded-full shadow-lg hover:bg-yellow-400"
-      >
-        Explore Services
-      </motion.a>
-      <motion.a
-        href="/contact"
-        whileHover={{ scale: 1.08 }}
-        className="inline-block px-10 py-4 text-lg font-semibold text-white transition-all duration-300 rounded-full shadow-lg bg-gradient-to-r from-indigo-500 to-pink-500 hover:from-indigo-600 hover:to-pink-600"
-      >
-        Contact Us
-      </motion.a>
-    </div>
-  </motion.div>
-</section>
+  </div>
 
+  {/* Card 2 */}
+  <div className="p-4 transition-all duration-300 border rounded-xl border-white/10 bg-white/5 backdrop-blur-md hover:border-indigo-400/30">
+
+    <h3 className="text-2xl font-bold leading-tight text-white">
+      100<span className="text-indigo-400">+</span>
+    </h3>
+
+    <p className="mt-1 text-xs text-gray-400">
+      Clients
+    </p>
+
+  </div>
+
+  {/* Card 3 */}
+  <div className="p-4 transition-all duration-300 border rounded-xl border-white/10 bg-white/5 backdrop-blur-md hover:border-pink-400/30">
+
+    <h3 className="text-2xl font-bold leading-tight text-white">
+      50<span className="text-pink-400">+</span>
+    </h3>
+
+    <p className="mt-1 text-xs text-gray-400">
+      SaaS Apps
+    </p>
+
+  </div>
+
+  {/* Card 4 */}
+  <div className="p-4 transition-all duration-300 border rounded-xl border-white/10 bg-white/5 backdrop-blur-md hover:border-yellow-400/30">
+
+    <h3 className="text-2xl font-bold leading-tight text-white">
+      5<span className="text-yellow-400">★</span>
+    </h3>
+
+    <p className="mt-1 text-xs text-gray-400">
+      Rating
+    </p>
+
+  </div>
+
+</div>
+
+      </motion.div>
+
+      {/* ================= RIGHT DASHBOARD ================= */}
+<motion.div
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.7 }}
+  className="justify-center hidden w-full lg:flex"
+>
+
+  <div className="w-full max-w-xl">
+
+    <div className="relative p-6 border shadow-[0_25px_80px_rgba(0,0,0,0.45)] rounded-3xl bg-white/5 backdrop-blur-2xl border-white/10">
+
+      {/* Header */}
+      <div className="flex items-start justify-between mb-8">
+
+        <div>
+          <p className="text-sm text-gray-400">
+            Ready Tech Analytics
+          </p>
+
+          <h3 className="text-2xl font-bold text-white">
+            Growth Intelligence
+          </h3>
+        </div>
+
+        <span className="px-3 py-1 text-xs font-medium text-green-400 border rounded-full bg-green-500/10 border-green-500/20">
+          Live
+        </span>
+
+      </div>
+
+      {/* Top KPI Row */}
+      <div className="grid grid-cols-2 gap-4 mb-5">
+
+        <div className="p-5 border rounded-2xl bg-gradient-to-br from-cyan-500/10 to-indigo-500/10 border-white/10">
+
+          <FaChartLine className="mb-3 text-cyan-400" size={22} />
+
+          <h4 className="text-3xl font-bold text-white">+247%</h4>
+
+          <p className="mt-1 text-sm text-gray-400">
+            Monthly Growth
+          </p>
+
+        </div>
+
+        <div className="p-5 border rounded-2xl bg-white/5 border-white/10">
+
+          <FaGlobe className="mb-3 text-yellow-400" size={22} />
+
+          <h4 className="text-3xl font-bold text-white">1.2M</h4>
+
+          <p className="mt-1 text-sm text-gray-400">
+            Website Traffic
+          </p>
+
+        </div>
+
+      </div>
+
+      {/* Middle Stats */}
+      <div className="grid grid-cols-2 gap-4 mb-5">
+
+        <div className="p-5 border rounded-2xl bg-white/5 border-white/10">
+
+          <FaRobot className="mb-3 text-cyan-400" size={22} />
+
+          <h4 className="text-2xl font-bold text-white">128+</h4>
+
+          <p className="text-sm text-gray-400">
+            AI Automations
+          </p>
+
+        </div>
+
+        <div className="p-5 border rounded-2xl bg-white/5 border-white/10">
+
+          <FaLaptopCode className="mb-3 text-indigo-400" size={22} />
+
+          <h4 className="text-2xl font-bold text-white">52</h4>
+
+          <p className="text-sm text-gray-400">
+            SaaS Projects
+          </p>
+
+        </div>
+
+      </div>
+
+      {/* Revenue + Conversion */}
+      <div className="p-5 mb-5 border rounded-2xl bg-gradient-to-r from-indigo-500/10 to-pink-500/10 border-white/10">
+
+        <div className="flex items-center justify-between">
+
+          <div>
+
+            <p className="text-sm text-gray-400">
+              Revenue Growth
+            </p>
+
+            <h2 className="mt-1 text-4xl font-black text-white">
+              ₹48.6L
+            </h2>
+
+          </div>
+
+          <FaChartLine size={38} className="text-pink-400" />
+
+        </div>
+
+        <div className="mt-4">
+
+          <div className="flex justify-between mb-2 text-xs text-gray-400">
+            <span>Conversion Rate</span>
+            <span className="text-green-400">92%</span>
+          </div>
+
+          <div className="w-full h-2 rounded-full bg-white/10">
+            <div className="h-2 rounded-full bg-gradient-to-r from-cyan-400 to-pink-500 w-[92%]" />
+          </div>
+
+        </div>
+
+      </div>
+
+      
+
+    </div>
+
+  </div>
+
+</motion.div>
+    </div>
+
+  </div>
+
+{/* ================= PREMIUM BOTTOM STRIP (FIXED) ================= */}
+<div className="relative border-t border-white/10 bg-white/[0.02] overflow-hidden">
+
+  {/* soft background glow */}
+  <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-transparent to-indigo-500/5" />
+
+  <div className="relative px-4 py-5 mx-auto max-w-7xl sm:px-6">
+
+    <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-3">
+
+      {[
+        "AI Automation",
+        "SEO",
+        "Google Ads",
+        "Meta Ads",
+        "CRM Systems",
+        "SaaS Platforms",
+        "Lead Generation",
+        "Business Growth",
+      ].map((item, i) => (
+        <span
+          key={i}
+          className="inline-flex items-center gap-2 whitespace-nowrap px-4 py-2 text-xs sm:text-sm text-gray-300 
+          border border-white/10 rounded-full bg-white/5 backdrop-blur-md 
+          transition-all duration-300 
+          hover:border-cyan-400/40 hover:text-white
+          hover:shadow-[0_0_18px_rgba(34,211,238,0.15)]"
+        >
+
+          {/* small dot icon */}
+          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 opacity-70" />
+
+          {item}
+
+        </span>
+      ))}
+
+    </div>
+
+    {/* footer note */}
+    <p className="text-center text-[11px] sm:text-xs text-gray-500 mt-4">
+      Scalable digital solutions for modern businesses
+    </p>
+
+  </div>
+</div>
+</section>
 
 
 
@@ -87,799 +390,1661 @@ export default function Home() {
   );
 }
 
-/* -------------------- Animated Background Component -------------------- */
+/* -------------------- Premium Animated Background -------------------- */
 function AnimatedBackground() {
   const icons = [
     <FaReact />,
     <FaRobot />,
-    <FaLock />,
-    <FaLaptopCode />,
     <FaCloud />,
-    <FaGlobe />,
-    <FaChartLine />,
     <FaDatabase />,
     <FaCode />,
+    <FaLock />,
   ];
 
-  const images = [Img1, Img2, Img3];
+  const floatingItems = Array.from({ length: 12 }, (_, i) => ({
+    id: i,
+    icon: icons[i % icons.length],
+    top: `${10 + Math.random() * 80}%`,
+    left: `${5 + Math.random() * 90}%`,
+    size: 28 + Math.random() * 40,
+    duration: 15 + Math.random() * 10,
+  }));
 
   return (
     <div className="absolute inset-0 overflow-hidden -z-30">
-      {/* Moving Grid */}
+
+      {/* Main Dark Gradient */}
+      <div className="absolute inset-0 bg-[#050816]" />
+
+      {/* Aurora Glow */}
       <motion.div
-        className="absolute inset-0 opacity-25 bg-[linear-gradient(90deg,rgba(255,255,255,0.07)_1px,transparent_1px),linear-gradient(rgba(255,255,255,0.07)_1px,transparent_1px)] bg-[size:70px_70px]"
+        className="absolute -top-40 left-1/2 w-[800px] h-[800px]
+                   -translate-x-1/2 rounded-full
+                   bg-purple-600/20 blur-[180px]"
         animate={{
-          backgroundPosition: ["0px 0px", "70px 70px"],
+          scale: [1, 1.15, 1],
+          opacity: [0.4, 0.8, 0.4],
         }}
         transition={{
-          duration: 30,
+          duration: 12,
           repeat: Infinity,
-          ease: "linear",
         }}
       />
 
-      {/* Gradient Glow Layers */}
-      <div className="absolute inset-0 bg-gradient-to-b from-indigo-900/40 via-transparent to-black" />
       <motion.div
-        className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(168,85,247,0.25),_transparent_70%)]"
-        animate={{ opacity: [0.2, 0.4, 0.2] }}
-        transition={{ duration: 8, repeat: Infinity }}
+        className="absolute bottom-0 left-0 w-[500px] h-[500px]
+                   rounded-full bg-cyan-500/15 blur-[150px]"
+        animate={{
+          x: [-50, 50, -50],
+          y: [0, -50, 0],
+        }}
+        transition={{
+          duration: 15,
+          repeat: Infinity,
+        }}
+      />
+
+      <motion.div
+        className="absolute top-20 right-0 w-[450px] h-[450px]
+                   rounded-full bg-indigo-500/15 blur-[140px]"
+        animate={{
+          y: [-30, 30, -30],
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+        }}
+      />
+
+      {/* Premium Grid */}
+      <div
+        className="
+          absolute inset-0 opacity-[0.06]
+          bg-[linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)]
+          bg-[size:60px_60px]
+        "
+      />
+
+      {/* Center Spotlight */}
+      <div
+        className="
+          absolute inset-0
+          bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08),transparent_65%)]
+        "
       />
 
       {/* Floating Icons */}
-      {[...Array(20)].map((_, i) => {
-        const randomIcon = icons[Math.floor(Math.random() * icons.length)];
-        const size = 25 + Math.random() * 50;
-        const top = Math.random() * 100;
-        const left = Math.random() * 100;
-        const duration = 15 + Math.random() * 30;
-        const blur = 4 + Math.random() * 8;
+      {floatingItems.map((item) => (
+        <motion.div
+          key={item.id}
+          className="absolute text-white/10"
+          style={{
+            top: item.top,
+            left: item.left,
+            fontSize: `${item.size}px`,
+          }}
+          animate={{
+            y: [0, -40, 0],
+            rotate: [0, 10, -10, 0],
+            opacity: [0.08, 0.18, 0.08],
+          }}
+          transition={{
+            duration: item.duration,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        >
+          {item.icon}
+        </motion.div>
+      ))}
 
-        return (
-          <motion.div
-            key={`icon-${i}`}
-            className="absolute text-indigo-400/25"
-            style={{
-              top: `${top}%`,
-              left: `${left}%`,
-              fontSize: `${size}px`,
-              filter: `blur(${blur}px)`,
-            }}
-            animate={{
-              y: [0, -80 + Math.random() * 120, 0],
-              x: [0, -50 + Math.random() * 100, 0],
-              rotate: [0, 360, 0],
-              opacity: [0.2, 0.6, 0.2],
-            }}
-            transition={{
-              duration,
-              repeat: Infinity,
-              repeatType: "mirror",
-              ease: "easeInOut",
-            }}
-          >
-            {randomIcon}
-          </motion.div>
-        );
-      })}
-
-      {/* Floating Local Images */}
-      {images.map((img, i) => {
-        const size = 100 + Math.random() * 150;
-        const top = Math.random() * 100;
-        const left = Math.random() * 100;
-        const duration = 20 + Math.random() * 25;
-
-        return (
-          <motion.img
-            key={`img-${i}`}
+      {/* Floating Images */}
+      {[Img1, Img2, Img3].map((img, i) => (
+        <motion.div
+          key={i}
+          className="absolute rounded-3xl overflow-hidden
+                     border border-white/10
+                     backdrop-blur-xl
+                     bg-white/5
+                     shadow-[0_0_40px_rgba(255,255,255,0.05)]"
+          style={{
+            width: "180px",
+            height: "180px",
+            top: `${20 + i * 22}%`,
+            right: `${5 + i * 8}%`,
+          }}
+          animate={{
+            y: [0, -25, 0],
+            rotate: [0, 2, -2, 0],
+          }}
+          transition={{
+            duration: 8 + i * 2,
+            repeat: Infinity,
+          }}
+        >
+          <img
             src={img}
-            alt="Floating tech element"
-            className="absolute opacity-20"
-            style={{
-              top: `${top}%`,
-              left: `${left}%`,
-              width: `${size}px`,
-              height: `${size}px`,
-              objectFit: "contain",
-            }}
-            animate={{
-              y: [0, -60 + Math.random() * 120, 0],
-              x: [0, -40 + Math.random() * 80, 0],
-              rotate: [0, 20, -20, 0],
-              opacity: [0.15, 0.3, 0.15],
-            }}
-            transition={{
-              duration,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
+            alt=""
+            className="object-cover w-full h-full opacity-70"
           />
-        );
-      })}
+        </motion.div>
+      ))}
+
+      {/* Noise Texture */}
+      <div
+        className="absolute inset-0 opacity-[0.03] mix-blend-soft-light"
+        style={{
+          backgroundImage:
+            "url('https://www.transparenttextures.com/patterns/noise.png')",
+        }}
+      />
     </div>
   );
 }
 
-/* -------------------- Vision & Mission Section -------------------- */
-function VisionMissionSection() {
-  // Container variants for staggered animation
-  const containerVariants = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  };
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 50 },
+import {
+  FaBullhorn,
+  FaLightbulb,
+} from "react-icons/fa";
+
+function VisionMissionSection() {
+  const fadeUp = {
+    hidden: { opacity: 0, y: 40 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { type: "spring", stiffness: 120, damping: 14 },
+      transition: {
+        duration: 0.7,
+        ease: "easeOut",
+      },
     },
   };
 
   return (
-    <section className="relative py-24 overflow-hidden bg-gradient-to-tr from-gray-950 via-indigo-950 to-black">
-      {/* ---------- Background Image ---------- */}
-      <div
-        className="absolute inset-0 bg-center bg-cover -z-20 opacity-40"
-        style={{ backgroundImage: "url(/images/bg5-hero.jpg)" }}
-      ></div>
+    <section className="relative overflow-hidden bg-[#050816] py-28">
+      {/* ================= Background ================= */}
+      <div className="absolute inset-0 -z-30 bg-[#050816]" />
 
-      {/* ---------- Gradient Overlay ---------- */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-gray-950/90 via-indigo-900/80 to-black/90 -z-10"></div>
-
-      {/* ---------- Animated Grid ---------- */}
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[length:60px_60px] animate-grid"></div>
-
-      {/* ---------- Floating Bubbles ---------- */}
-      <div className="absolute inset-0 overflow-hidden -z-10">
-        {[...Array(15)].map((_, i) => (
-          <div
-            key={i}
-            className={`bubble ${
-              i % 3 === 0
-                ? "bg-indigo-500"
-                : i % 3 === 1
-                ? "bg-pink-500"
-                : "bg-cyan-400"
-            }`}
-            style={{
-              width: `${20 + Math.random() * 60}px`,
-              height: `${20 + Math.random() * 60}px`,
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              animationDuration: `${10 + Math.random() * 10}s`,
-              animationDelay: `${Math.random() * 5}s`,
-            }}
-          ></div>
-        ))}
-      </div>
-
-      {/* ---------- Content ---------- */}
+      {/* Aurora Glow */}
       <motion.div
-        className="relative z-10 max-w-6xl px-6 mx-auto text-center"
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-      >
-        <motion.h2
-          variants={itemVariants}
-          className="mb-6 text-4xl font-extrabold tracking-tight text-transparent sm:text-5xl bg-clip-text bg-gradient-to-r from-indigo-400 via-pink-500 to-yellow-400"
-        >
-          Our Vision & Mission
-        </motion.h2>
+        className="absolute top-0 left-1/2 -translate-x-1/2
+        w-[900px] h-[900px]
+        rounded-full
+        bg-indigo-600/20
+        blur-[180px]
+        -z-20"
+        animate={{
+          scale: [1, 1.15, 1],
+          opacity: [0.3, 0.7, 0.3],
+        }}
+        transition={{
+          duration: 12,
+          repeat: Infinity,
+        }}
+      />
 
-        <motion.p
-          variants={itemVariants}
-          className="max-w-3xl mx-auto mb-12 text-lg leading-relaxed text-gray-300"
-        >
-          We envision a world where technology empowers creativity and innovation, blending{" "}
-          <span className="font-semibold text-indigo-400">AI</span>,{" "}
-          <span className="font-semibold text-pink-400">cloud systems</span>, and{" "}
-          <span className="font-semibold text-yellow-400">secure solutions</span>{" "}
-          to help businesses grow intelligently.
-        </motion.p>
+      <motion.div
+        className="absolute bottom-0 left-0
+        w-[500px] h-[500px]
+        bg-cyan-500/10
+        rounded-full
+        blur-[150px]
+        -z-20"
+        animate={{
+          x: [-30, 40, -30],
+          y: [0, -40, 0],
+        }}
+        transition={{
+          duration: 15,
+          repeat: Infinity,
+        }}
+      />
 
+      {/* Grid */}
+      <div
+        className="
+        absolute inset-0 -z-10
+        opacity-[0.05]
+        bg-[linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)]
+        bg-[size:60px_60px]
+      "
+      />
+
+      {/* ================= Content ================= */}
+      <div className="relative z-10 px-6 mx-auto max-w-7xl">
+        {/* Section Heading */}
         <motion.div
-          variants={containerVariants}
-          className="grid gap-10 md:grid-cols-2"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+          className="max-w-4xl mx-auto text-center"
         >
-          {[
-            {
-              title: "🌐 Our Vision",
-              desc: "Our vision is to transform organizations through AI-driven solutions and seamless automation, maximizing efficiency while delivering robust AI-based security frameworks and ethical AI systems that prioritize privacy, fairness, and responsible innovation.",
-              color: "from-indigo-600 to-cyan-400",
-            },
-            {
-              title: "🚀 Our Mission",
-              desc: "At Ready Tech Solutions, our mission is to build intelligent AI systems and automation platforms that enhance operational efficiency, secure business ecosystems, and advance ethical AI adoption across industries.",
-              color: "from-pink-500 to-purple-500",
-            },
-          ].map((card, i) => (
-            <motion.div
-              key={i}
-              variants={itemVariants}
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 200, damping: 12 }}
-              className="relative p-8 overflow-hidden text-left transition-all duration-300 border shadow-lg rounded-2xl bg-white/5 backdrop-blur-xl border-white/10"
-            >
-              <div
-                className={`absolute inset-0 opacity-25 blur-3xl bg-gradient-to-tr ${card.color}`}
-              ></div>
-              <h3 className="mb-3 text-2xl font-bold text-white">{card.title}</h3>
-              <p className="text-gray-300">{card.desc}</p>
-            </motion.div>
-          ))}
+          <span className="inline-flex items-center px-4 py-2 mb-6 text-sm font-medium text-indigo-300 border rounded-full bg-white/5 border-white/10">
+            AI Solutions • Digital Marketing • Automation
+          </span>
+
+          <h2 className="mb-6 text-4xl font-extrabold leading-tight text-white md:text-5xl">
+            Driving Growth Through
+            <span className="block text-transparent bg-gradient-to-r from-indigo-400 via-cyan-400 to-purple-400 bg-clip-text">
+              AI & Digital Innovation
+            </span>
+          </h2>
+
+          <p className="max-w-3xl mx-auto text-lg leading-relaxed text-gray-400">
+            We help businesses scale faster through intelligent AI systems,
+            marketing automation, data-driven campaigns and modern digital
+            transformation strategies that create measurable growth.
+          </p>
         </motion.div>
-      </motion.div>
+
+        {/* Vision + Mission Cards */}
+        <div className="grid gap-8 mt-20 lg:grid-cols-2">
+          {/* Vision */}
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            whileHover={{ y: -8 }}
+            className="
+              group
+              relative
+              overflow-hidden
+              rounded-3xl
+              border
+              border-white/10
+              bg-white/[0.04]
+              backdrop-blur-xl
+              p-10
+            "
+          >
+            <div className="absolute inset-0 transition duration-500 opacity-0 bg-gradient-to-br from-indigo-600/10 via-transparent to-cyan-500/10 group-hover:opacity-100" />
+
+            <div className="flex items-center justify-center w-16 h-16 mb-6 rounded-2xl bg-gradient-to-r from-indigo-500 to-cyan-500">
+              <FaLightbulb className="text-2xl text-white" />
+            </div>
+
+            <h3 className="mb-4 text-3xl font-bold text-white">
+              Our Vision
+            </h3>
+
+            <p className="leading-relaxed text-gray-400">
+              To become a global leader in AI-powered business transformation,
+              empowering organizations with intelligent automation, predictive
+              analytics and innovative digital marketing strategies that drive
+              sustainable growth and long-term success.
+            </p>
+
+            <div className="flex gap-4 mt-8">
+              <div className="flex items-center gap-2 text-indigo-300">
+                <FaRobot />
+                AI Innovation
+              </div>
+
+              <div className="flex items-center gap-2 text-cyan-300">
+                <FaChartLine />
+                Growth Focused
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Mission */}
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            whileHover={{ y: -8 }}
+            className="
+              group
+              relative
+              overflow-hidden
+              rounded-3xl
+              border
+              border-white/10
+              bg-white/[0.04]
+              backdrop-blur-xl
+              p-10
+            "
+          >
+            <div className="absolute inset-0 transition duration-500 opacity-0 bg-gradient-to-br from-purple-600/10 via-transparent to-pink-500/10 group-hover:opacity-100" />
+
+            <div className="flex items-center justify-center w-16 h-16 mb-6 rounded-2xl bg-gradient-to-r from-pink-500 to-purple-500">
+              <FaBullhorn className="text-2xl text-white" />
+            </div>
+
+            <h3 className="mb-4 text-3xl font-bold text-white">
+              Our Mission
+            </h3>
+
+            <p className="leading-relaxed text-gray-400">
+              Our mission is to deliver cutting-edge AI solutions, performance
+              marketing campaigns, CRM automation and intelligent business
+              platforms that help organizations improve efficiency, increase
+              customer engagement and accelerate revenue growth.
+            </p>
+
+            <div className="flex gap-4 mt-8">
+              <div className="flex items-center gap-2 text-pink-300">
+                <FaBullhorn />
+                Digital Marketing
+              </div>
+
+              <div className="flex items-center gap-2 text-purple-300">
+                <FaRobot />
+                Smart Automation
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* ================= PREMIUM STATS ================= */}
+<motion.div
+  initial={{ opacity: 0, y: 40 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true }}
+  transition={{ delay: 0.2 }}
+  className="grid grid-cols-2 gap-4 mt-16 md:grid-cols-4"
+>
+
+  {/* Stat 1 */}
+  <div className="flex items-center gap-4 p-5 rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl hover:border-cyan-400/30 transition">
+
+    <FaRocket className="text-xl text-cyan-400" />
+
+    <div>
+      <h4 className="text-2xl font-bold text-white">50+</h4>
+      <p className="text-xs text-gray-400">Projects Delivered</p>
+    </div>
+
+  </div>
+
+  {/* Stat 2 */}
+  <div className="flex items-center gap-4 p-5 rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl hover:border-indigo-400/30 transition">
+
+    <FaUsers className="text-xl text-indigo-400" />
+
+    <div>
+      <h4 className="text-2xl font-bold text-white">25+</h4>
+      <p className="text-xs text-gray-400">Business Clients</p>
+    </div>
+
+  </div>
+
+  {/* Stat 3 */}
+  <div className="flex items-center gap-4 p-5 rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl hover:border-pink-400/30 transition">
+
+    <FaChartLine className="text-xl text-pink-400" />
+
+    <div>
+      <h4 className="text-2xl font-bold text-white">99%</h4>
+      <p className="text-xs text-gray-400">Client Satisfaction</p>
+    </div>
+
+  </div>
+
+  {/* Stat 4 */}
+  <div className="flex items-center gap-4 p-5 rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl hover:border-yellow-400/30 transition">
+
+    <FaRobot className="text-xl text-yellow-400" />
+
+    <div>
+      <h4 className="text-2xl font-bold text-white">24/7</h4>
+      <p className="text-xs text-gray-400">Support</p>
+    </div>
+
+  </div>
+
+</motion.div>
+      </div>
     </section>
   );
 }
 
-/* -------------------- Template Switcher -------------------- */
+
+
+import {
+  FaBuilding,
+  FaPalette,
+  FaMagic,
+} from "react-icons/fa";
+
 function TemplateSwitcher({ template, setTemplate }) {
+  const templates = [
+    {
+      id: "A",
+      title: "Corporate",
+      icon: <FaBuilding />,
+      desc: "Professional business websites",
+    },
+    {
+      id: "B",
+      title: "Creative",
+      icon: <FaPalette />,
+      desc: "Modern creative portfolios",
+    },
+    {
+      id: "C",
+      title: "Developer",
+      icon: <FaCode />,
+      desc: "Technical & SaaS platforms",
+    },
+  ];
+
   return (
-    <section
-  className="relative py-20 overflow-hidden bg-center bg-cover opacity-60"
-  style={{ backgroundImage: "url(/images/bg3-hero.jpg)" }}
->
-  {/* Optional dark overlay for readability */}
-  <div className="absolute 0"></div>
+    <section className="relative overflow-hidden py-28 bg-[#050816]">
 
-  <div className="relative z-10 max-w-6xl px-6 mx-auto text-center">
-    <h2 className="mb-12 text-4xl font-extrabold tracking-tight text-transparent sm:text-5xl bg-clip-text bg-gradient-to-r from-pink-400 via-indigo-400 to-yellow-400">
-      Explore Our Templates
-    </h2>
+      {/* ================= Background ================= */}
 
-    <div className="flex justify-center gap-3 mb-12">
-      {["A", "B", "C"].map((t) => (
-        <button
-          key={t}
-          onClick={() => setTemplate(t)}
-          className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-            template === t
-              ? "bg-indigo-600 text-white shadow-lg scale-105"
-              : "bg-white/10 text-gray-300 hover:bg-indigo-500/20 hover:text-indigo-300"
-          }`}
-        >
-          {t === "A" ? "Corporate" : t === "B" ? "Creative" : "Developer"}
-        </button>
-      ))}
-    </div>
+      <div className="absolute inset-0 bg-[#050816]" />
 
-    <motion.main
-      key={template}
-      initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8 }}
-      className="space-y-12"
-    >
-      {template === "A" && <TemplateA />}
-      {template === "B" && <TemplateB />}
-      {template === "C" && <TemplateC />}
-    </motion.main>
-  </div>
-</section>
+      {/* Aurora Glow */}
+      <motion.div
+        className="
+          absolute
+          top-0
+          left-1/2
+          -translate-x-1/2
+          w-[900px]
+          h-[900px]
+          rounded-full
+          bg-indigo-600/20
+          blur-[180px]
+        "
+        animate={{
+          scale: [1, 1.15, 1],
+          opacity: [0.25, 0.6, 0.25],
+        }}
+        transition={{
+          duration: 12,
+          repeat: Infinity,
+        }}
+      />
 
+      <motion.div
+        className="
+          absolute
+          bottom-0
+          left-0
+          w-[500px]
+          h-[500px]
+          rounded-full
+          bg-cyan-500/10
+          blur-[140px]
+        "
+        animate={{
+          x: [-30, 40, -30],
+          y: [0, -30, 0],
+        }}
+        transition={{
+          duration: 15,
+          repeat: Infinity,
+        }}
+      />
+
+      {/* Grid */}
+      <div
+        className="
+          absolute inset-0
+          opacity-[0.05]
+          bg-[linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)]
+          bg-[size:60px_60px]
+        "
+      />
+
+      {/* ================= Content ================= */}
+
+      <div className="relative z-10 px-6 mx-auto max-w-7xl">
+
+        {/* Header */}
+        <div className="max-w-4xl mx-auto text-center">
+
+          <div
+            className="inline-flex items-center gap-2 px-4 py-2 mb-6 text-sm text-indigo-300 border rounded-full border-white/10 bg-white/5 backdrop-blur-xl"
+          >
+            <FaMagic />
+            Premium Website Templates
+          </div>
+
+          <h2
+            className="mb-6 text-4xl font-extrabold text-white md:text-4xl"
+          >
+            Explore Our
+            <span
+              className="block text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-cyan-400 to-purple-400"
+            >
+              Premium Templates
+            </span>
+          </h2>
+
+          <p className="max-w-3xl mx-auto text-lg text-gray-400">
+            Discover professionally crafted website designs tailored for
+            businesses, startups, agencies, creators and SaaS products.
+          </p>
+        </div>
+
+        {/* ================= Template Tabs ================= */}
+
+        <div className="flex justify-center mb-16 mt-14">
+
+          <div
+            className="
+              relative
+              flex
+              p-2
+              rounded-2xl
+              border
+              border-white/10
+              bg-white/[0.04]
+              backdrop-blur-xl
+            "
+          >
+            {templates.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => setTemplate(item.id)}
+                className="relative z-10 px-8 py-4 transition-all duration-300 rounded-xl"
+              >
+                {template === item.id && (
+                  <motion.div
+                    layoutId="activeTemplate"
+                    className="absolute inset-0 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-500"
+                    transition={{
+                      type: "spring",
+                      stiffness: 300,
+                      damping: 25,
+                    }}
+                  />
+                )}
+
+                <div className="relative flex items-center gap-3">
+                  <span
+                    className={`text-lg ${
+                      template === item.id
+                        ? "text-white"
+                        : "text-gray-400"
+                    }`}
+                  >
+                    {item.icon}
+                  </span>
+
+                  <div className="text-left">
+                    <p
+                      className={`font-semibold ${
+                        template === item.id
+                          ? "text-white"
+                          : "text-gray-300"
+                      }`}
+                    >
+                      {item.title}
+                    </p>
+
+                    <p
+                      className={`text-xs ${
+                        template === item.id
+                          ? "text-white/80"
+                          : "text-gray-500"
+                      }`}
+                    >
+                      {item.desc}
+                    </p>
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* ================= Template Content ================= */}
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={template}
+            initial={{
+              opacity: 0,
+              y: 40,
+              scale: 0.98,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+              scale: 1,
+            }}
+            exit={{
+              opacity: 0,
+              y: -20,
+            }}
+            transition={{
+              duration: 0.45,
+            }}
+          >
+            {template === "A" && <TemplateA />}
+            {template === "B" && <TemplateB />}
+            {template === "C" && <TemplateC />}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </section>
   );
 }
 
 
 
 
-/* ---------------------- TemplateA Modern Dark UI ---------------------- */
-function TemplateA() {
-  return (
-    <section className="relative overflow-hidden text-white font-poppins">
 
-      {/* Floating Gradient Blobs */}
-  {/* Floating Gradient Bubbles Background */}
-<div className="absolute inset-0 overflow-hidden -z-10">
-  {[...Array(15)].map((_, i) => (
+import {
+  FaCheckCircle,
+} from "react-icons/fa";
+
+function TemplateA() {
+  const services = [
+    {
+      icon: <FaRobot />,
+      title: "AI Solutions",
+      desc: "Intelligent automation, AI chatbots, workflow optimization and predictive analytics.",
+    },
+    {
+      icon: <FaBullhorn />,
+      title: "Digital Marketing",
+      desc: "SEO, social media campaigns, lead generation and conversion-focused marketing.",
+    },
+    {
+      icon: <FaCloud />,
+      title: "Cloud Platforms",
+      desc: "Scalable SaaS applications, CRM systems and enterprise-grade cloud deployments.",
+    },
+  ];
+
+  return (
+    <section className="relative overflow-hidden rounded-[40px] bg-[#050816] text-white">
+
+      {/* Background */}
+      <div className="absolute inset-0 bg-[#050816]" />
+
+      <motion.div
+        className="absolute top-0 left-1/2 -translate-x-1/2
+        w-[800px] h-[800px]
+        rounded-full
+        bg-indigo-600/20
+        blur-[180px]"
+        animate={{
+          scale: [1, 1.1, 1],
+          opacity: [0.3, 0.6, 0.3],
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+        }}
+      />
+
+      <div
+        className="
+        absolute inset-0 opacity-[0.05]
+        bg-[linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)]
+        bg-[size:60px_60px]
+      "
+      />
+
+      <div className="relative z-10 px-8 py-24 lg:px-16">
+
+        {/* Hero */}
+        <div className="max-w-5xl mx-auto mt-5 text-center">
+
+          <span
+            className="inline-flex items-center gap-2 px-4 py-2 text-sm text-indigo-300 border rounded-full border-white/10 bg-white/5 backdrop-blur-xl"
+          >
+            Enterprise Digital Solutions
+          </span>
+
+          <h1
+            className="mt-8 text-5xl font-black leading-tight md:text-5xl"
+          >
+            Accelerate Growth With
+            <span
+              className="block text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-cyan-400 to-purple-400"
+            >
+              AI & Digital Innovation
+            </span>
+          </h1>
+
+          <p
+            className="max-w-3xl mx-auto mt-8 text-lg leading-relaxed text-gray-400 "
+          >
+            ReadyTech Solutions helps businesses transform operations,
+            automate workflows, improve customer engagement, and scale
+            revenue through AI-powered technology and performance-driven
+            digital marketing.
+          </p>
+
+        </div>
+
+        {/* Stats */}
+<div className="grid gap-6 mt-10 md:grid-cols-4">
+
+  {[
+    { value: "50+", label: "Projects Delivered", icon: "🚀" },
+    { value: "25+", label: "Business Clients", icon: "🤝" },
+    { value: "99%", label: "Client Satisfaction", icon: "⭐" },
+    { value: "24/7", label: "Support", icon: "🛟" },
+  ].map((item, i) => (
     <div
       key={i}
-      className={`bubble ${
-        i % 3 === 0
-          ? "bg-pink-500"
-          : i % 3 === 1
-          ? "bg-indigo-500"
-          : "bg-purple-500"
-      }`}
-      style={{
-        width: `${20 + Math.random() * 60}px`,
-        height: `${20 + Math.random() * 60}px`,
-        top: `${Math.random() * 100}%`,
-        left: `${Math.random() * 100}%`,
-        animationDuration: `${10 + Math.random() * 10}s`,
-        animationDelay: `${Math.random() * 5}s`,
-      }}
-    ></div>
+      className="
+        relative group
+        p-8
+        text-center
+        rounded-3xl
+        border border-white/10
+        bg-white/[0.04]
+        backdrop-blur-xl
+        transition-all duration-300
+        hover:scale-[1.04]
+        hover:bg-white/[0.06]
+        hover:border-indigo-500/40
+        overflow-hidden
+      "
+    >
+      {/* Glow background on hover */}
+      <div className="absolute inset-0 transition duration-500 opacity-0 group-hover:opacity-100 bg-gradient-to-br from-indigo-600/10 to-purple-600/10 blur-2xl" />
+
+      {/* Icon */}
+      <div className="flex justify-center mb-3">
+        <div className="p-3 text-2xl transition border rounded-xl bg-white/5 border-white/10 group-hover:border-indigo-500/30">
+          {item.icon}
+        </div>
+      </div>
+
+      {/* Value */}
+      <h3 className="text-3xl font-bold tracking-tight text-white">
+        {item.value}
+      </h3>
+
+      {/* Label */}
+      <p className="mt-2 text-sm text-gray-400">
+        {item.label}
+      </p>
+
+      {/* underline animation */}
+      <div className="mx-auto mt-4 h-[2px] w-10 bg-indigo-500/30 group-hover:w-16 transition-all duration-300 rounded-full" />
+    </div>
   ))}
 </div>
 
+        {/* Services */}
+        <div className="mt-20">
+
+          <h2 className="text-4xl font-bold text-center">
+            Core Business Solutions
+          </h2>
+
+          <p className="max-w-2xl mx-auto mt-4 text-center text-gray-400">
+            Innovative services designed to improve efficiency,
+            customer engagement and business growth.
+          </p>
+
+          <div className="grid gap-8 mt-14 lg:grid-cols-3">
+
+            {services.map((service, index) => (
+              <motion.div
+                key={index}
+                whileHover={{
+                  y: -8,
+                }}
+                className="
+                p-8
+                rounded-3xl
+                border
+                border-white/10
+                bg-white/[0.04]
+                backdrop-blur-xl
+              "
+              >
+                <div
+                  className="flex items-center justify-center w-16 h-16 text-2xl rounded-2xl bg-gradient-to-r from-indigo-500 to-cyan-500"
+                >
+                  {service.icon}
+                </div>
+
+                <h3 className="mt-6 text-2xl font-bold">
+                  {service.title}
+                </h3>
+
+                <p className="mt-4 text-gray-400">
+                  {service.desc}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* Why Choose Us */}
+        <div className="grid gap-12 mt-28 lg:grid-cols-2">
+
+          <div>
+            <h2 className="text-4xl font-bold">
+              Why Businesses Choose ReadyTech
+            </h2>
+
+            <p className="mt-6 text-gray-400">
+              We combine technology expertise, AI innovation
+              and digital marketing excellence to help businesses
+              achieve sustainable growth.
+            </p>
+
+            <div className="mt-8 space-y-5">
+
+              {[
+                "AI-Powered Business Automation",
+                "Lead Generation & Growth Marketing",
+                "Scalable SaaS & CRM Platforms",
+                "Enterprise Security Standards",
+                "Performance-Focused Development",
+              ].map((item, index) => (
+                <div
+                  key={index}
+                  className="flex items-center gap-3"
+                >
+                  <FaCheckCircle className="text-green-400" />
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div
+            className="
+            rounded-3xl
+            border
+            border-white/10
+            bg-white/[0.04]
+            backdrop-blur-xl
+            p-10
+          "
+          >
+            <h3 className="text-3xl font-bold">
+              Business Impact
+            </h3>
+
+            <div className="mt-8 space-y-8">
+
+              <div>
+                <div className="flex justify-between">
+                  <span>Automation Efficiency</span>
+                  <span>95%</span>
+                </div>
+
+                <div className="h-3 mt-2 rounded-full bg-white/10">
+                  <div className="h-full w-[95%] rounded-full bg-gradient-to-r from-indigo-500 to-cyan-500" />
+                </div>
+              </div>
+
+              <div>
+                <div className="flex justify-between">
+                  <span>Lead Conversion Growth</span>
+                  <span>88%</span>
+                </div>
+
+                <div className="h-3 mt-2 rounded-full bg-white/10">
+                  <div className="h-full w-[88%] rounded-full bg-gradient-to-r from-purple-500 to-pink-500" />
+                </div>
+              </div>
+
+              <div>
+                <div className="flex justify-between">
+                  <span>Client Retention</span>
+                  <span>98%</span>
+                </div>
+
+                <div className="h-3 mt-2 rounded-full bg-white/10">
+                  <div className="h-full w-[98%] rounded-full bg-gradient-to-r from-cyan-500 to-indigo-500" />
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  );
+}
 
 
-      {/* Hero Intro */}
-      <div className="px-6 py-20 lg:px-16">
-        <h1 className="text-4xl font-extrabold leading-tight text-center text-pink-400 md:text-5xl">
-          Your Partner for{" "}
-          <span className="text-purple-300">Enterprise-Grade Digital Solutions</span>
-        </h1>
-        <p className="max-w-3xl mx-auto mt-6 text-lg text-center text-gray-300">
-          At <strong className="text-pink-400">ReadyTech Solutions</strong>, we help businesses scale with technology that lasts. From SaaS platforms to enterprise apps, we focus on{" "}
-          <span className="font-semibold text-purple-300">speed, security and measurable growth</span>.
-        </p>
+function TemplateB() {
+  const services = [
+    {
+      icon: <FaRobot />,
+      title: "AI Solutions",
+      desc: "AI chatbots, workflow automation, intelligent assistants and business process optimization.",
+    },
+    {
+      icon: <FaBullhorn />,
+      title: "Digital Marketing",
+      desc: "SEO, paid advertising, social media growth and lead generation campaigns.",
+    },
+    {
+      icon: <FaCloud />,
+      title: "Cloud Platforms",
+      desc: "Scalable SaaS applications, CRM systems and enterprise cloud solutions.",
+    },
+    {
+      icon: <FaChartLine />,
+      title: "Growth Analytics",
+      desc: "Advanced reporting, customer insights and performance tracking.",
+    },
+  ];
 
-        {/* Business Outcomes */}
-        <div className="grid gap-6 mt-16 sm:grid-cols-3">
-          {[
-            { title: "Faster Time-to-Market", desc: "Agile processes cut development timelines by up to 30%, helping you launch faster.", color: "from-purple-800/60 to-purple-600/40" },
-            { title: "Lower Costs, Higher ROI", desc: "Optimized codebases save clients an average of 25% in operational costs.", color: "from-pink-800/60 to-pink-600/40" },
-            { title: "Future-Proof Technology", desc: "Latest MERN stack and cloud-native deployments to keep your product relevant.", color: "from-yellow-800/60 to-yellow-600/40" },
-          ].map((item, idx) => (
-            <div key={idx} className={`p-6 rounded-xl shadow-xl bg-gradient-to-br ${item.color} backdrop-blur-md hover:scale-105 transition`}>
-              <h4 className="text-xl font-semibold text-white">{item.title}</h4>
-              <p className="mt-2 text-sm text-gray-300">{item.desc}</p>
+  const industries = [
+    "Healthcare",
+    "Finance",
+    "E-Commerce",
+    "Real Estate",
+    "Education",
+    "Logistics",
+    "Manufacturing",
+    "SaaS Startups",
+  ];
+
+  const benefits = [
+    "AI-Powered Automation",
+    "Performance Marketing Expertise",
+    "Scalable Cloud Architecture",
+    "Enterprise Security Standards",
+    "Dedicated Support Team",
+    "Transparent Delivery Process",
+  ];
+
+  const stats = [
+    { value: "50+", label: "Projects Delivered" },
+    { value: "25+", label: "Business Clients" },
+    { value: "98%", label: "Client Satisfaction" },
+    { value: "24/7", label: "Support & Monitoring" },
+  ];
+
+  return (
+    <section className="relative overflow-hidden rounded-[32px] bg-[#050816] text-white">
+
+      {/* Background */}
+      <div className="absolute inset-0 bg-[#050816]" />
+
+      <motion.div
+        className="absolute top-0 left-1/2 h-[700px] w-[700px] -translate-x-1/2 rounded-full bg-indigo-600/20 blur-[180px]"
+        animate={{
+          scale: [1, 1.1, 1],
+          opacity: [0.3, 0.6, 0.3],
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+        }}
+      />
+
+      <div
+        className="
+        absolute inset-0 opacity-[0.05]
+        bg-[linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)]
+        bg-[size:60px_60px]
+      "
+      />
+
+      <div className="relative z-10 px-6 py-24 lg:px-12">
+
+        {/* HERO */}
+        <div className="max-w-5xl mx-auto text-center">
+
+          <span
+            className="inline-flex items-center gap-2 px-4 py-2 text-sm border rounded-full border-white/10 bg-white/5 text-cyan-300 backdrop-blur-xl"
+          >
+            <FaLightbulb />
+            Digital Marketing • AI Solutions
+          </span>
+
+          <h1 className="mt-8 text-5xl font-black leading-tight md:text-5xl">
+            Building
+            <span className="block text-transparent bg-gradient-to-r from-cyan-400 via-indigo-400 to-purple-400 bg-clip-text">
+              Intelligent Growth
+            </span>
+          </h1>
+
+          <p className="max-w-3xl mx-auto mt-8 text-lg leading-relaxed text-gray-400">
+            ReadyTech Solutions helps businesses scale faster through
+            AI-powered automation, digital marketing strategies,
+            cloud technologies and enterprise-grade software solutions.
+          </p>
+
+          
+        </div>
+
+        {/* STATS */}
+        <div className="grid gap-6 mt-10 md:grid-cols-4">
+          {stats.map((item, index) => (
+            <div
+              key={index}
+              className="
+              rounded-3xl
+              border border-white/10
+              bg-white/[0.04]
+              p-8
+              text-center
+              backdrop-blur-xl
+            "
+            >
+              <h3 className="text-4xl font-bold">{item.value}</h3>
+              <p className="mt-2 text-gray-400">{item.label}</p>
             </div>
           ))}
         </div>
 
-        {/* Trust Signals */}
-      {/* Trusted by Businesses Section */}
-<div className="relative mt-20 overflow-hidden text-center">
-  <h2 className="text-2xl font-bold text-pink-400">
-    Trusted by Businesses Worldwide 🌍
-  </h2>
-  <p className="mt-2 text-gray-300">
-    From startups in Silicon Valley to SMEs in Europe — ReadyTech delivers secure, scalable and user-friendly platforms.
-  </p>
+        {/* SERVICES */}
+        <div className="mt-28">
 
-  {/* Gradient overlays for soft fade edges */}
-  {/* <div className="absolute top-0 left-0 w-24 h-full pointer-events-none bg-gradient-to-r from-gray-900 to-transparent"></div>
-  <div className="absolute top-0 right-0 w-24 h-full pointer-events-none bg-gradient-to-l from-gray-900 to-transparent"></div> */}
+          <h2 className="text-4xl font-bold text-center">
+            Core Capabilities
+          </h2>
 
-  {/* Scrolling Logo Carousel */}
-  <div className="relative mt-10 overflow-hidden">
-    <div className="flex animate-scroll-fast gap-16 w-max hover:[animation-play-state:paused]">
-      <img
-        src={Img1}
-        alt="Client Logo 1"
-        className="object-contain w-40 h-40 transition-transform duration-300 opacity-85 hover:opacity-100 hover:scale-110"
-      />
-      <img
-        src={Img2}
-        alt="Client Logo 2"
-        className="object-contain w-40 h-40 transition-transform duration-300 opacity-85 hover:opacity-100 hover:scale-110"
-      />
-      <img
-        src={Img3}
-        alt="Client Logo 3"
-        className="object-contain w-40 h-40 transition-transform duration-300 opacity-85 hover:opacity-100 hover:scale-110"
-      />
-      <img
-        src={Img1}
-        alt="Client Logo 4"
-        className="object-contain w-40 h-40 transition-transform duration-300 opacity-85 hover:opacity-100 hover:scale-110"
-      />
-      <img
-        src={Img2}
-        alt="Client Logo 5"
-        className="object-contain w-40 h-40 transition-transform duration-300 opacity-85 hover:opacity-100 hover:scale-110"
-      />
-      <img
-        src={Img3}
-        alt="Client Logo 6"
-        className="object-contain w-40 h-40 transition-transform duration-300 opacity-85 hover:opacity-100 hover:scale-110"
-      />
-    </div>
-  </div>
-</div>
-
-
-
-        {/* Core Services */}
-        <div className="mt-24">
-          <h2 className="text-3xl font-bold text-center text-pink-400">Our Core Services</h2>
-          <p className="max-w-2xl mx-auto mt-2 text-center text-gray-300">
-            Full-stack solutions aligned with your business goals.
+          <p className="max-w-2xl mx-auto mt-4 text-center text-gray-400">
+            End-to-end solutions designed to accelerate growth,
+            improve efficiency and strengthen your digital presence.
           </p>
-          <div className="grid gap-6 mt-12 sm:grid-cols-3">
-            {[
-              { title: "Custom Software", desc: "Tailored applications built for scalability and security.", color: "from-purple-800/60 to-purple-600/40" },
-              { title: "UI/UX Design", desc: "Creating intuitive interfaces that boost engagement.", color: "from-pink-800/60 to-pink-600/40" },
-              { title: "Cloud & DevOps", desc: "Optimized deployments with high availability & performance.", color: "from-yellow-800/60 to-yellow-600/40" },
-            ].map((service, idx) => (
-              <div key={idx} className={`p-6 text-center rounded-xl shadow-xl bg-gradient-to-br ${service.color} backdrop-blur-md hover:scale-105 transition`}>
-                <h4 className="text-xl font-semibold text-white">{service.title}</h4>
-                <p className="mt-2 text-sm text-gray-300">{service.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
 
-        {/* Case Studies */}
-        <div className="mt-24">
-          <h2 className="text-3xl font-bold text-center text-pink-400">Case Studies</h2>
-          <div className="grid gap-6 mt-12 sm:grid-cols-2">
-            {[
-              { title: "FinTech SaaS Platform", desc: "Reduced transaction processing time by 40% with optimized backend APIs and scalable cloud deployment.", color: "from-purple-700/50 to-purple-500/40" },
-              { title: "Healthcare Data Portal", desc: "Improved patient record management with secure HIPAA-compliant software, cutting downtime by 60%.", color: "from-pink-700/50 to-pink-500/40" },
-            ].map((caseStudy, idx) => (
-              <div key={idx} className={`p-6 rounded-xl shadow-xl bg-gradient-to-br ${caseStudy.color} backdrop-blur-md hover:scale-105 transition`}>
-                <h4 className="text-xl font-semibold text-white">{caseStudy.title}</h4>
-                <p className="mt-2 text-sm text-gray-300">{caseStudy.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        
-      </div>
-    </section>
-  );
-}
-
-
-
-
-/* ---------------------- TemplateB Modern Dark UI ---------------------- */
-function TemplateB() {
-  return (
-    <section className="overflow-hidden text-gray-100 rounded-xl">
-{/* Updated Company Introduction (Top → Bottom, Perfect Alignment, Clean Professional Design) */}
-<div className="max-w-6xl px-6 py-20 mx-auto space-y-16">
-
-  {/* Top Heading Section */}
-  <div className="max-w-4xl mx-auto text-center">
-    <h2 className="mb-4 text-4xl font-extrabold leading-tight text-white">
-      <span className="text-pink-600">ReadyTech Solutions</span> – Innovating the Future with Precision Engineering
-    </h2>
-    <p className="max-w-3xl mx-auto text-lg leading-relaxed text-white md:text-xl">
-      At <span className="font-semibold text-pink-600">ReadyTech Solutions</span>, we craft
-      <span className="font-semibold text-indigo-600"> end‑to‑end digital solutions</span> engineered for performance, usability and scale. We blend
-      <span className="font-semibold text-indigo-600"> human‑centered design</span> with
-      <span className="font-semibold text-indigo-600"> enterprise‑grade engineering</span> to build products that elevate businesses and create lasting digital impact.
-    </p>
-
-    <p className="max-w-3xl mx-auto mt-5 text-lg leading-relaxed text-white md:text-xl">
-      With trusted clients across the US and global markets, we deliver solutions that streamline operations,
-      strengthen customer engagement and support long‑term growth through innovation.
-    </p>
-  </div>
-
-
-  {/* What We Offer Section */}
-  <div className="max-w-4xl mx-auto">
-    <h3 className="mb-6 text-3xl font-bold text-center text-white">What We Offer</h3>
-
-    <ul className="max-w-3xl mx-auto space-y-4 text-lg leading-relaxed text-white list-disc list-inside">
-      <li>Custom Web & Mobile Application Development</li>
-      <li>Cloud‑Native, Scalable & High‑Availability Systems</li>
-      <li>AI‑Powered Automation & Intelligent Business Workflows</li>
-      <li>Modern UI/UX Design with Maximum Engagement & Accessibility</li>
-      <li>Advanced Data Security, Privacy & Global Compliance Standards</li>
-    </ul>
-  </div>
-
-
-  {/* Service Cards - Bottom Section */}
-  <div className="grid max-w-6xl grid-cols-1 gap-8 mx-auto md:grid-cols-2 lg:grid-cols-3">
-    {[
-      {
-        title: "Custom Software Solutions",
-        color: "pink-400",
-        border: "border-pink-500/40",
-        description:
-          "Tailored applications built for performance, efficiency and seamless business integration.",
-      },
-      {
-        title: "Cloud & Scalable Systems",
-        color: "cyan-400",
-        border: "border-cyan-500/40",
-        description:
-          "High‑performance cloud infrastructure engineered for speed, security and global scale.",
-      },
-      {
-        title: "UI/UX Experience Design",
-        color: "indigo-400",
-        border: "border-indigo-500/40",
-        description:
-          "Modern, intuitive, and accessible interfaces that enhance user satisfaction and engagement.",
-      },
-      {
-        title: "AI & Automation",
-        color: "yellow-400",
-        border: "border-yellow-500/40",
-        description:
-          "Smart automation solutions that increase accuracy, reduce cost and accelerate decision‑making.",
-      },
-      {
-        title: "Consulting & Technical Strategy",
-        color: "green-400",
-        border: "border-green-500/40",
-        description:
-          "Expert guidance for digital transformation, innovation and long‑term tech strategy.",
-      },
-      {
-        title: "End‑to‑End Support",
-        color: "purple-400",
-        border: "border-purple-500/40",
-        description:
-          "Reliable technical support ensuring continuous improvement and operational stability.",
-      },
-    ].map((item, index) => (
-      <div
-        key={index}
-        className={`p-6 border shadow-lg rounded-2xl bg-gradient-to-br from-gray-800 to-gray-900 ${item.border} flex flex-col text-center`}
-      >
-        <h3 className={`text-xl font-semibold text-${item.color} mb-3`}>{item.title}</h3>
-        <p className="text-base leading-relaxed text-gray-300">{item.description}</p>
-      </div>
-    ))}
-  </div>
-</div>
-
-
-
-      {/* Industries Served */}
-      <div className="py-16 ">
-        <div className="px-6 mx-auto text-center max-w-7xl">
-          <h2 className="mb-8 text-3xl font-bold text-pink-400">Industries We Serve</h2>
-          <p className="mb-12 text-gray-300">
-            From healthcare to finance, e-commerce to agriculture, our solutions are tailored to fit diverse industries and deliver tangible results.
-          </p>
-          <div className="grid grid-cols-2 gap-8 text-gray-200 md:grid-cols-4">
-            {[
-              "Healthcare",
-              "Finance & Banking",
-              "E-Commerce",
-              "Agriculture & Farming",
-              "Education",
-              "Logistics & Transport",
-              "Real Estate",
-              "SaaS & Startups",
-            ].map((item, i) => (
-              <div
-                key={i}
-                className="p-6 transition-transform bg-gray-800 border border-gray-700 shadow-lg rounded-xl hover:scale-105"
+          <div className="grid gap-8 mt-14 lg:grid-cols-4">
+            {services.map((service, index) => (
+              <motion.div
+                key={index}
+                whileHover={{ y: -8 }}
+                className="
+                rounded-3xl
+                border border-white/10
+                bg-white/[0.04]
+                p-8
+                backdrop-blur-xl
+              "
               >
-                {item}
+                <div
+                  className="flex items-center justify-center w-16 h-16 text-2xl rounded-2xl bg-gradient-to-r from-indigo-500 to-cyan-500"
+                >
+                  {service.icon}
+                </div>
+
+                <h3 className="mt-6 text-xl font-bold">
+                  {service.title}
+                </h3>
+
+                <p className="mt-4 text-gray-400">
+                  {service.desc}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* INDUSTRIES */}
+        <div className="mt-28">
+
+          <h2 className="text-4xl font-bold text-center">
+            Industries We Serve
+          </h2>
+
+          <div className="grid grid-cols-2 gap-6 mt-12 lg:grid-cols-4">
+            {industries.map((industry, index) => (
+              <div
+                key={index}
+                className="
+                rounded-2xl
+                border border-white/10
+                bg-white/[0.03]
+                p-6
+                text-center
+                transition
+                hover:-translate-y-1
+                backdrop-blur-xl
+              "
+              >
+                {industry}
               </div>
             ))}
           </div>
         </div>
-      </div>
 
-      
-      {/* Our Process */}
-<div className="px-6 py-16 mx-auto max-w-7xl">
-  <h2 className="mb-12 text-3xl font-bold text-center text-pink-400">
-    Our Proven Process
-  </h2>
-  <div className="grid grid-cols-1 gap-10 text-center md:grid-cols-4">
-    {[
-      {
-        step: "1. Discovery",
-        color: "text-pink-400",
-        desc:
-          "We understand your goals, audience, and challenges to define a clear roadmap.",
-      },
-      {
-        step: "2. Design",
-        color: "text-cyan-400",
-        desc:
-          "We create wireframes, prototypes, and intuitive designs that resonate with users.",
-      },
-      {
-        step: "3. Development",
-        color: "text-indigo-400",
-        desc:
-          "Our engineers build scalable, reliable, and maintainable solutions using best practices.",
-      },
-      {
-        step: "4. Launch & Support",
-        color: "text-yellow-400",
-        desc:
-          "We deploy your product and provide continuous monitoring, updates, and support.",
-      },
-    ].map((item, i) => (
-      <div
-        key={i}
-        className="flex flex-col items-center p-6 bg-gray-800 border border-gray-700 shadow-xl rounded-2xl"
-      >
-        <h3 className={`text-lg font-semibold ${item.color} mb-3`}>{item.step}</h3>
-        <p className="text-base leading-relaxed text-left text-gray-300">
-          {item.desc}
-        </p>
-      </div>
-    ))}
-  </div>
-</div>
+        {/* PROCESS */}
+        <div className="mt-28">
 
+          <h2 className="text-4xl font-bold text-center mb-14">
+            Our Process
+          </h2>
 
-      {/* Why Choose Us */}
-<div className="py-16 bg-gray-900">
-  <div className="px-6 mx-auto space-y-8 text-center max-w-7xl">
-    {/* Section Heading */}
-    <h2 className="text-3xl font-bold text-pink-400">Why Choose ReadyTech Solutions?</h2>
+          <div className="grid gap-8 md:grid-cols-4">
 
-    {/* Intro Paragraph */}
-    <p className="max-w-3xl mx-auto text-lg leading-relaxed text-gray-300">
-      With years of experience, a dedicated team of experts, and a commitment to innovation, we help
-      businesses achieve their digital goals efficiently. Our clients value our transparency,
-      creativity, and ability to deliver on time and within budget.
-    </p>
+            {[
+              "Discovery",
+              "Strategy",
+              "Execution",
+              "Optimization",
+            ].map((step, index) => (
+              <div
+                key={index}
+                className="
+                rounded-3xl
+                border border-white/10
+                bg-white/[0.04]
+                p-8
+                text-center
+                backdrop-blur-xl
+              "
+              >
+                <div
+                  className="flex items-center justify-center mx-auto font-bold rounded-full h-14 w-14 bg-gradient-to-r from-indigo-500 to-cyan-500"
+                >
+                  {index + 1}
+                </div>
 
-    {/* Features / Cards */}
-    <div className="grid grid-cols-1 gap-8 mt-8 md:grid-cols-3">
-      {[
-        {
-          title: "Experienced Team",
-          color: "pink-400",
-          description:
-            "Professionals with deep expertise in full-stack development, design, and AI solutions.",
-          border: "border-pink-500/30",
-        },
-        {
-          title: "Client-Centric Approach",
-          color: "cyan-400",
-          description:
-            "We prioritize understanding client needs and delivering solutions that exceed expectations.",
-          border: "border-cyan-500/30",
-        },
-        {
-          title: "Proven Results",
-          color: "indigo-400",
-          description:
-            "We have successfully helped clients in multiple industries achieve measurable growth.",
-          border: "border-indigo-500/30",
-        },
-      ].map((item, index) => (
-        <div
-          key={index}
-          className={`p-6 bg-gray-800 border shadow-lg rounded-xl transition-shadow hover:shadow-2xl ${item.border} flex flex-col`}
-        >
-          <h3 className={`text-lg font-semibold text-${item.color}`}>{item.title}</h3>
-          <p className="mt-2 leading-relaxed text-left text-gray-300">{item.description}</p>
+                <h3 className="mt-5 text-xl font-bold">
+                  {step}
+                </h3>
+              </div>
+            ))}
+          </div>
         </div>
-      ))}
-    </div>
-  </div>
+
+        {/* WHY CHOOSE */}
+        <div className="grid gap-12 mt-28 lg:grid-cols-2">
+
+          <div>
+            <h2 className="text-4xl font-bold">
+              Why Choose ReadyTech Solutions
+            </h2>
+
+            <p className="mt-6 text-gray-400">
+              We combine creativity, technology and business strategy
+              to deliver measurable results and sustainable growth.
+            </p>
+
+            <div className="mt-8 space-y-4">
+
+              {benefits.map((item, index) => (
+                <div
+                  key={index}
+                  className="flex items-center gap-3"
+                >
+                  <FaCheckCircle className="text-green-400" />
+                  <span>{item}</span>
+                </div>
+              ))}
+
+            </div>
+          </div>
+
+          <div
+            className="
+            rounded-3xl
+            border border-white/10
+            bg-white/[0.04]
+            p-10
+            backdrop-blur-xl
+          "
+          >
+            <div className="flex items-center gap-4">
+              <FaUsers className="text-4xl text-cyan-400" />
+              <div>
+                <h3 className="text-2xl font-bold">
+                  Trusted Growth Partner
+                </h3>
+                <p className="text-gray-400">
+                  Helping businesses innovate and scale.
+                </p>
+              </div>
+            </div>
+
+            <p className="mt-8 leading-relaxed text-gray-400">
+              Our team specializes in AI systems, digital marketing,
+              CRM platforms, automation workflows and cloud-based
+              applications that improve productivity and revenue.
+            </p>
+          </div>
+
+        </div>
+
+        {/* CTA */}
+        <div
+          className="
+          mt-28
+          rounded-[40px]
+          border border-white/10
+          bg-gradient-to-r
+          from-indigo-600/20
+          via-purple-600/20
+          to-cyan-600/20
+          p-14
+          text-center
+        "
+        >
+          <h2 className="text-4xl font-bold">
+            Ready to Transform Your Business?
+          </h2>
+
+          <p className="max-w-2xl mx-auto mt-4 text-gray-300">
+            Partner with ReadyTech Solutions to build smarter systems,
+            stronger marketing strategies and sustainable growth.
+          </p>
+
+          <div className="flex flex-col justify-center gap-5 mt-10 sm:flex-row">
+
+  <motion.div
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+  >
+    <Link
+      to="/contact"
+      className="inline-flex items-center gap-2 px-8 py-4 font-semibold text-white rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-500"
+    >
+      Let's Get Started
+      <FaArrowRight size={16} />
+    </Link>
+  </motion.div>
+
+  <motion.div
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+  >
+    <Link
+      to="/services"
+      className="inline-flex items-center px-8 py-4 font-semibold text-white border border-white/10 rounded-xl bg-white/5 backdrop-blur-xl hover:bg-white/10"
+    >
+      Explore Services
+    </Link>
+  </motion.div>
+
 </div>
+        </div>
 
-
-      {/* Call to Action */}
-      
+      </div>
     </section>
   );
 }
 
 
 
-
-
-
-
-/* ---------------------- TemplateC Modern Dark UI ---------------------- */
 
 
 function TemplateC() {
-  const navigate = useNavigate(); // For navigation
+  const navigate = useNavigate();
 
-  const handleDemoClick = () => {
-    navigate("/demo"); // Navigate to Demo page
-  };
+  const solutions = [
+  {
+    icon: <FaRobot className="text-3xl text-white" />,
+    title: "AI Automation",
+    desc: "Automate repetitive tasks, streamline workflows and improve operational efficiency using intelligent AI systems.",
+    color: "from-cyan-500 to-blue-600",
+  },
+  {
+    icon: <FaBullhorn className="text-3xl text-white" />,
+    title: "Digital Marketing",
+    desc: "Performance-driven SEO, paid advertising and growth campaigns designed to maximize ROI.",
+    color: "from-pink-500 to-purple-600",
+  },
+  {
+    icon: <FaLaptopCode className="text-3xl text-white" />,
+    title: "CRM & SaaS Platforms",
+    desc: "Scalable business platforms that improve customer engagement and operational management.",
+    color: "from-indigo-500 to-violet-600",
+  },
+  {
+    icon: <FaCloud className="text-3xl text-white" />,
+    title: "Cloud Infrastructure",
+    desc: "Secure, scalable and highly available cloud environments engineered for business growth.",
+    color: "from-emerald-500 to-cyan-600",
+  },
+];
+
+  const stats = [
+    { value: "50+", label: "Projects Delivered" },
+    { value: "25+", label: "Global Clients" },
+    { value: "98%", label: "Client Satisfaction" },
+    { value: "24/7", label: "Support" },
+  ];
+
+  const techStack = [
+  {
+    name: "React",
+    icon: <FaReact className="text-5xl text-sky-400" />,
+  },
+  {
+    name: "Node.js",
+    icon: <SiNodedotjs className="text-5xl text-green-500" />,
+  },
+  {
+    name: "MongoDB",
+    icon: <SiMongodb className="text-5xl text-green-400" />,
+  },
+  {
+    name: "AWS",
+    icon: <FaAws className="text-5xl text-orange-400" />,
+  },
+  {
+    name: "Docker",
+    icon: <FaDocker className="text-5xl text-blue-400" />,
+  },
+  {
+    name: "OpenAI",
+    icon: <SiOpenai className="text-5xl text-emerald-400" />,
+  },
+  {
+    name: "Google Ads",
+    icon: <SiGoogleads className="text-5xl text-yellow-400" />,
+  },
+  {
+    name: "Meta Ads",
+    icon: <SiMeta className="text-5xl text-blue-500" />,
+  },
+];
+
+
 
   return (
-    <section className="overflow-hidden text-gray-100 ">
+    <section className="relative overflow-hidden text-white">
 
-      {/* Intro Section */}
-      <div className="px-6 py-16 md:flex md:items-center md:gap-12">
-        <div className="max-w-2xl md:w-2/3">
-          <h1 className="text-3xl font-extrabold text-pink-400 md:text-5xl">
-            Fast, Reliable MERN Engineering for Global Clients
+      {/* Background */}
+      <div className="absolute inset-0 bg-[#050816]" />
+
+      <div
+        className="
+        absolute inset-0 opacity-[0.05]
+        bg-[linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)]
+        bg-[size:60px_60px]
+      "
+      />
+
+      <div className="relative z-10 px-6 py-20 mx-auto max-w-7xl">
+
+        {/* Hero */}
+        <div className="max-w-4xl mx-auto text-center">
+
+          <span
+            className="inline-flex items-center px-4 py-2 text-sm border rounded-full border-cyan-500/20 bg-cyan-500/10 text-cyan-300"
+          >
+            AI Solutions • Digital Marketing • SaaS Development
+          </span>
+
+          <h1 className="mt-8 text-5xl font-black leading-tight md:text-7xl">
+            Accelerating
+            <span className="block text-transparent bg-gradient-to-r from-cyan-400 via-indigo-400 to-purple-400 bg-clip-text">
+              Digital Transformation
+            </span>
           </h1>
-          <p className="mt-4 text-lg leading-relaxed text-gray-300">
-            At <span className="font-semibold text-pink-400">Ready Tech Solutions</span>,
-            we engineer scalable web & mobile applications for startups and enterprises.
-            Our team ensures clean code, robust APIs and seamless deployments to exceed expectations.
+
+          <p className="max-w-3xl mx-auto mt-8 text-lg text-gray-400">
+            Ready Tech Solutions helps businesses scale faster with
+            AI-powered automation, digital marketing strategies,
+            cloud-native platforms and enterprise-grade software solutions.
           </p>
 
-          {/* Feature Highlights */}
-          <div className="grid gap-6 mt-10 sm:grid-cols-2">
-            {[
-              { title: "APIs & Integrations", desc: "REST/GraphQL endpoints with documentation and third-party integrations.", color: "from-purple-700 to-purple-900" },
-              { title: "Performance", desc: "Optimized queries, server-side caching and lazy-loading for lightning-fast apps.", color: "from-pink-700 to-pink-900" },
-              { title: "Scalability", desc: "Cloud-native deployments with CI/CD pipelines and microservices.", color: "from-indigo-700 to-indigo-900" },
-              { title: "Security", desc: "JWT/OAuth authentication, role-based access and data encryption.", color: "from-yellow-600 to-yellow-800" }
-            ].map((feature, idx) => (
-              <div key={idx} className={`p-6 rounded-xl shadow-xl bg-gradient-to-br ${feature.color} hover:scale-105 transition transform`}>
-                <h4 className="font-semibold text-white">{feature.title}</h4>
-                <p className="mt-2 text-sm text-gray-300">{feature.desc}</p>
+          <button
+            onClick={() => navigate("/contact")}
+            className="px-8 py-4 mt-10 font-semibold transition rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-500 hover:scale-105"
+          >
+            Start Your Project
+          </button>
+        </div>
+
+        {/* Stats */}
+        <div className="grid gap-6 mt-20 md:grid-cols-4">
+
+          {stats.map((item, index) => (
+            <div
+              key={index}
+              className="
+              rounded-3xl
+              border border-white/10
+              bg-white/[0.04]
+              p-8
+              text-center
+              backdrop-blur-xl
+            "
+            >
+              <h3 className="text-4xl font-bold">
+                {item.value}
+              </h3>
+
+              <p className="mt-2 text-gray-400">
+                {item.label}
+              </p>
+            </div>
+          ))}
+
+        </div>
+
+       {/* Solutions */}
+<div className="mt-24">
+
+  <div className="text-center">
+    <span
+      className="inline-flex px-4 py-2 text-sm border rounded-full border-cyan-500/20 bg-cyan-500/10 text-cyan-300"
+    >
+      Core Expertise
+    </span>
+
+    <h2 className="mt-5 text-4xl font-black md:text-5xl">
+      Business Solutions
+    </h2>
+
+    <p className="max-w-2xl mx-auto mt-4 text-gray-400">
+      Comprehensive digital solutions designed to accelerate growth,
+      automate operations and improve customer experiences.
+    </p>
+  </div>
+
+  <div className="grid gap-8 mt-14 md:grid-cols-2 xl:grid-cols-4">
+
+    {solutions.map((item, index) => (
+      <div
+        key={index}
+        className="
+        group
+        relative
+        overflow-hidden
+        rounded-3xl
+        border border-white/10
+        bg-white/[0.04]
+        p-8
+        backdrop-blur-xl
+        transition-all
+        duration-500
+        hover:-translate-y-3
+        hover:border-cyan-500/30
+      "
+      >
+
+        {/* Glow */}
+        <div
+          className={`
+          absolute
+          inset-0
+          opacity-0
+          group-hover:opacity-20
+          transition-opacity
+          duration-500
+          bg-gradient-to-br
+          ${item.color}
+        `}
+        />
+
+        {/* Icon */}
+        <div
+          className={`
+          relative
+          flex
+          items-center
+          justify-center
+          w-16 h-16
+          rounded-2xl
+          bg-gradient-to-r
+          ${item.color}
+          text-white
+          text-2xl
+          shadow-lg
+        `}
+        >
+          {item.icon}
+        </div>
+
+        {/* Content */}
+        <div className="relative">
+
+          <h3 className="mt-6 text-xl font-bold text-white">
+            {item.title}
+          </h3>
+
+          <p className="mt-4 leading-relaxed text-gray-400">
+            {item.desc}
+          </p>
+
+          <div
+            className="flex items-center gap-2 mt-6 text-sm font-medium text-cyan-300"
+          >
+            Learn More →
+          </div>
+
+        </div>
+
+      </div>
+    ))}
+
+  </div>
+
+</div>
+
+        {/* Technology */}
+        <div className="mt-24">
+  <h2 className="text-4xl font-bold text-center">
+    Technology Ecosystem
+  </h2>
+
+  <p className="max-w-2xl mx-auto mt-4 text-center text-gray-400">
+    Modern technologies powering scalable digital experiences.
+  </p>
+
+  <div className="grid grid-cols-2 gap-6 mt-12 md:grid-cols-4">
+    {techStack.map((tech, index) => (
+      <div
+        key={index}
+        className="
+          group
+          rounded-3xl
+          border border-white/10
+          bg-white/[0.04]
+          backdrop-blur-xl
+          p-8
+          text-center
+          transition-all
+          duration-300
+          hover:-translate-y-2
+          hover:border-cyan-500/40
+        "
+      >
+        <div className="flex justify-center">
+          {tech.icon}
+        </div>
+
+        <h3 className="mt-4 font-semibold text-white">
+          {tech.name}
+        </h3>
+      </div>
+    ))}
+  </div>
+</div>
+
+        {/* Success Story */}
+        <div className="mt-24">
+
+          <div
+            className="
+            rounded-[32px]
+            border border-white/10
+            bg-white/[0.04]
+            p-12
+            backdrop-blur-xl
+          "
+          >
+            <h2 className="text-4xl font-bold">
+              Driving Real Business Impact
+            </h2>
+
+            <p className="mt-6 text-lg text-gray-400">
+              Our solutions help organizations automate processes,
+              improve customer experiences, increase lead generation,
+              and create sustainable digital growth.
+            </p>
+
+            <div className="grid gap-6 mt-10 md:grid-cols-3">
+
+              <div>
+                <h3 className="text-3xl font-bold text-cyan-400">
+                  40%
+                </h3>
+                <p className="text-gray-400">
+                  Faster Operations
+                </p>
               </div>
-            ))}
-          </div>
-        </div>
 
-        {/* Right Illustration */}
-        <div className="hidden mt-10 md:block md:w-1/3">
-          <div className="flex items-center justify-center p-6 shadow-2xl h-72 bg-gradient-to-br from-pink-600 to-purple-700 rounded-2xl">
-            <div className="text-center">
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-24 h-24 mx-auto text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v12m6-6H6" />
-              </svg>
-              <h3 className="mt-4 text-2xl font-bold text-white">Developer Tools</h3>
-              <p className="text-white/80">API Docs • Testing • CI/CD</p>
+              <div>
+                <h3 className="text-3xl font-bold text-indigo-400">
+                  3X
+                </h3>
+                <p className="text-gray-400">
+                  Lead Generation Growth
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-3xl font-bold text-purple-400">
+                  99.9%
+                </h3>
+                <p className="text-gray-400">
+                  Platform Reliability
+                </p>
+              </div>
+
             </div>
           </div>
+
         </div>
-      </div>
 
-      {/* Mission Section */}
-      <div className="px-6 py-16 md:px-12">
-        <h2 className="text-3xl font-bold text-center text-pink-400">Our Mission</h2>
-        <p className="max-w-3xl mx-auto mt-4 text-center text-gray-300">
-          Empower businesses with reliable, scalable and user-centric digital products. Bridging innovation and practicality to drive measurable growth.
-        </p>
-      </div>
+        {/* CTA */}
+        <div
+          className="
+          mt-24
+          rounded-[40px]
+          border border-white/10
+          bg-gradient-to-r
+          from-indigo-600/20
+          via-purple-600/20
+          to-cyan-600/20
+          p-14
+          text-center
+        "
+        >
+          <h2 className="text-4xl font-bold">
+            Ready to Build the Future?
+          </h2>
 
-      {/* Core Values Section */}
-      <div className="px-6 py-16 md:px-12">
-        <h2 className="text-3xl font-bold text-center text-purple-400">Our Core Values</h2>
-        <div className="grid gap-8 mt-10 md:grid-cols-3">
-          {[
-            { icon: "💡", title: "Innovation", desc: "Exploring cutting-edge technologies to deliver next-gen solutions." },
-            { icon: "🤝", title: "Collaboration", desc: "Partnering with clients for transparent and impactful results." },
-            { icon: "🏆", title: "Excellence", desc: "Delivering quality products with attention to detail and user satisfaction." }
-          ].map((value, idx) => (
-            <div key={idx} className="p-6 transition bg-gray-800 shadow-lg rounded-xl hover:shadow-2xl">
-              <h4 className="text-xl font-semibold text-pink-400">{value.icon} {value.title}</h4>
-              <p className="mt-2 text-sm text-gray-300">{value.desc}</p>
-            </div>
-          ))}
+          <p className="max-w-2xl mx-auto mt-4 text-gray-300">
+            Partner with Ready Tech Solutions to transform your ideas
+            into scalable digital products powered by AI and innovation.
+          </p>
+
+          <button
+            onClick={() => navigate("/contact")}
+            className="px-8 py-4 mt-8 font-semibold rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-500"
+          >
+            Schedule a Consultation
+          </button>
         </div>
-      </div>
 
-      {/* Client Success Stories */}
-      <div className="px-6 py-16 md:px-12">
-        <h2 className="text-3xl font-bold text-center text-purple-400">Client Success Stories</h2>
-        <div className="grid gap-8 mt-10 md:grid-cols-3">
-          {[
-            { title: "🌾 AgriTech Platform", desc: "Streamlined farmer operations with real-time analytics and mobile-first dashboards." },
-            { title: "🛍️ E-Commerce Solution", desc: "Responsive marketplace with advanced search, filtering, and checkout experiences." },
-            { title: "🎬 Media Streaming App", desc: "Optimized for performance with user-personalized recommendations." }
-          ].map((story, idx) => (
-            <div key={idx} className="p-6 transition bg-gray-800 shadow rounded-xl hover:shadow-lg">
-              <h4 className="font-semibold text-purple-400">{story.title}</h4>
-              <p className="mt-2 text-sm text-gray-300">{story.desc}</p>
-            </div>
-          ))}
-        </div>
       </div>
-
-      {/* Tech Stack */}
-      <div className="px-6 py-16 0 md:px-12">
-        <h2 className="text-3xl font-bold text-center text-pink-400">Our Technology Stack</h2>
-        <p className="max-w-3xl mx-auto mt-4 text-center text-gray-300">
-          Modern frameworks, cloud tools, and enterprise-grade security to ensure every project is robust and scalable.
-        </p>
-        <div className="flex flex-wrap items-center justify-center gap-6 mt-10">
-          {["⚛️ React", "🟢 Node.js", "🍃 MongoDB", "🐳 Docker", "☁️ AWS", "🔐 OAuth/JWT", "🧪 Jest / Cypress", "📦 Nginx / CI-CD"].map((tech, idx) => (
-            <span key={idx} className="px-4 py-2 font-medium text-gray-100 bg-gray-800 shadow rounded-xl">{tech}</span>
-          ))}
-        </div>
-      </div>
-
-      
     </section>
   );
 }
-
 
 
