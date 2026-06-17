@@ -128,6 +128,7 @@ export default function HelpdeskChat() {
 
   setMessage("");
 
+  // Show user message instantly
   setChat((prev) => [
     ...prev,
     {
@@ -141,8 +142,13 @@ export default function HelpdeskChat() {
   setTyping(true);
 
   try {
-    // First message creates ticket
+    console.log("BASE_URL:", BASE_URL);
+    console.log("Ticket ID:", ticketId);
+
+    // Create ticket or add response
     if (chat.length <= 1) {
+      console.log("Creating Ticket...");
+
       await axios.post(
         `${BASE_URL}/tickets/create-ticket`,
         {
@@ -152,6 +158,8 @@ export default function HelpdeskChat() {
         }
       );
     } else {
+      console.log("Adding Response...");
+
       await axios.post(
         `${BASE_URL}/tickets/response/${ticketId}`,
         {
@@ -161,43 +169,80 @@ export default function HelpdeskChat() {
       );
     }
 
-    setTimeout(() => {
-      setTyping(false);
+    let reply = "";
 
-      let reply =
-        "Thank you for contacting ReadyTech.";
+    // Email detected
+    if (detectEmail(text) && !emailCollected) {
+      setEmailCollected(true);
 
-      if (
-        detectEmail(text) &&
-        !emailCollected
-      ) {
-        setEmailCollected(true);
+      try {
+        console.log("Sending Helpdesk Email...");
+
+        const emailRes = await axios.post(
+          `${BASE_URL}/contact/helpdesk-email`,
+          {
+            name: "Website Visitor",
+            email: text,
+            message:
+              "Customer shared their email through Helpdesk Chat.",
+          }
+        );
+
+        console.log(
+          "Helpdesk Email Success:",
+          emailRes.data
+        );
 
         reply =
           "✅ Thank you! We have received your email address.\n\nOur team will contact you within 24 hours.";
-      } else if (!emailCollected) {
-        reply =
-          "📩 Please share your email address so our team can contact you within 24 hours.";
-      } else {
-        reply =
-          "✅ Your message has been received.\n\nOur support team will review it and get back to you shortly.";
-      }
+      } catch (mailError) {
+        console.error(
+          "EMAIL ERROR:",
+          mailError.response?.data ||
+            mailError.message
+        );
 
-      setChat((prev) => [
-        ...prev,
-        {
-          sender: "admin",
-          text: reply,
-          time: getTime(),
-        },
-      ]);
-
-      if (!open) {
-        setUnread((v) => v + 1);
+        reply =
+          "⚠️ Your email was received, but we couldn't notify support right now.";
       }
-    }, 1000);
+    }
+    // Email not provided yet
+    else if (!emailCollected) {
+      reply =
+        "📩 Please share your email address so our team can contact you within 24 hours.";
+    }
+    // Normal conversation after email
+    else {
+      reply =
+        "✅ Your message has been received.\n\nOur support team will review it and get back to you shortly.";
+    }
+
+    setTyping(false);
+
+    setChat((prev) => [
+      ...prev,
+      {
+        sender: "admin",
+        text: reply,
+        time: getTime(),
+      },
+    ]);
+
+    if (!open) {
+      setUnread((prev) => prev + 1);
+    }
   } catch (error) {
-    console.error(error);
+    console.error("SEND MESSAGE ERROR:", error);
+
+    console.log(
+      "STATUS:",
+      error.response?.status
+    );
+
+    console.log(
+      "DATA:",
+      error.response?.data
+    );
 
     setTyping(false);
 
@@ -210,9 +255,9 @@ export default function HelpdeskChat() {
         time: getTime(),
       },
     ]);
+  } finally {
+    setLoading(false);
   }
-
-  setLoading(false);
 };
 
   const openChat = () => {
