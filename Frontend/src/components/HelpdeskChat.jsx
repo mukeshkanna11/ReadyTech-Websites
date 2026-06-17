@@ -418,7 +418,7 @@ max-h-[650px]
             {/* Footer */}
 
             <div className="p-4 bg-white border-t">
-              <div className="flex gap-2">
+              <div className="flex gap-2 text-black">
                 <input
                   type="text"
                   value={message}

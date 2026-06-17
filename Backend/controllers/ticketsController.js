@@ -38,6 +38,61 @@ export const createTicket = async (req, res, next) => {
   }
 };
 
+export const sendTicketResponse = async (req, res, next) => {
+  try {
+    const { ticketId } = req.params;
+    const { text, from = "agent" } = req.body;
+
+    if (!text || !text.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Response text is required",
+      });
+    }
+
+    const ticket = await Ticket.findOne({ tokenId: ticketId });
+
+    if (!ticket) {
+      return res.status(404).json({
+        success: false,
+        message: "Ticket not found",
+      });
+    }
+
+    ticket.responses.push({
+      from,
+      text: text.trim(),
+      createdAt: new Date(),
+    });
+
+    // 🔥 HARD TIMEOUT PROTECTION
+    const savePromise = ticket.save();
+
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error("DB_SAVE_TIMEOUT")), 8000)
+    );
+
+    await Promise.race([savePromise, timeoutPromise]);
+
+    return res.json({
+      success: true,
+      message: "Response added successfully",
+      ticket,
+    });
+
+  } catch (err) {
+    console.error("TICKET RESPONSE ERROR:", err);
+
+    return res.status(500).json({
+      success: false,
+      message:
+        err.message === "DB_SAVE_TIMEOUT"
+          ? "Database is slow. Please try again."
+          : "Internal server error",
+    });
+  }
+};
+
 /**
  * Get ticket by token
  */
