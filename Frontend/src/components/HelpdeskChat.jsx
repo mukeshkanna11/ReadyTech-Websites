@@ -1,242 +1,401 @@
 // src/components/HelpdeskChat.jsx
+
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, Send, X } from "lucide-react";
+import {
+  MessageCircle,
+  Send,
+  X,
+  HeadphonesIcon,
+} from "lucide-react";
 
 const BASE_URL =
   import.meta.env.MODE === "development"
     ? "http://localhost:5000/api"
     : "https://readytech-websites.onrender.com/api";
 
-const SHARED_TICKET_ID = "helpdesk_shared";
-
 export default function HelpdeskChat() {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [chat, setChat] = useState([]);
-  const [ticketId] = useState(SHARED_TICKET_ID);
   const [loading, setLoading] = useState(false);
   const [typing, setTyping] = useState(false);
-
+  const [unread, setUnread] = useState(0);
+  const [emailCollected, setEmailCollected] = useState(false);
   const chatEndRef = useRef(null);
 
-  // Auto-scroll to bottom
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [chat, typing]);
+  const [ticketId] = useState(() => {
+    const existing = localStorage.getItem("helpdesk_ticket");
 
-  // Initialize ticket on load
+    if (existing) return existing;
+
+    const newId = `ticket_${Date.now()}`;
+    localStorage.setItem("helpdesk_ticket", newId);
+
+    return newId;
+  });
+
   useEffect(() => {
-    initializeTicketAndLoad();
+    initializeTicket();
   }, []);
 
-  // ================================
-  // Ensure Ticket Exists
-  // ================================
-  const initializeTicketAndLoad = async () => {
-    try {
-      await axios.post(`${BASE_URL}/tickets/create-ticket`, {
-        email: "guest@auto.com",
-        text: "Chat started",
-        tokenId: ticketId,
-      });
-      fetchConversation();
-    } catch {
-      // Ticket already exists → just fetch
-      fetchConversation();
-    }
-  };
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+  }, [chat, typing]);
 
-  // ================================
-  // Fetch Conversation
-  // ================================
-  const fetchConversation = async () => {
-    try {
-      const res = await axios.get(`${BASE_URL}/tickets/ticket/${ticketId}`);
-      if (res.data.ticket) {
-        const messages = res.data.ticket.responses.map((msg) => ({
-          sender: msg.from === "user" ? "user" : "admin",
-          text: msg.text,
-          time: new Date(msg.createdAt).toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-        }));
-        setChat(messages);
-      }
-    } catch (err) {
-      console.error("❌ Failed to fetch ticket:", err);
-    }
-  };
-
-  // ================================
-  // Detect Email
-  // ================================
   const detectEmail = (text) => {
-    const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i;
+    const emailRegex =
+      /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i;
+
     return emailRegex.test(text);
   };
 
-  // ================================
-  // Send Message
-  // ================================
-  const sendMessage = async () => {
-    if (!message.trim() || loading) return;
-
-    const userText = message;
-    setMessage("");
-
-    // Show user message immediately
-    setChat((prev) => [
-      ...prev,
+ const initializeTicket = async () => {
+  try {
+    await axios.post(
+      `${BASE_URL}/tickets/create-ticket`,
       {
-        sender: "user",
-        text: userText,
-        time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-      },
-    ]);
-
-    setLoading(true);
-    setTyping(true);
-
-    try {
-      // Save message to ticket
-      await axios.post(`${BASE_URL}/tickets/response/${ticketId}`, {
-        from: "user",
-        text: userText,
-      });
-
-      // If user sends an email → notify backend
-      if (detectEmail(userText)) {
-        await axios.post(`${BASE_URL}/contact/helpdesk-email`, {
-          name: "Guest", // REQUIRED by backend
-          email: userText,
-          message: "User shared contact email through Helpdesk Chat.",
-        });
-
-        setTimeout(() => {
-          setTyping(false);
-          setChat((prev) => [
-            ...prev,
-            {
-              sender: "admin",
-              text: "📩 Thanks! We received your email. Our support team will contact you soon.",
-              time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-            },
-          ]);
-        }, 700);
-      } else {
-        // Normal bot reply
-        setTimeout(() => {
-          setTyping(false);
-          setChat((prev) => [
-            ...prev,
-            {
-              sender: "admin",
-              text: "🤖 Please share your email so our support team can assist you.",
-              time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-            },
-          ]);
-        }, 700);
+        email: "guest@readytech.com",
+        text: "Chat Started",
+        tokenId: ticketId,
       }
-    } catch (err) {
-      console.error("❌ Sending failed:", err);
+    );
+
+    await loadConversation();
+  } catch (error) {
+    console.error(error);
+  }
+
+  setTimeout(() => {
+    setChat((prev) =>
+      prev.length
+        ? prev
+        : [
+            {
+              sender: "admin",
+              text:
+                "👋 Welcome to ReadyTech Support.\n\nTell us about your requirement and share your email address.",
+              time: getTime(),
+            },
+          ]
+    );
+  }, 300);
+};
+
+  const loadConversation = async () => {
+  try {
+    const res = await axios.get(
+      `${BASE_URL}/tickets/ticket/${ticketId}`
+    );
+
+    if (res.data?.ticket) {
+      const messages = res.data.ticket.responses.map((msg) => ({
+        sender: msg.from === "user" ? "user" : "admin",
+        text: msg.text,
+        time: msg.createdAt
+          ? new Date(msg.createdAt).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })
+          : getTime(),
+      }));
+
+      setChat(messages);
+    }
+  } catch (err) {
+    if (err.response?.status === 404) {
+      console.log("Ticket doesn't exist yet. Waiting for first message.");
+      return;
+    }
+
+    console.error(err);
+  }
+};
+
+  const getTime = () =>
+    new Date().toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+  const sendMessage = async () => {
+  if (!message.trim() || loading) return;
+
+  const text = message.trim();
+
+  setMessage("");
+
+  setChat((prev) => [
+    ...prev,
+    {
+      sender: "user",
+      text,
+      time: getTime(),
+    },
+  ]);
+
+  setLoading(true);
+  setTyping(true);
+
+  try {
+    // First message creates ticket
+    if (chat.length <= 1) {
+      await axios.post(
+        `${BASE_URL}/tickets/create-ticket`,
+        {
+          email: "guest@readytech.com",
+          text,
+          tokenId: ticketId,
+        }
+      );
+    } else {
+      await axios.post(
+        `${BASE_URL}/tickets/response/${ticketId}`,
+        {
+          from: "user",
+          text,
+        }
+      );
+    }
+
+    setTimeout(() => {
       setTyping(false);
+
+      let reply =
+        "Thank you for contacting ReadyTech.";
+
+      if (
+        detectEmail(text) &&
+        !emailCollected
+      ) {
+        setEmailCollected(true);
+
+        reply =
+          "✅ Thank you! We have received your email address.\n\nOur team will contact you within 24 hours.";
+      } else if (!emailCollected) {
+        reply =
+          "📩 Please share your email address so our team can contact you within 24 hours.";
+      } else {
+        reply =
+          "✅ Your message has been received.\n\nOur support team will review it and get back to you shortly.";
+      }
+
       setChat((prev) => [
         ...prev,
         {
           sender: "admin",
-          text: "⚠️ Unable to send message. Please try again.",
-          time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          text: reply,
+          time: getTime(),
         },
       ]);
-    }
 
-    setLoading(false);
+      if (!open) {
+        setUnread((v) => v + 1);
+      }
+    }, 1000);
+  } catch (error) {
+    console.error(error);
+
+    setTyping(false);
+
+    setChat((prev) => [
+      ...prev,
+      {
+        sender: "admin",
+        text:
+          "⚠️ Unable to send your message right now. Please try again in a few moments.",
+        time: getTime(),
+      },
+    ]);
+  }
+
+  setLoading(false);
+};
+
+  const openChat = () => {
+    setOpen(true);
+    setUnread(0);
   };
 
-  // ================================
-  // Render Chat UI
-  // ================================
   return (
-    <div className="fixed z-50 bottom-5 right-5">
+    <div className="fixed z-[9999] bottom-6 right-6">
+
       {!open && (
         <motion.button
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          onClick={() => setOpen(true)}
-          className="p-4 text-white rounded-full shadow-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:scale-110"
+          whileHover={{ scale: 1.08 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={openChat}
+          className="relative flex items-center justify-center w-16 h-16 text-white shadow-2xl rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600"
         >
-          <MessageCircle size={28} />
+          <MessageCircle size={30} />
+
+          {unread > 0 && (
+            <div className="absolute flex items-center justify-center w-6 h-6 text-xs font-bold bg-red-500 rounded-full -top-2 -right-2">
+              {unread}
+            </div>
+          )}
         </motion.button>
       )}
 
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: 60 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 60 }}
-            className="flex flex-col w-80 h-[450px] rounded-2xl shadow-2xl bg-white/90 backdrop-blur-xl border border-gray-200"
+            initial={{
+              opacity: 0,
+              y: 40,
+              scale: 0.95,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+              scale: 1,
+            }}
+            exit={{
+              opacity: 0,
+              y: 40,
+              scale: 0.95,
+            }}
+            className="
+             w-[95vw]
+max-w-[420px]
+h-[80vh]
+max-h-[650px]
+              overflow-hidden
+              rounded-3xl
+              border
+              border-white/20
+              bg-white/80
+              backdrop-blur-2xl
+              shadow-[0_20px_60px_rgba(0,0,0,0.2)]
+              flex
+              flex-col
+            "
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-4 text-white bg-gradient-to-r from-blue-600 to-indigo-600">
-              <div>
-                <h2 className="text-lg font-semibold">Helpdesk Support</h2>
-                <span className="text-xs opacity-80">Ticket ID: {ticketId}</span>
-              </div>
-              <button onClick={() => setOpen(false)} className="p-1 rounded-full hover:bg-white/10">
-                <X size={22} />
-              </button>
-            </div>
 
-            {/* Messages */}
-            <div className="flex-1 p-3 space-y-3 overflow-y-auto bg-gray-100">
-              {chat.map((msg, idx) => (
-                <div
-                  key={idx}
-                  className={`max-w-[75%] p-2 text-sm rounded-2xl shadow ${
-                    msg.sender === "user"
-                      ? "ml-auto bg-blue-600 text-white rounded-br-none"
-                      : "mr-auto bg-white text-gray-900 border rounded-bl-none"
-                  }`}
+            <div className="p-5 text-white bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+
+                  <div className="relative">
+                    <div className="flex items-center justify-center w-12 h-12 bg-white/20 rounded-2xl">
+                      <HeadphonesIcon size={24} />
+                    </div>
+
+                    <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 border-2 border-white rounded-full"></div>
+                  </div>
+
+                  <div>
+                    <h3 className="font-semibold">
+                      ReadyTech Support
+                    </h3>
+
+                    <p className="text-xs text-white/80">
+  Online • Support available 24/7
+</p>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => setOpen(false)}
+                  className="p-2 rounded-xl hover:bg-white/10"
                 >
-                  {msg.text}
-                  <div className="text-[10px] text-right opacity-70 mt-1">{msg.time}</div>
-                </div>
-              ))}
-
-              {typing && (
-                <div className="flex gap-1 p-2 px-3 mr-auto bg-white border shadow rounded-xl">
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                  <div className="w-2 h-2 delay-150 bg-gray-400 rounded-full animate-bounce"></div>
-                  <div className="w-2 h-2 delay-300 bg-gray-400 rounded-full animate-bounce"></div>
-                </div>
-              )}
-
-              <div ref={chatEndRef}></div>
+                  <X size={20} />
+                </button>
+              </div>
             </div>
 
-            {/* Input */}
-            <div className="flex items-center gap-2 p-3 text-black border-t bg-white/60 backdrop-blur-md">
-              <input
-                type="text"
-                placeholder="Type a message..."
-                className="flex-1 px-3 py-2 text-sm border shadow-sm outline-none rounded-xl"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-              />
-              <button
-                disabled={loading}
-                onClick={sendMessage}
-                className={`p-2 rounded-xl text-white shadow-md transition ${
-                  loading ? "bg-gray-400" : "bg-blue-600 hover:bg-blue-700 hover:scale-105"
-                }`}
-              >
-                <Send size={18} />
-              </button>
+            {/* Chat Area */}
+
+            <div className="flex-1 p-4 overflow-y-auto bg-slate-50">
+              <div className="space-y-4">
+
+                {chat.map((msg, index) => (
+                  <div
+                    key={index}
+                    className={`flex ${
+                      msg.sender === "user"
+                        ? "justify-end"
+                        : "justify-start"
+                    }`}
+                  >
+                    <div
+                      className={`
+                        max-w-[80%]
+                        px-4
+                        py-3
+                        rounded-2xl
+                        text-sm
+                        shadow-md
+                        ${
+                          msg.sender === "user"
+                            ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-br-md"
+                            : "bg-white text-gray-800 border rounded-bl-md"
+                        }
+                      `}
+                    >
+                      <p>{msg.text}</p>
+
+                      <div
+                        className={`text-[10px] mt-2 ${
+                          msg.sender === "user"
+                            ? "text-white/70"
+                            : "text-gray-400"
+                        }`}
+                      >
+                        {msg.time}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
+                {typing && (
+                  <div className="flex">
+                    <div className="px-4 py-3 bg-white border rounded-2xl">
+                      <div className="flex gap-1">
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 delay-150 bg-gray-400 rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 delay-300 bg-gray-400 rounded-full animate-bounce"></div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div ref={chatEndRef} />
+              </div>
+            </div>
+
+            {/* Footer */}
+
+            <div className="p-4 bg-white border-t">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={message}
+                  placeholder="Tell us how we can help..."
+                  onChange={(e) =>
+                    setMessage(e.target.value)
+                  }
+                  onKeyDown={(e) =>
+                    e.key === "Enter" &&
+                    sendMessage()
+                  }
+                  className="flex-1 px-4 py-3 text-sm border outline-none rounded-2xl focus:ring-2 focus:ring-blue-500"
+                />
+
+                <button
+                  disabled={loading}
+                  onClick={sendMessage}
+                  className="flex items-center justify-center w-12 h-12 text-white transition rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:scale-105"
+                >
+                  <Send size={18} />
+                </button>
+              </div>
             </div>
           </motion.div>
         )}

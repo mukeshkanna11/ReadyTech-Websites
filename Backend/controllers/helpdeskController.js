@@ -1,65 +1,127 @@
 import HelpdeskTicket from "../models/HelpdeskTicket.js";
 import crypto from "crypto";
+import { sendHelpdeskMail } from "../utils/sendHelpdeskMail.js";
 
 // Generate random token
-const generateToken = () => crypto.randomBytes(4).toString("hex");
+const generateToken = () =>
+  crypto.randomBytes(4).toString("hex");
 
-// Shared ticket token
 export const SHARED_TOKEN = "helpdesk_shared";
+
+// Email validation
+const emailRegex =
+  /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i;
 
 // Ensure shared ticket exists
 export const ensureSharedTicketExists = async () => {
-  let ticket = await HelpdeskTicket.findOne({ tokenId: SHARED_TOKEN });
+  let ticket = await HelpdeskTicket.findOne({
+    tokenId: SHARED_TOKEN,
+  });
+
   if (!ticket) {
     ticket = await HelpdeskTicket.create({
       tokenId: SHARED_TOKEN,
       email: "shared@helpdesk.com",
       subject: "Shared Helpdesk Ticket",
-      description: "All users can post messages here",
-      responses: [],
+      description: "Shared Helpdesk Chat",
+      responses: [
+        {
+          from: "admin",
+          text: "Welcome to ReadyTech Support 👋",
+          createdAt: new Date(),
+        },
+      ],
       status: "Open",
     });
   }
+
   return ticket;
 };
 
-// Create individual ticket
+// Create Ticket
 export const createTicket = async (req, res) => {
   try {
-    const { email, text } = req.body;
+    const {
+      email,
+      text,
+      tokenId,
+      subject = "",
+      description = "",
+    } = req.body;
 
-    if (!email || !text) {
+    if (!email?.trim()) {
       return res.status(400).json({
         success: false,
-        message: "Email and text are required",
+        message: "Email is required",
       });
     }
 
-    const tokenId = generateToken();
+    if (!text?.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Message is required",
+      });
+    }
 
-    const ticket = await HelpdeskTicket.create({
-      tokenId,
-      email,
-      subject: "",
-      description: "",
-      responses: [{ from: "user", text }],
-      status: "New",
+    const finalToken =
+      tokenId?.trim() || generateToken();
+
+    let ticket = await HelpdeskTicket.findOne({
+      tokenId: finalToken,
     });
 
-    res.status(201).json({
+    if (ticket) {
+      return res.status(200).json({
+        success: true,
+        message: "Ticket already exists",
+        ticket,
+      });
+    }
+
+    ticket = await HelpdeskTicket.create({
+      tokenId: finalToken,
+      email: email.trim().toLowerCase(),
+      subject: subject.trim(),
+      description: description.trim(),
+      status: "New",
+
+      responses: [
+        {
+          from: "user",
+          text: text.trim(),
+          createdAt: new Date(),
+        },
+        {
+          from: "admin",
+          text:
+            "📩 Please share your email address. Our team will contact you within 24 hours.",
+          createdAt: new Date(),
+        },
+      ],
+    });
+
+    await sendHelpdeskMail({
+      customerEmail: email,
+      customerMessage: text,
+    });
+
+    return res.status(201).json({
       success: true,
       message: "Ticket created successfully",
+      ticketId: ticket.tokenId,
       ticket,
     });
   } catch (err) {
-    res.status(500).json({
+    console.error("Create Ticket Error:", err);
+
+    return res.status(500).json({
       success: false,
-      message: err.message,
+      message: "Failed to create ticket",
     });
   }
 };
 
-// Add response to ticket
+// Add Response
 export const addResponse = async (req, res) => {
   try {
     const { ticketId } = req.params;
@@ -72,10 +134,15 @@ export const addResponse = async (req, res) => {
       });
     }
 
-    let ticket =
-      ticketId === SHARED_TOKEN
-        ? await ensureSharedTicketExists()
-        : await HelpdeskTicket.findOne({ tokenId: ticketId });
+    let ticket;
+
+    if (ticketId === SHARED_TOKEN) {
+      ticket = await ensureSharedTicketExists();
+    } else {
+      ticket = await HelpdeskTicket.findOne({
+        tokenId: ticketId,
+      });
+    }
 
     if (!ticket) {
       return res.status(404).json({
@@ -84,32 +151,64 @@ export const addResponse = async (req, res) => {
       });
     }
 
-    ticket.responses.push({ from, text });
+    ticket.responses.push({
+      from,
+      text,
+      createdAt: new Date(),
+    });
+
+    // Email detected
+    if (
+      from === "user" &&
+      emailRegex.test(text)
+    ) {
+      await sendHelpdeskMail({
+        customerEmail: text.trim(),
+        customerMessage:
+          "Customer shared their email via Helpdesk Chat.",
+      });
+
+      ticket.responses.push({
+        from: "admin",
+        text:
+          "✅ Thank you! We have received your email. Our team will contact you within 24 hours.",
+        createdAt: new Date(),
+      });
+    }
+
     ticket.status = "Open";
+
     await ticket.save();
 
-    res.json({
+    return res.status(200).json({
       success: true,
-      message: "Response added",
+      message: "Response added successfully",
       ticket,
     });
   } catch (err) {
-    res.status(500).json({
+    console.error(err);
+
+    return res.status(500).json({
       success: false,
       message: err.message,
     });
   }
 };
 
-// Get ticket by ID
+// Get Ticket By ID
 export const getTicketById = async (req, res) => {
   try {
     const { ticketId } = req.params;
 
-    let ticket =
-      ticketId === SHARED_TOKEN
-        ? await ensureSharedTicketExists()
-        : await HelpdeskTicket.findOne({ tokenId: ticketId });
+    let ticket;
+
+    if (ticketId === SHARED_TOKEN) {
+      ticket = await ensureSharedTicketExists();
+    } else {
+      ticket = await HelpdeskTicket.findOne({
+        tokenId: ticketId,
+      });
+    }
 
     if (!ticket) {
       return res.status(404).json({
@@ -118,48 +217,49 @@ export const getTicketById = async (req, res) => {
       });
     }
 
-    res.json({
+    return res.status(200).json({
       success: true,
       ticket,
     });
   } catch (err) {
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: err.message,
     });
   }
 };
 
-// Get tickets by email
+// Get Tickets By Email
 export const getTicketByEmail = async (req, res) => {
   try {
-    const { email } = req.params;
+    const tickets = await HelpdeskTicket.find({
+      email: req.params.email,
+    }).sort({ createdAt: -1 });
 
-    const tickets = await HelpdeskTicket.find({ email });
-
-    res.json({
+    return res.json({
       success: true,
       tickets,
     });
   } catch (err) {
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: err.message,
     });
   }
 };
 
-// Get all tickets (admin)
+// Admin - Get All Tickets
 export const getAllTickets = async (req, res) => {
   try {
-    const tickets = await HelpdeskTicket.find().sort({ createdAt: -1 });
+    const tickets = await HelpdeskTicket.find()
+      .sort({ createdAt: -1 });
 
-    res.json({
+    return res.json({
       success: true,
       tickets,
     });
   } catch (err) {
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: err.message,
     });
