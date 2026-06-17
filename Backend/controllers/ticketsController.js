@@ -38,11 +38,12 @@ export const createTicket = async (req, res, next) => {
   }
 };
 
-export const sendTicketResponse = async (req, res, next) => {
+export const sendTicketResponse = async (req, res) => {
   try {
     const { ticketId } = req.params;
     const { text, from = "agent" } = req.body;
 
+    // ✅ Validate input
     if (!text || !text.trim()) {
       return res.status(400).json({
         success: false,
@@ -50,6 +51,7 @@ export const sendTicketResponse = async (req, res, next) => {
       });
     }
 
+    // ✅ Find ticket
     const ticket = await Ticket.findOne({ tokenId: ticketId });
 
     if (!ticket) {
@@ -59,25 +61,24 @@ export const sendTicketResponse = async (req, res, next) => {
       });
     }
 
+    // ✅ Push response
     ticket.responses.push({
       from,
       text: text.trim(),
       createdAt: new Date(),
     });
 
-    // 🔥 HARD TIMEOUT PROTECTION
-    const savePromise = ticket.save();
+    ticket.status = "Open";
 
-    const timeoutPromise = new Promise((_, reject) =>
-      setTimeout(() => reject(new Error("DB_SAVE_TIMEOUT")), 8000)
-    );
+    // 🚀 NON-BLOCKING SAVE (IMPORTANT FIX)
+    ticket.save().catch((err) => {
+      console.error("Ticket save failed (non-blocking):", err);
+    });
 
-    await Promise.race([savePromise, timeoutPromise]);
-
-    return res.json({
+    // 🚀 RESPONSE SENT IMMEDIATELY (NO WAITING)
+    return res.status(200).json({
       success: true,
       message: "Response added successfully",
-      ticket,
     });
 
   } catch (err) {
@@ -85,10 +86,7 @@ export const sendTicketResponse = async (req, res, next) => {
 
     return res.status(500).json({
       success: false,
-      message:
-        err.message === "DB_SAVE_TIMEOUT"
-          ? "Database is slow. Please try again."
-          : "Internal server error",
+      message: "Internal server error",
     });
   }
 };

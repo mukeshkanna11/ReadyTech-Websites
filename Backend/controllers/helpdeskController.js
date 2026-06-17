@@ -127,7 +127,7 @@ export const addResponse = async (req, res) => {
     const { ticketId } = req.params;
     const { from, text } = req.body;
 
-    if (!from || !text) {
+    if (!from || !text?.trim()) {
       return res.status(400).json({
         success: false,
         message: "Sender and text are required",
@@ -136,12 +136,11 @@ export const addResponse = async (req, res) => {
 
     let ticket;
 
+    // ⚡ Shared ticket handling
     if (ticketId === SHARED_TOKEN) {
       ticket = await ensureSharedTicketExists();
     } else {
-      ticket = await HelpdeskTicket.findOne({
-        tokenId: ticketId,
-      });
+      ticket = await HelpdeskTicket.findOne({ tokenId: ticketId });
     }
 
     if (!ticket) {
@@ -153,44 +152,40 @@ export const addResponse = async (req, res) => {
 
     ticket.responses.push({
       from,
-      text,
+      text: text.trim(),
       createdAt: new Date(),
     });
 
-    // Email detected
-    if (
-      from === "user" &&
-      emailRegex.test(text)
-    ) {
-      await sendHelpdeskMail({
+    ticket.status = "Open";
+
+    // 🚀 DO NOT BLOCK REQUEST ON SAVE (IMPORTANT FIX)
+    ticket.save().catch((err) => {
+      console.error("Ticket save failed:", err);
+    });
+
+    // 🚀 EMAIL NON-BLOCKING
+    if (from === "user" && emailRegex.test(text)) {
+      sendHelpdeskMail({
         customerEmail: text.trim(),
         customerMessage:
           "Customer shared their email via Helpdesk Chat.",
-      });
-
-      ticket.responses.push({
-        from: "admin",
-        text:
-          "✅ Thank you! We have received your email. Our team will contact you within 24 hours.",
-        createdAt: new Date(),
-      });
+      }).catch((err) =>
+        console.error("Email failed (non-blocking):", err)
+      );
     }
-
-    ticket.status = "Open";
-
-    await ticket.save();
 
     return res.status(200).json({
       success: true,
       message: "Response added successfully",
       ticket,
     });
+
   } catch (err) {
-    console.error(err);
+    console.error("addResponse ERROR:", err);
 
     return res.status(500).json({
       success: false,
-      message: err.message,
+      message: "Internal server error",
     });
   }
 };
