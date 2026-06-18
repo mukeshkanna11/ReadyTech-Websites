@@ -29,7 +29,18 @@ import helpdeskRoutes from "./routes/helpdeskRoutes.js";
 // Environment Setup
 // =============================================================
 dotenv.config();
+
 const app = express();
+app.set("trust proxy", 1);
+
+console.log("=================================");
+console.log("🚀 ENVIRONMENT CHECK");
+console.log("NODE_ENV:", process.env.NODE_ENV);
+console.log("MAIL_USER:", process.env.MAIL_USER);
+console.log("MAIL_PASS EXISTS:", !!process.env.MAIL_PASS);
+console.log("MAIL_FROM:", process.env.MAIL_FROM);
+console.log("FRONTEND_URL:", process.env.FRONTEND_URL);
+console.log("=================================");
 
 // dirname fix for ES module
 const __filename = fileURLToPath(import.meta.url);
@@ -62,6 +73,8 @@ const allowedOrigins = [
   "http://localhost:5174",
   "https://readytech-site.netlify.app",
   "https://readytech-websites.onrender.com",
+  "https://readytechsolutions.in",
+  "https://www.readytechsolutions.in",
   process.env.FRONTEND_URL,
 ].filter(Boolean);
 
@@ -155,11 +168,12 @@ const PORT = process.env.PORT || 5000;
 const connectDB = async () => {
   try {
     console.log("⏳ Connecting to MongoDB...");
-    const conn = await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      serverSelectionTimeoutMS: 15000,
-    });
+    const conn = await mongoose.connect(
+  process.env.MONGO_URI,
+  {
+    serverSelectionTimeoutMS: 15000,
+  }
+);
     console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
   } catch (err) {
     console.error("❌ MongoDB Error:", err.message);
