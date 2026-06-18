@@ -31,12 +31,6 @@ import {
   SiGoogleads,
   SiMeta,
 } from "react-icons/si";
-// 🖼️ Local floating images (tech-style)
-import BgVision from "../assets/images/bg-vision.jpg";
-import BgHero from "../assets/images/bg-hero.jpg";
-import Img1 from "../assets/images/image1.jpg";
-import Img2 from "../assets/images/image2.jpg";
-import Img3 from "../assets/images/image3.jpg";
 
 export default function Home() {
   const [template, setTemplate] = useState("A");
@@ -46,12 +40,19 @@ export default function Home() {
       <Navbar />
 
       <Helmet>
-        <title>Home | Ready Tech Solutions</title>
-        <meta
-          name="description"
-          content="Ready Tech Solutions provides expert IT solutions to help businesses grow and succeed in the digital world."
-        />
-      </Helmet>
+  <title>Home | Ready Tech Solutions</title>
+
+  <meta
+    name="description"
+    content="Ready Tech Solutions provides expert IT solutions to help businesses grow and succeed in the digital world."
+  />
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="/Rtech-logo.png"
+  />
+</Helmet>
 
 {/* ================= PREMIUM HERO ================= */}
 <section className="relative overflow-hidden bg-[#050816]">

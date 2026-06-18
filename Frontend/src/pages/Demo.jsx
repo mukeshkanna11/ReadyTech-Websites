@@ -77,127 +77,195 @@ export default function Demo() {
   };
 
   return (
-    <section className="relative py-20 overflow-hidden bg-gradient-to-b from-indigo-50 via-white to-indigo-100">
-      <Helmet>
-        <title>Free Consultation Demo | Ready Tech Solutions</title>
-        <meta
-          name="description"
-          content="Get a free consultation demo with Ready Tech Solutions for web development, digital marketing, UI/UX design, and IT services."
-        />
-        <meta
-          name="keywords"
-          content="Demo, Free Consultation, Ready Tech Solutions, Web Development, Digital Marketing"
-        />
-      </Helmet>
+  <>
+    <Helmet>
+      <title>Free Consultation Demo | Ready Tech Solutions</title>
+      <meta
+        name="description"
+        content="Book a free consultation with Ready Tech Solutions."
+      />
+    </Helmet>
 
-      {/* Background Illustration */}
-      <div className="absolute top-0 transform -translate-x-1/2 pointer-events-none left-1/2 -translate-y-1/3 opacity-10">
-        <img
-          src="https://undraw.co/api/illustrations/9b4a5c45-42e8-4cbb-8f54-1d0f1e3cbb37" // Free undraw illustration
-          alt="Illustration Background"
-          className="w-[800px] md:w-[1000px]"
-        />
-      </div>
-
-      <div className="relative max-w-4xl px-6 mx-auto">
-        <h1 className="text-4xl font-extrabold text-center text-indigo-700 sm:text-5xl">
-          Request a Free Demo
-        </h1>
-        <p className="mt-4 text-center text-gray-600 sm:text-lg">
-          Let us understand your business requirements and provide the best
-          solutions tailored for you.
-        </p>
-
-        <form
-          onSubmit={handleSubmit}
-          className="relative z-10 p-10 mt-12 space-y-6 bg-white shadow-2xl rounded-3xl md:p-16"
-        >
-          {/* Name */}
-          <input
-            type="text"
-            name="name"
-            placeholder="Full Name"
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full px-4 py-3 text-gray-700 border rounded-xl focus:ring-2 focus:ring-indigo-500"
-          />
-
-          {/* Email */}
-          <input
-            type="email"
-            name="email"
-            placeholder="Email Address"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full px-4 py-3 text-gray-700 border rounded-xl focus:ring-2 focus:ring-indigo-500"
-          />
-
-          {/* Phone */}
-          <input
-            type="text"
-            name="phone"
-            placeholder="Phone Number (Optional)"
-            value={formData.phone}
-            onChange={handleChange}
-            className="w-full px-4 py-3 text-gray-700 border rounded-xl focus:ring-2 focus:ring-indigo-500"
-          />
-
-          {/* Services Selection */}
+    <section className="min-h-screen text-white bg-slate-950">
+      <div className="px-6 py-20 mx-auto max-w-7xl">
+        <div className="grid items-center mb-28 gap-14 lg:grid-cols-2">
+          
+          {/* LEFT SIDE */}
           <div>
-            <p className="mb-3 font-semibold text-gray-700">
-              Select Services:
+            <span className="inline-flex px-4 py-2 mb-6 text-sm font-medium border rounded-full text-cyan-400 border-cyan-500/20 bg-cyan-500/10">
+              🚀 Free Consultation
+            </span>
+
+            <h1 className="text-5xl font-black leading-tight lg:text-5xl">
+              Build Your
+              <span className="block text-transparent bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text">
+                Next Digital Success
+              </span>
+            </h1>
+
+            <p className="max-w-xl mt-8 text-lg leading-relaxed text-slate-400">
+              We help startups and businesses build powerful websites,
+              mobile applications, AI solutions, digital marketing systems
+              and scalable technology platforms.
             </p>
-            <div className="grid gap-3 md:grid-cols-2">
-              {servicesOptions.map((service, idx) => (
-                <label
-                  key={idx}
-                  className={`flex items-center gap-2 px-4 py-2 border rounded-lg text-gray-700 shadow-sm cursor-pointer transition-all ${
-                    formData.selectedServices.includes(service)
-                      ? "bg-indigo-100 border-indigo-500 text-indigo-700"
-                      : "bg-white hover:bg-indigo-50"
-                  }`}
+
+            {/* Stats */}
+            <div className="grid grid-cols-2 gap-5 mt-12">
+              {[
+                ["50+", "Projects Delivered"],
+                ["98%", "Client Satisfaction"],
+                ["24/7", "Support"],
+                ["100%", "Custom Solutions"],
+              ].map(([value, label]) => (
+                <div
+                  key={label}
+                  className="p-6 border rounded-3xl bg-slate-900 border-slate-800"
                 >
-                  <input
-                    type="checkbox"
-                    checked={formData.selectedServices.includes(service)}
-                    onChange={() => handleCheckboxChange(service)}
-                    className="w-4 h-4 text-indigo-600 accent-indigo-600"
-                  />
-                  {service}
-                </label>
+                  <h3 className="text-3xl font-bold text-cyan-400">
+                    {value}
+                  </h3>
+                  <p className="mt-2 text-slate-400">{label}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Benefits */}
+            <div className="grid gap-4 mt-12">
+              {[
+                "Dedicated Technical Team",
+                "Transparent Project Workflow",
+                "Modern Technology Stack",
+                "Long-Term Support & Maintenance",
+              ].map((item) => (
+                <div
+                  key={item}
+                  className="flex items-center gap-3 text-slate-300"
+                >
+                  <div className="w-2 h-2 rounded-full bg-cyan-400" />
+                  {item}
+                </div>
               ))}
             </div>
           </div>
 
-          {/* Message */}
-          <textarea
-            name="message"
-            placeholder="Your Message"
-            value={formData.message}
-            onChange={handleChange}
-            rows={5}
-            className="w-full px-4 py-3 text-gray-700 border rounded-xl focus:ring-2 focus:ring-indigo-500"
-          ></textarea>
+          {/* RIGHT SIDE FORM */}
+          <div className="p-8 border shadow-2xl bg-slate-900 rounded-3xl border-slate-800 md:p-10">
+            <div className="mb-8">
+              <h2 className="text-3xl font-bold">
+                Request Free Demo
+              </h2>
 
-          {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={loading}
-            className={`w-full py-3 font-semibold text-white rounded-full shadow-lg transition ${
-              loading
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-indigo-600 hover:bg-indigo-700"
-            }`}
-          >
-            {loading ? "Sending..." : "Request Free Demo"}
-          </button>
-        </form>
+              <p className="mt-2 text-slate-400">
+                Tell us about your requirements and we'll get back to you.
+              </p>
+            </div>
 
-        {/* Footer Note */}
-        <p className="mt-6 text-sm text-center text-gray-500">
-          We respect your privacy and will never share your contact information.
-        </p>
+            <form onSubmit={handleSubmit} className="space-y-5">
+              
+              <input
+                type="text"
+                name="name"
+                placeholder="Full Name"
+                value={formData.name}
+                onChange={handleChange}
+                className="w-full px-5 py-4 text-white border rounded-2xl bg-slate-950 border-slate-800 placeholder:text-slate-500 focus:border-cyan-500 focus:outline-none"
+              />
+
+              <input
+                type="email"
+                name="email"
+                placeholder="Email Address"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full px-5 py-4 text-white border rounded-2xl bg-slate-950 border-slate-800 placeholder:text-slate-500 focus:border-cyan-500 focus:outline-none"
+              />
+
+              <input
+                type="text"
+                name="phone"
+                placeholder="Phone Number"
+                value={formData.phone}
+                onChange={handleChange}
+                className="w-full px-5 py-4 text-white border rounded-2xl bg-slate-950 border-slate-800 placeholder:text-slate-500 focus:border-cyan-500 focus:outline-none"
+              />
+
+              {/* Services */}
+              <div>
+                <p className="mb-4 font-medium text-slate-300">
+                  Services Required
+                </p>
+
+                <div className="grid gap-3 md:grid-cols-2">
+                  {servicesOptions.map((service) => (
+                    <label
+                      key={service}
+                      className={`cursor-pointer rounded-2xl border p-4 transition ${
+                        formData.selectedServices.includes(service)
+                          ? "border-cyan-500 bg-cyan-500/10"
+                          : "border-slate-800 bg-slate-950"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="checkbox"
+                          checked={formData.selectedServices.includes(
+                            service
+                          )}
+                          onChange={() =>
+                            handleCheckboxChange(service)
+                          }
+                          className="accent-cyan-500"
+                        />
+                        <span className="text-sm text-slate-300">
+                          {service}
+                        </span>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <textarea
+                name="message"
+                rows={5}
+                placeholder="Tell us about your project..."
+                value={formData.message}
+                onChange={handleChange}
+                className="w-full px-5 py-4 text-white border resize-none rounded-2xl bg-slate-950 border-slate-800 placeholder:text-slate-500 focus:border-cyan-500 focus:outline-none"
+              />
+
+              <button
+                type="submit"
+                disabled={loading}
+                className={`w-full py-4 rounded-2xl font-semibold transition ${
+                  loading
+                    ? "bg-slate-700 cursor-not-allowed"
+                    : "bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90"
+                }`}
+              >
+                {loading
+                  ? "Sending Request..."
+                  : "Book Free Consultation"}
+              </button>
+            </form>
+
+            <div className="grid grid-cols-3 gap-3 pt-6 mt-6 border-t border-slate-800">
+              <div className="p-3 text-xs text-center rounded-xl bg-slate-950 text-slate-400">
+                🔒 Secure
+              </div>
+
+              <div className="p-3 text-xs text-center rounded-xl bg-slate-950 text-slate-400">
+                ⚡ Fast Response
+              </div>
+
+              <div className="p-3 text-xs text-center rounded-xl bg-slate-950 text-slate-400">
+                🎯 Experts
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
-  );
+  </>
+);
 }
