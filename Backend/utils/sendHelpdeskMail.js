@@ -1,44 +1,18 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
 // ==========================================
 // Environment Debug Logs
 // ==========================================
 console.log("=================================");
-console.log("📧 MAIL CONFIG CHECK");
-console.log("MAIL_USER:", process.env.MAIL_USER);
-console.log("MAIL_PASS EXISTS:", !!process.env.MAIL_PASS);
-console.log("MAIL_FROM:", process.env.MAIL_FROM);
+console.log("📧 RESEND CONFIG CHECK");
+console.log("RESEND_API_KEY EXISTS:", !!process.env.RESEND_API_KEY);
+console.log("MAIL_TO:", process.env.MAIL_TO);
 console.log("=================================");
 
 // ==========================================
-// Nodemailer Transport
+// Resend Client
 // ==========================================
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  requireTLS: true,
-
-  auth: {
-    user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PASS,
-  },
-
-  connectionTimeout: 30000,
-  greetingTimeout: 30000,
-  socketTimeout: 30000,
-});
-
-// ==========================================
-// Verify SMTP Connection
-// ==========================================
-transporter.verify()
-  .then(() => {
-    console.log("✅ Mail Server Connected");
-  })
-  .catch((err) => {
-    console.error("❌ Mail Server Error:", err);
-  });
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // ==========================================
 // Send Helpdesk Mail
@@ -50,27 +24,26 @@ export const sendHelpdeskMail = async ({
 }) => {
   try {
     console.log("=================================");
-    console.log("📨 EMAIL FUNCTION CALLED");
+    console.log("📨 RESEND EMAIL FUNCTION CALLED");
     console.log("Customer Email:", customerEmail);
     console.log("Customer Name:", customerName);
     console.log("=================================");
 
-    const info = await transporter.sendMail({
-      from:
-        process.env.MAIL_FROM ||
-        `ReadyTech Support <${process.env.MAIL_USER}>`,
+    const response = await resend.emails.send({
+      // Free Resend testing sender
+      from: "ReadyTech Support <onboarding@resend.dev>",
 
-      // Mail goes to company inbox
-      to: process.env.MAIL_USER,
+      // Company inbox
+      to: [process.env.MAIL_TO],
 
-      // Customer email for direct reply
+      // Reply directly to customer
       replyTo: customerEmail,
 
       subject: `📩 New Helpdesk Inquiry from ${customerName}`,
 
       html: `
         <div style="font-family:Arial,sans-serif;padding:20px;max-width:700px;margin:auto;">
-          
+
           <h2 style="color:#2563eb;margin-bottom:20px;">
             New Helpdesk Inquiry
           </h2>
@@ -130,20 +103,18 @@ export const sendHelpdeskMail = async ({
     });
 
     console.log("=================================");
-    console.log("✅ EMAIL SENT SUCCESSFULLY");
-    console.log("MESSAGE ID:", info.messageId);
-    console.log("ACCEPTED:", info.accepted);
-    console.log("REJECTED:", info.rejected);
-    console.log("RESPONSE:", info.response);
+    console.log("✅ RESEND EMAIL SENT");
+    console.log("EMAIL ID:", response?.data?.id);
+    console.log("FULL RESPONSE:", response);
     console.log("=================================");
 
     return {
       success: true,
-      messageId: info.messageId,
+      emailId: response?.data?.id,
     };
   } catch (error) {
     console.error("=================================");
-    console.error("❌ HELPDESK EMAIL ERROR");
+    console.error("❌ RESEND EMAIL ERROR");
     console.error(error);
     console.error("=================================");
 
